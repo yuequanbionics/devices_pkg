@@ -1,0 +1,3 @@
+[submodule "src/devices_pkg/src/sdk"]
+	path = src/devices_pkg/src/sdk
+	url = https://gitee.com/beijing-daqi-yuequan-bionics/sdk_2.git
