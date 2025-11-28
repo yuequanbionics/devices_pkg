@@ -26,3 +26,6 @@ source ./install/setup.sh
 
 可执行文件路径  
 /install/devices_pkg/lib/devices_pkg  
+
+执行可执行文件  
+ros2 run devices_pkg 可执行文件名  
