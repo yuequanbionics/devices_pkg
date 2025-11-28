@@ -10,6 +10,36 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+add_executable(devices_node_publisher
+
+src/out/Publisher.cpp
+
+)
+
+add_executable(devices_node_subscriber
+
+src/out/Subscriber.cpp
+
+)
+
+# 链接 ROS 2 依赖
+ament_target_dependencies(devices_node_publisher rclcpp std_msgs)
+
+ament_target_dependencies(devices_node_subscriber rclcpp std_msgs)
+
+
+# 安装可执行文件
+
+install(TARGETS 
+
+  devices_node_publisher
+  devices_node_subscriber
+  DESTINATION lib/${PROJECT_NAME}
+
+)
+
+add_subdirectory(src/sdk/)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
