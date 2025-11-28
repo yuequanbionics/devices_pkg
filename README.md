@@ -18,7 +18,7 @@
 因为包含子模块需要添加 --recurse-submodules  
 git clone --recurse-submodules git@gitee.com:beijing-daqi-yuequan-bionics/sdk2ros.git  
 
-拉取子模块SDK_2的最新分支
+拉取子模块SDK_2的最新分支  
 git submodule update --remote --merge  
 
 编译命令  
