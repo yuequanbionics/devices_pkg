@@ -9,22 +9,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-
-add_subdirectory(src/sdk/)
-
-add_executable(devices_node_publisher
-
-src/out/Publisher.cpp
-)
-
-add_executable(devices_node_subscriber
-
-src/out/Subscriber.cpp
-)
+find_package(geometry_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
 set(SDK_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/inc)
 
 set(SDK_INCLUDE_DIRS
+
+    PRIVATE
     ${SDK_ROOT}/
     ${SDK_ROOT}/HARDWARE_TOP
     ${SDK_ROOT}/Z_SYS_SRC/CAN
@@ -33,69 +25,71 @@ set(SDK_INCLUDE_DIRS
     ${SDK_ROOT}/Z_SYS_SRC/UDP
     ${SDK_ROOT}/../third_party/lib/install-x86_64/include
     ${SDK_ROOT}/../third_party/lib/install-x86_64/include/yaml-cpp
-)
-
-target_include_directories(devices_node_publisher PRIVATE
-
-    ${YAML_CPP_INCLUDE_DIR}
-    ${SDK_INCLUDE_DIRS}
-    ${SDK_ROOT}/Custom_Device/Motor_TaiHu
     ${SDK_ROOT}/Switch_Board
+    ${SDK_ROOT}/Switch_Board/mcu/stm32h743
+    #/install/devices_pkg/include/devices_pkg/devices_pkg/msg
+    src/project/E_Bot_Node
+    src/project/W_Bot_Node
+    src/project/X_Hand_Node
+    src/project/Y_Hand_Node
 
 )
 
-target_include_directories(devices_node_subscriber PRIVATE
-
-    ${YAML_CPP_INCLUDE_DIR}
-    ${SYS_INC_DIR}
-    ${INC_DIR}/Custom_Device/Motor_TaiHu
-    ${INC_DIR}/Switch_Board
-
-)
-
-#message("主项目源码目录 (CMAKE_CURRENT_SOURCE_DIR): ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/x86_64/")
-#/home/yq-z/code/SDK_2_ROS/src/devices_pkg/src/sdk/third_party/lib/install-x86_64/lib
 set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/x86_64)
 set(HARDWARE_TOP_LIB ${SDK_LIB_ABS_DIR}/libHARDWARE_TOP.so)
 set(SWITCH_BOARD_LIB ${SDK_LIB_ABS_DIR}/libSwitch_Board.so)
 set(MOTOR_TAIHU_LIB ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so)
 set(SPDLOG_LIB ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-x86_64/lib/libspdlog.so)
 
-
-target_link_libraries(devices_node_publisher
-
-    ${HARDWARE_TOP_LIB}
-    ${SWITCH_BOARD_LIB}
-    ${MOTOR_TAIHU_LIB}
-    ${SPDLOG_LIB}
-    pthread
+set(MSG_FILES
+    "msg/EBotMsg.msg"
+    "msg/WBotMsg.msg"
+    "msg/XHandMsg.msg"
+    "msg/YHandMsg.msg"
+)
+rosidl_generate_interfaces(${PROJECT_NAME}
+    ${MSG_FILES}
+    DEPENDENCIES std_msgs 
 )
 
+function(add_device_node TARGET_NAME)
 
-target_link_libraries(devices_node_subscriber
+    add_executable(${TARGET_NAME}
+        src/project/${TARGET_NAME}/${TARGET_NAME}.cpp
+    )
 
-    ${HARDWARE_TOP_LIB}
-    ${SWITCH_BOARD_LIB}
-    ${MOTOR_TAIHU_LIB}
-    ${SPDLOG_LIB}
-    pthread
-)
-
-# 链接 ROS 2 依赖
- ament_target_dependencies(devices_node_publisher rclcpp std_msgs)
-
- ament_target_dependencies(devices_node_subscriber rclcpp std_msgs)
+    # 添加公共头文件路径
+    target_include_directories(${TARGET_NAME} ${SDK_INCLUDE_DIRS})
 
 
-# 安装可执行文件
+    # 添加公共链接库
+    target_link_libraries(${TARGET_NAME}
 
-install(TARGETS 
+        ${HARDWARE_TOP_LIB}
+        ${SWITCH_BOARD_LIB}
+        ${MOTOR_TAIHU_LIB}
+        ${SPDLOG_LIB}
+        pthread
+    )
+    # 链接 ROS 2 依赖
+    ament_target_dependencies(${TARGET_NAME} rclcpp std_msgs)
 
-  devices_node_publisher
-  devices_node_subscriber
-  DESTINATION lib/${PROJECT_NAME}
+      rosidl_target_interfaces(${TARGET_NAME}
+        ${PROJECT_NAME}
+        "rosidl_typesupport_cpp"
+    )
 
-)
+    # 可选：安装目标
+    install(TARGETS ${TARGET_NAME}
+        RUNTIME DESTINATION lib/${PROJECT_NAME}
+    )
+endfunction()
+
+# 添加设备节点
+#add_device_node(X_Hand_Node)
+#add_device_node(Y_Hand_Node)
+add_device_node(E_Bot_Node)
+#add_device_node(Y_Bot_Node)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
