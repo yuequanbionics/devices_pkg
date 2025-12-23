@@ -35,10 +35,18 @@ int main(int argc, char *argv[])
 
     rclcpp::init(argc, argv);
 
-    rclcpp::spin(std::make_shared<E_Bot_Publisher>(Test_Robot));
-    rclcpp::spin(std::make_shared<E_Bot_Subscriber>(Test_Robot));
+    auto pub_node = std::make_shared<E_Bot_Publisher>(Test_Robot);
+    auto sub_node = std::make_shared<E_Bot_Subscriber>(Test_Robot);
+
+    // 创建多线程执行器
+    rclcpp::executors::MultiThreadedExecutor executor;
+    executor.add_node(pub_node);
+    executor.add_node(sub_node);
+    executor.spin();
 
     rclcpp::shutdown();
+
+    delete Test_Robot;
 
     return 0;
 }
