@@ -64,30 +64,30 @@ rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typ
 
 function(add_device_node TARGET_NAME)
 
-    add_executable(${TARGET_NAME}
-        src/project/${TARGET_NAME}/${TARGET_NAME}.cpp
-    )
+  add_executable(${TARGET_NAME}
+      src/project/${TARGET_NAME}/${TARGET_NAME}.cpp
+  )
 
-    # 添加公共头文件路径
-    target_include_directories(${TARGET_NAME} PRIVATE ${SDK_INCLUDE_DIRS})
+  # 添加公共头文件路径
+  target_include_directories(${TARGET_NAME} PRIVATE ${SDK_INCLUDE_DIRS})
     
-    # 链接 ROS 2 依赖
-    ament_target_dependencies(${TARGET_NAME} rclcpp std_msgs)
+  # 链接 ROS2 依赖
+  ament_target_dependencies(${TARGET_NAME} rclcpp std_msgs)
 
-    #解决「ROS 2 自动生成的消息接口代码未提前编译」导致的编译错误
-    add_dependencies(${TARGET_NAME} ${cpp_typesupport_target})
+  # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
+  add_dependencies(${TARGET_NAME} ${cpp_typesupport_target})
 
-    # 添加公共链接库
-    target_link_libraries(${TARGET_NAME}
-        ${SDK_ALL_LIBS}
-        ${cpp_typesupport_target}
-        pthread   
-    )
+  # 添加公共链接库
+  target_link_libraries(${TARGET_NAME}
+      ${SDK_ALL_LIBS}
+      ${cpp_typesupport_target}
+      pthread   
+  )
 
-    # 安装目标
-    install(TARGETS ${TARGET_NAME}
-        RUNTIME DESTINATION lib/${PROJECT_NAME}
-    )
+  # 安装目标
+  install(TARGETS ${TARGET_NAME}
+      RUNTIME DESTINATION lib/${PROJECT_NAME}
+  )
 endfunction()
 
 # 添加设备节点
