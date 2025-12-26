@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
     UDP_Def UDP_Def_one;
     Init_One_UDP_Connect(&UDP_Def_one, inet_addr("127.0.0.1"), htons(16201));
 
-     Robot_Hardware *Test_Robot = new Robot_Hardware();
+    Robot_Hardware *Test_Robot = new Robot_Hardware();
     Test_Robot->Add_Device_Type("Switch_Board", Switch_Board_Device_Init, Switch_Board_Device_CallBack_F, Switch_Board_Device_Delete_F);
     // Test_Robot->Add_Device_Type("TaiHu_Custom_Motor", Motor_Device_Init_TaiHu, Motor_Device_CallBack_TaiHu, Motor_Device_Delete_TaiHu);
 
-    // filesystem::path exe_path = filesystem::canonical("/proc/self/exe");  
+    // filesystem::path exe_path = filesystem::canonical("/proc/self/exe");
     // filesystem::path dir_path = exe_path.parent_path();
     // std::cout << "程序所在目录: " << dir_path << std::endl;
 

@@ -25,14 +25,14 @@ public:
 private:
     void topic_callback(const devices_pkg::msg::EBotMsg::SharedPtr msg) const
     {
-       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+       // RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
     }
 
     void publish_message()
     {
         auto message = devices_pkg::msg::EBotMsg();
-        message.frist_data = 4.56;
-        message.last_data = "E_Bot Node Message Data";
+        // message.frist_data = 4.56;
+        // message.last_data = "E_Bot Node Message Data";
         publisher_->publish(message);
     }
 
