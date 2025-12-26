@@ -4,6 +4,7 @@
 
 using namespace std;
 
+int hardware_init(string ADDR);
 
 int main(int argc, char *argv[])
 
@@ -34,6 +35,8 @@ int main(int argc, char *argv[])
     // Motor_TaiHu *Motor_TaiHu_c = static_cast<Motor_TaiHu *>(Test_Robot->Get_Control_Class(Motor));
 
     rclcpp::init(argc, argv);
+
+    hardware_init("../../../sdk/config//YAML/E_Bot/li_wenzhi/Servo_Config/TOP.yaml");
 
     // auto pub_node = std::make_shared<E_Bot_Publisher>(Test_Robot);
     // auto sub_node = std::make_shared<E_Bot_Subscriber>(Test_Robot);
