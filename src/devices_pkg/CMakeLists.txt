@@ -27,6 +27,7 @@ set(SDK_INCLUDE_DIRS
     ${SDK_ROOT}/../third_party/lib/install-x86_64/include/yaml-cpp
     ${SDK_ROOT}/Switch_Board
     ${SDK_ROOT}/Switch_Board/mcu/stm32h743
+    ${SDK_ROOT}/Custom_Device/Servo_Feetech
     ${CMAKE_INSTALL_PREFIX}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/project/E_Bot_Node
     ${CMAKE_CURRENT_SOURCE_DIR}/src/project/W_Bot_Node
@@ -40,6 +41,7 @@ set(SDK_ALL_LIBS
   ${SDK_LIB_ABS_DIR}/libHARDWARE_TOP.so
   ${SDK_LIB_ABS_DIR}/libSwitch_Board.so
   ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
+  ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
 )
 
 set(MSG_FILES
@@ -87,9 +89,11 @@ function(add_device_node TARGET_NAME)
 
   # 添加公共链接库
   target_link_libraries(${TARGET_NAME}
+      -Wl,--no-as-needed
       ${SDK_ALL_LIBS}
       ${cpp_typesupport_target}
-      pthread   
+      pthread
+      -Wl,--as-needed
   )
 
   # 安装目标
