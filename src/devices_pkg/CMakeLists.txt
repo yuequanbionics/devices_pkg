@@ -43,6 +43,9 @@ set(SDK_ALL_LIBS
 )
 
 set(MSG_FILES
+    "msg/types/IMU.msg"
+    "msg/types/Motor.msg"
+    "msg/types/Pressure.msg"
     "msg/EBotMsg.msg"
     "msg/WBotMsg.msg"
     "msg/XHandMsg.msg"
@@ -66,6 +69,11 @@ function(add_device_node TARGET_NAME)
 
   add_executable(${TARGET_NAME}
       src/project/${TARGET_NAME}/${TARGET_NAME}.cpp
+  )
+
+   # 添加 Debug 编译定义
+  target_compile_definitions(${TARGET_NAME} PRIVATE
+        HAVE_ROS
   )
 
   # 添加公共头文件路径
