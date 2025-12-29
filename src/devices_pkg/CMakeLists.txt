@@ -31,9 +31,10 @@ elseif (ARCH_SUFFIX MATCHES "arm64")
   set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/arch64)
 endif()
 
-set(SPDLOG_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib)
+set(TH_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib) 
 set(SOK_PROJECT_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/Project)
-file(GLOB SPDLOG_ALL_FILES "${SPDLOG_LIB_DIR}/libspdlog.so*")
+file(GLOB SPDLOG_ALL_FILES "${TH_LIB_DIR}/libspdlog.so*")
+file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 
 # 汇总SDK头文件路径
 set(SDK_INCLUDE_DIRS
@@ -43,8 +44,8 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom
         ${SDK_INC}/Z_SYS_SRC/SYS
         ${SDK_INC}/Z_SYS_SRC/UDP
-        ${SDK_INC}/../third_party/lib/install-x86_64/include
-        ${SDK_INC}/../third_party/lib/install-x86_64/include/yaml-cpp
+        ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include
+        ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include/yaml-cpp
         ${SDK_INC}/Switch_Board
         ${SDK_INC}/Switch_Board/mcu/stm32h743
         ${SDK_INC}/Custom_Device/Servo_Feetech
@@ -59,13 +60,11 @@ set(SDK_INCLUDE_DIRS
 # 汇总SDK链接库
 set(SDK_ALL_LIBS
         ${SPDLOG_ALL_FILES}
+        ${YAML_ALL_FILES}
         ${SDK_LIB_ABS_DIR}/libHARDWARE_TOP.so
         ${SDK_LIB_ABS_DIR}/libSwitch_Board.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
         ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
-        ${SPDLOG_LIB_DIR}/libyaml-cpp.so.0.8.0
-        ${SPDLOG_LIB_DIR}/libyaml-cpp.so.0.8
-        ${SPDLOG_LIB_DIR}/libyaml-cpp.so
 )
 
 # 定义消息文件
