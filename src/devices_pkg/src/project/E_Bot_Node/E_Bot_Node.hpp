@@ -7,14 +7,18 @@
 #include <filesystem>
 #include <iostream>
 #include "devices_pkg/msg/e_bot_msg.hpp"
+#include "Feetech_SCS0009.hpp"
 
 using namespace std;
 
 
+extern shared_ptr<Device_Struct> Device_Servo_SCS0009;
+extern Servo_SCS0009 *Servo_Ctrl;
+
 class E_Bot_Node : public rclcpp::Node
 {
 public:
-     E_Bot_Node(Robot_Hardware *Robot_e_bot) 
+     E_Bot_Node(Robot_Hardware *Robot_e_bot)
      : Node("e_bot_node")
      , Robot_ptr(Robot_e_bot)
      {
@@ -25,7 +29,7 @@ public:
 private:
     void topic_callback(const devices_pkg::msg::EBotMsg::SharedPtr msg) const
     {
-       // RCLCPP_INFO(this->get_logger(), "I heard[%d].", msg->cmd);
+       RCLCPP_INFO(this->get_logger(), "I heard[%d].", msg->cmd);
     }
 
     void publish_message()

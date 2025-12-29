@@ -11,10 +11,27 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
+
+# 统一架构判断，获取安装目录后缀
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+  set(ARCH_SUFFIX "x86_64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+  set(ARCH_SUFFIX "arm64")
+else()
+  message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+
 # 设置SDK相关路径
 set(SDK_INC ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/inc)
-set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/x86_64)
-set(SPDLOG_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-x86_64/lib)
+
+if(ARCH_SUFFIX MATCHES "x86_64")
+  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/x86_64)
+elseif (ARCH_SUFFIX MATCHES "arm64")
+  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/arch64)
+endif()
+
+set(SPDLOG_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib)
 set(SOK_PROJECT_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/Project)
 file(GLOB SPDLOG_ALL_FILES "${SPDLOG_LIB_DIR}/libspdlog.so*")
 
@@ -46,6 +63,9 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libSwitch_Board.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
         ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
+        ${SPDLOG_LIB_DIR}/libyaml-cpp.so.0.8.0
+        ${SPDLOG_LIB_DIR}/libyaml-cpp.so.0.8
+        ${SPDLOG_LIB_DIR}/libyaml-cpp.so
 )
 
 # 定义消息文件
