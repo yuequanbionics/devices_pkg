@@ -38,10 +38,11 @@ file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 
 # 汇总SDK头文件路径
 set(SDK_INCLUDE_DIRS
-        ${SDK_INC}/
         ${SDK_INC}/HARDWARE_TOP
         ${SDK_INC}/Z_SYS_SRC/CAN
-        ${SDK_INC}/Custom
+        ${SDK_INC}/Motor
+        ${SDK_INC}/Auto_Set_Id
+        ${SDK_INC}/Uart_Pressure_Sensor
         ${SDK_INC}/Z_SYS_SRC/SYS
         ${SDK_INC}/Z_SYS_SRC/UDP
         ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include
@@ -49,6 +50,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Switch_Board
         ${SDK_INC}/Switch_Board/mcu/stm32h743
         ${SDK_INC}/Custom_Device/Servo_Feetech
+        ${SDK_INC}/Custom_Device/Uart_Pressure_Sensor
         ${CMAKE_INSTALL_PREFIX}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/project/E_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/project/W_Bot_Node
@@ -63,8 +65,12 @@ set(SDK_ALL_LIBS
         ${YAML_ALL_FILES}
         ${SDK_LIB_ABS_DIR}/libHARDWARE_TOP.so
         ${SDK_LIB_ABS_DIR}/libSwitch_Board.so
+        ${SDK_LIB_ABS_DIR}/libAuto_Set_Id.so
+        ${SDK_LIB_ABS_DIR}/libMotor_Device.so
+        ${SDK_LIB_ABS_DIR}/libMotor_Interpolation.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
         ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
+        ${SDK_LIB_ABS_DIR}/libPressure_Sensor_Custom_Device.so
 )
 
 # 定义消息文件
@@ -137,7 +143,7 @@ function(add_device_node TARGET_NAME)
 endfunction()
 
 # 添加设备节点
-#add_device_node(X_Hand_Node)
+add_device_node(X_Hand_Node)
 #add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
 #add_device_node(Y_Bot_Node)
