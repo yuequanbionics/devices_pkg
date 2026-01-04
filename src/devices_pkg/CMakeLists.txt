@@ -146,7 +146,7 @@ endfunction()
 add_device_node(X_Hand_Node)
 #add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
-#add_device_node(Y_Bot_Node)
+add_device_node(W_Bot_Node)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

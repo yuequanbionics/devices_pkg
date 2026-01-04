@@ -1,1 +1,2 @@
-devices_pkg/Motor motor1
+devices_pkg/Motor[6] motors
+devices_pkg/Pressure pressure
