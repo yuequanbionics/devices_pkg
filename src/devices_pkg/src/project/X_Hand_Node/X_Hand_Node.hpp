@@ -46,7 +46,8 @@ public:
      {
         hardware_init("src/devices_pkg/src/sdk/config/YAML/X_Hand/out/TOP.yaml");
         publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>("x_hand_publisher", 10);
-        subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>("x_hand_subscriber", 10, std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));
+        subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>("x_hand_subscriber", 10, \
+            std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));
      }
 
 
@@ -70,14 +71,11 @@ private:
 
         X_Hand_Node* mutable_this = const_cast<X_Hand_Node*>(this);
 
-        mutable_this->sendMes.pressure.thumb = g_sensor_data.at(0);
-        mutable_this->sendMes.pressure.index = g_sensor_data.at(1);
-        mutable_this->sendMes.pressure.middle = g_sensor_data.at(2);
-        mutable_this->sendMes.pressure.ring = g_sensor_data.at(3);
-        mutable_this->sendMes.pressure.little = g_sensor_data.at(4);
-        mutable_this->sendMes.pressure.palm = g_sensor_data.at(5);
-
         Get_FB();
+
+        if(g_sensor_data.size() < 6)
+            return;
+        
         for (size_t i = 0; i < 6; i++)
         {
             mutable_this->sendMes.motors[i].pos = FB_Datas[i].P;
@@ -87,8 +85,7 @@ private:
             mutable_this->sendMes.motors[i].temp[1] = FB_Datas[i].temp[1];
             mutable_this->sendMes.motors[i].error = FB_Datas[i].error;
             
-            RCLCPP_INFO(this->get_logger(), "Received motor %d command: pos=%f, vel=%f, tor=%f, kp=%f, kd=%f", 
-                i+1, mutable_this->sendMes.motors[i].pos, mutable_this->sendMes.motors[i].vel, mutable_this->sendMes.motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+            mutable_this->sendMes.pressure[i].finger = g_sensor_data.at((u8)i+1);
         }
 
         publisher_->publish(sendMes);

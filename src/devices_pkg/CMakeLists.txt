@@ -90,11 +90,20 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         DEPENDENCIES std_msgs
 )
 
+# 自动处理 setup.py, package.xml 和 launch 目录的路径问题
+#ament_python_install_package(${PROJECT_NAME})
+
 # 安装SDK库文件到lib目录
 install(FILES
         ${SDK_ALL_LIBS}
         DESTINATION lib/
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+
+# 安装launch文件到share/<package_name>目录
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
 )
 
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
@@ -105,13 +114,23 @@ function(add_device_node TARGET_NAME)
   # 生成对应的输出文件名
   string(REPLACE "_Node" "" PROJECT_FILES_NAME ${TARGET_NAME})
   string(REPLACE "_Node" "_Out" PROJECT_OUT_NAME ${TARGET_NAME})
+  string(FIND ${TARGET_NAME} "Test_" IS_TEST_PROJECT)
+
+  if(NOT ${IS_TEST_PROJECT} EQUAL -1)
+    set(SOURCES_FILES "src/project/Test_Node.cpp")
+  else()
+    set(SOURCES_FILES
+    "src/sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
+    "src/project/${TARGET_NAME}/${TARGET_NAME}.cpp"
+   )   
+   endif()
 
   # 添加可执行文件
   add_executable(${TARGET_NAME}
-          src/sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp
-          src/project/${TARGET_NAME}/${TARGET_NAME}.cpp
+  ${SOURCES_FILES}
   )
 
+ 
   # 添加Debug编译定义
   target_compile_definitions(${TARGET_NAME} PRIVATE
           HAVE_ROS
@@ -147,6 +166,7 @@ add_device_node(X_Hand_Node)
 #add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
+add_device_node(Test_Node)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
