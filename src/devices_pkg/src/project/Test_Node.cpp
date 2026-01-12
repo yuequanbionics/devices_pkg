@@ -47,22 +47,24 @@ private:
 
 
         publisher_->publish(message);
+        RCLCPP_INFO(this->get_logger(), "Published command message");
+    
     }
 
      void topic_callback(const devices_pkg::msg::XHandMsg::SharedPtr msg) const
     {
-        for(size_t i = 0; i < 6; i++)
-        {
-            RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f", 
-                i+1, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+        // for(size_t i = 0; i < 6; i++)
+        // {
+        //     RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f", 
+        //         i+1, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
 
-            for(size_t j = 0; j < msg->pressure[i].finger.size(); j++)
-            {
-                RCLCPP_INFO(this->get_logger(), "Received  Pressure finger %d size %d data: %d", 
-                i, j, msg->pressure[i].finger[j]);
-            }
+        //     // for(size_t j = 0; j < msg->pressure[i].finger.size(); j++)
+        //     // {
+        //     //     RCLCPP_INFO(this->get_logger(), "Received  Pressure finger %d size %d data: %d", 
+        //     //     i, j, msg->pressure[i].finger[j]);
+        //     // }
 
-        }
+        // }
 
     }
     rclcpp::Publisher<devices_pkg::msg::XHandMsg>::SharedPtr publisher_;

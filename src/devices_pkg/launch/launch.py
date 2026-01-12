@@ -16,6 +16,7 @@ def generate_launch_description():
             package='devices_pkg',
             executable='X_Hand_Node', 
             name='x_hand_node',
+            output='screen',
             on_exit=Shutdown(reason="launch is shutting down")
         )
 

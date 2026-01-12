@@ -73,19 +73,19 @@ private:
 
         Get_FB();
 
-        if(g_sensor_data.size() < 6)
-            return;
-        
-        for (size_t i = 0; i < 6; i++)
+        if (g_sensor_data.size() == 6)
         {
-            mutable_this->sendMes.motors[i].pos = FB_Datas[i].P;
-            mutable_this->sendMes.motors[i].vel = FB_Datas[i].V;
-            mutable_this->sendMes.motors[i].tor = FB_Datas[i].F;
-            mutable_this->sendMes.motors[i].temp[0] = FB_Datas[i].temp[0];
-            mutable_this->sendMes.motors[i].temp[1] = FB_Datas[i].temp[1];
-            mutable_this->sendMes.motors[i].error = FB_Datas[i].error;
-            
-            mutable_this->sendMes.pressure[i].finger = g_sensor_data.at((u8)i+1);
+            for (size_t i = 0; i < 6; i++)
+            {
+                mutable_this->sendMes.motors[i].pos = FB_Datas[i].P;
+                mutable_this->sendMes.motors[i].vel = FB_Datas[i].V;
+                mutable_this->sendMes.motors[i].tor = FB_Datas[i].F;
+                mutable_this->sendMes.motors[i].temp[0] = FB_Datas[i].temp[0];
+                mutable_this->sendMes.motors[i].temp[1] = FB_Datas[i].temp[1];
+                mutable_this->sendMes.motors[i].error = FB_Datas[i].error;
+
+                mutable_this->sendMes.pressure[i].finger = g_sensor_data.at((u8)i + 1);
+            }
         }
 
         publisher_->publish(sendMes);
