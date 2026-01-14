@@ -4,8 +4,14 @@
 
 > **本项目是 [SDK]项目 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，支持设备通信、数据解析、节点发布等功能。** 
 
-[项目Gitee仓库](https://gitee.com/beijing-daqi-yuequan-bionics/sdk2ros) 
-[项目GitHub仓库](https://github.com/yuequanbionics/YQ_SDK_ROS2.git)
+📎项目Gitee仓库
+
+https://gitee.com/beijing-daqi-yuequan-bionics/sdk2ros
+
+
+📎项目GitHub仓库
+
+https://github.com/yuequanbionics/YQ_SDK_ROS2.git
 
  
 --- 
@@ -24,7 +30,9 @@
 ## 🚀 克隆部署运行
 
 > ⚠️ 注意事项：编译前请确保已安装所有ROS2依赖
+
 > ✅ 支持平台：包括x86/ARM架构的嵌入式设备
+
 > 💡 关键提醒：本项目包含**Git子模块(SDK)**，克隆需要带参数
 
 
