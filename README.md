@@ -4,14 +4,11 @@
 
 > **本项目是 [SDK]项目 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，支持设备通信、数据解析、节点发布等功能。** 
 
-📎项目Gitee仓库
 
-https://gitee.com/beijing-daqi-yuequan-bionics/sdk2ros
+📎项目Gitee仓库: https://gitee.com/beijing-daqi-yuequan-bionics/sdk2ros
 
 
-📎项目GitHub仓库
-
-https://github.com/yuequanbionics/YQ_SDK_ROS2.git
+📎项目GitHub仓库: https://github.com/yuequanbionics/YQ_SDK_ROS2.git
 
  
 --- 
@@ -37,21 +34,27 @@ https://github.com/yuequanbionics/YQ_SDK_ROS2.git
 
 
 1. SSH克隆包含子仓库
-   git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
+
+    git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
 
 2. cd 工程文件夹
 
-3. 拉取子仓库的最新分支 
-   git submodule update --remote --merge  
+3. 拉取子仓库的最新分支
 
-4. 编译命令  
-   colcon build  
+    git submodule update --remote --merge  
 
-5. 执行ROS的shell配置脚本  
-   source ./install/setup.sh  
+4. 编译命令
 
-6. 可执行文件路径  
-   /install/devices_pkg/lib/devices_pkg/  
+    colcon build  
+
+5. 执行ROS的shell配置脚本
+
+    source ./install/setup.sh  
+
+6. 可执行文件路径
+
+    /install/devices_pkg/lib/devices_pkg/  
 
 7. 运行节点  && 通过launch启动多节点
-   ros2 run devices_pkg 可执行文件名  && ros2 launch devices_pkg xxx.py
+
+    ros2 run devices_pkg 可执行文件名  && ros2 launch devices_pkg xxx.py
