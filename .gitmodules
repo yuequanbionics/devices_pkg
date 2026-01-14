@@ -1,4 +1,4 @@
 [submodule "src/devices_pkg/src/sdk"]
 	path = src/devices_pkg/src/sdk
-	url = git@gitee.com:beijing-daqi-yuequan-bionics/sdk_2.git
-	branch = develop
+	url = git@github.com:yuequanbionics/YQ_SDK_ROS2.git
+	branch = main
