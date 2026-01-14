@@ -33,7 +33,7 @@
 > 💡 关键提醒：本项目包含**Git子模块(SDK)**，克隆需要带参数
 
 
-1. SSH && HTTPS克隆包含子仓库(二选一)
+1. SSH || HTTPS克隆包含子仓库(二选一)
 
     git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
 
@@ -57,7 +57,7 @@
 
     /install/devices_pkg/lib/devices_pkg/  
 
-7. 运行节点  && 通过launch启动多节点
+7. 运行节点  || 通过launch启动多节点(二选一)
 
     ros2 run devices_pkg 可执行文件名
 
