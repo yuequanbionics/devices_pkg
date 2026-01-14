@@ -4,4 +4,5 @@
 /build/
 /install/
 /log/
+/logs/
 #src/devices_pkg/src/sdk
