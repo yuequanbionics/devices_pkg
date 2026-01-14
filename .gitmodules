@@ -1,0 +1,3 @@
+[submodule "src/devices_pkg/src/sdk"]
+	path = src/devices_pkg/src/sdk
+	url = git@github.com:yuequanbionics/YQ_SDK_ROS2.git
