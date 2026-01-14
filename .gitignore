@@ -1,0 +1,7 @@
+# .gitignore
+
+.vscode/
+/build/
+/install/
+/log/
+src/devices_pkg/src/sdk
