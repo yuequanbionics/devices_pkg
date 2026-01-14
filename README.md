@@ -33,9 +33,11 @@
 > 💡 关键提醒：本项目包含**Git子模块(SDK)**，克隆需要带参数
 
 
-1. SSH克隆包含子仓库
+1. SSH && HTTPS克隆包含子仓库(二选一)
 
     git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
+
+    git clone --recurse-submodules https://xxxxx.com/xxxxxxxx.git
 
 2. cd 工程文件夹
 
