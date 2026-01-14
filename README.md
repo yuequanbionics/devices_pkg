@@ -1,6 +1,8 @@
 # SDK_2_ROS
 
-> 本项目是 [SDK_2]项目develop分支 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，便于在系统中集成设备的功能。  
+> 本项目是 [SDK_2]项目develop分支 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，便于在系统中集成设备的功能。 
+
+ ⚠️ 警告：该仓库已暂停维护，最新代码已移植到github 地址：https://github.com/yuequanbionics/YQ_SDK_ROS2#
  
 --- 
 
