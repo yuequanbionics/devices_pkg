@@ -59,4 +59,6 @@
 
 7. 运行节点  && 通过launch启动多节点
 
-    ros2 run devices_pkg 可执行文件名  && ros2 launch devices_pkg xxx.py
+    ros2 run devices_pkg 可执行文件名
+
+    ros2 launch devices_pkg xxx.py
