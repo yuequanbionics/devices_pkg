@@ -1,35 +1,49 @@
 # SDK_2_ROS
 
-> 本项目是 [SDK]项目 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，便于在系统中集成设备的功能。 
+## 📋 项目介绍
+
+> **本项目是 [SDK]项目 的 ROS 封装，提供 ROS 节点、话题、服务和参数接口，支持设备通信、数据解析、节点发布等功能。** 
+
+[项目Gitee仓库](https://gitee.com/beijing-daqi-yuequan-bionics/sdk2ros) 
+[项目GitHub仓库](https://github.com/yuequanbionics/YQ_SDK_ROS2.git)
 
  
 --- 
 
-## 环境要求
+## 📌 环境要求
 
--当前开发环境  
--Ubuntu24.04  
--ROS2 jazzy  
--其他环境暂未测试  
+| 环境         | 版本要求 | 状态  |
+| :----------- | :------- | :---- |
+| 系统         | Ubuntu24.04 | ✅ 支持 |
+| ROS版本      | jazzy   | ✅ 支持 |
+| Python       | 3.10     | ✅ 支持 |
+| C++标准      | C++17    | ✅ 支持 |
 
 ---
 
-## 克隆仓库
+## 🚀 克隆部署运行
 
-因为包含子模块需要添加 --recurse-submodules  
-git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git  
+> ⚠️ 注意事项：编译前请确保已安装所有ROS2依赖
+> ✅ 支持平台：包括x86/ARM架构的嵌入式设备
+> 💡 关键提醒：本项目包含**Git子模块(SDK)**，克隆需要带参数
 
-拉取子模块SDK_2的最新分支  
-git submodule update --remote --merge  
 
-编译命令  
-colcon build  
+1. SSH克隆包含子仓库
+   git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
 
-执行ROS的shell配置脚本  
-source ./install/setup.sh  
+2. cd 工程文件夹
 
-可执行文件路径  
-/install/devices_pkg/lib/devices_pkg  
+3. 拉取子仓库的最新分支 
+   git submodule update --remote --merge  
 
-执行可执行文件  
-ros2 run devices_pkg 可执行文件名  
+4. 编译命令  
+   colcon build  
+
+5. 执行ROS的shell配置脚本  
+   source ./install/setup.sh  
+
+6. 可执行文件路径  
+   /install/devices_pkg/lib/devices_pkg/  
+
+7. 运行节点  && 通过launch启动多节点
+   ros2 run devices_pkg 可执行文件名  && ros2 launch devices_pkg xxx.py
