@@ -38,6 +38,8 @@ int hardware_init(string ADDR);
 void Get_FB(void);
 void Send(void);
 
+const int MOTOR_NUM = 6;
+
 class X_Hand_Node : public rclcpp::Node
 {
 public:
@@ -55,7 +57,7 @@ public:
 private:
     void topic_callback(const devices_pkg::msg::XHandMsg::SharedPtr msg) const
     {
-        for(size_t i = 0; i < 6; i++)
+        for(size_t i = 0; i < MOTOR_NUM; i++)
         {
             Send_Datas[i].P = msg->motors[i].pos;
             Send_Datas[i].V = msg->motors[i].vel;
@@ -73,9 +75,9 @@ private:
 
         Get_FB();
 
-        if (g_sensor_data.size() == 6)
+        if (g_sensor_data.size() == MOTOR_NUM)
         {
-            for (size_t i = 0; i < 6; i++)
+            for (size_t i = 0; i < MOTOR_NUM; i++)
             {
                 mutable_this->sendMes.motors[i].pos = FB_Datas[i].P;
                 mutable_this->sendMes.motors[i].vel = FB_Datas[i].V;

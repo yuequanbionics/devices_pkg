@@ -78,6 +78,7 @@ set(MSG_FILES
         "msg/types/IMU.msg"
         "msg/types/Motor.msg"
         "msg/types/Pressure.msg"
+        "msg/types/Pretighten.msg"
         "msg/EBotMsg.msg"
         "msg/WBotMsg.msg"
         "msg/XHandMsg.msg"
@@ -163,7 +164,7 @@ endfunction()
 
 # 添加设备节点
 add_device_node(X_Hand_Node)
-#add_device_node(Y_Hand_Node)
+add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
 add_device_node(Test_Node)
