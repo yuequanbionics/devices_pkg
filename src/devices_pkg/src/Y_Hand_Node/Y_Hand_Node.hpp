@@ -82,7 +82,7 @@ public:
      Y_Hand_Node()
      : Node("y_hand_node")
      {
-        hardware_init("src/devices_pkg/src/sdk/config/YAML/Y_Hand/out/TOP.yaml");
+        hardware_init("src/devices_pkg/sdk/config/YAML/Y_Hand/out/TOP.yaml");
         publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>("y_hand_publisher", 10);
         subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>("y_hand_subscriber", 10, \
             std::bind(&Y_Hand_Node::topic_callback, this, std::placeholders::_1));
