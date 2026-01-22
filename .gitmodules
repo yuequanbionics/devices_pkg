@@ -1,3 +1,0 @@
-[submodule "src/devices_pkg/src/sdk"]
-	path = src/devices_pkg/src/sdk
-	url = https://github.com/yuequanbionics/YQ_SDK.git

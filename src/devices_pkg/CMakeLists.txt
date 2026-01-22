@@ -23,16 +23,16 @@ endif()
 
 
 # 设置SDK相关路径
-set(SDK_INC ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/inc)
+set(SDK_INC ${CMAKE_CURRENT_SOURCE_DIR}/sdk/inc)
 
 if(ARCH_SUFFIX MATCHES "x86_64")
-  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/x86_64)
+  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib/x86_64)
 elseif (ARCH_SUFFIX MATCHES "arm64")
-  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/lib/arch64)
+  set(SDK_LIB_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib/arch64)
 endif()
 
-set(TH_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib) 
-set(SOK_PROJECT_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/sdk/Project)
+set(TH_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib) 
+set(SOK_PROJECT_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/Project)
 file(GLOB SPDLOG_ALL_FILES "${TH_LIB_DIR}/libspdlog.so*")
 file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 
@@ -52,10 +52,10 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Servo_Feetech
         ${SDK_INC}/Custom_Device/Uart_Pressure_Sensor
         ${CMAKE_INSTALL_PREFIX}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/project/E_Bot_Node
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/project/W_Bot_Node
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/project/X_Hand_Node
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/project/Y_Hand_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/E_Bot_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/X_Hand_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Y_Hand_Node
 
 )
 
@@ -118,11 +118,11 @@ function(add_device_node TARGET_NAME)
   string(FIND ${TARGET_NAME} "Test_" IS_TEST_PROJECT)
 
   if(NOT ${IS_TEST_PROJECT} EQUAL -1)
-    set(SOURCES_FILES "src/project/Test_Node.cpp")
+    set(SOURCES_FILES "src/Test_Node.cpp")
   else()
     set(SOURCES_FILES
-    "src/sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
-    "src/project/${TARGET_NAME}/${TARGET_NAME}.cpp"
+    "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
+    "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
    )   
    endif()
 
