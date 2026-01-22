@@ -30,20 +30,25 @@
 
 > ✅ 支持平台：包括x86/ARM架构的嵌入式设备
 
-> 💡 关键提醒：本项目包含**Git子模块(SDK)**，克隆需要带参数
 
 
 1. SSH || HTTPS克隆包含子仓库(二选一)
 
-    git clone --recurse-submodules git@xxxx.com:xxxxxxxxxxxxx.git
+    git clone git@xxxx.com:xxxxxxxxxxxxx.git
 
-    git clone --recurse-submodules https://xxxxx.com/xxxxxxxx.git
+    git clone https://xxxxx.com/xxxxxxxx.git
 
 2. cd 工程文件夹
 
-3. 拉取子仓库的最新分支
+3. 运行拉取SDK的shell脚本
 
-    git submodule update --remote --merge  
+    拉取gitee上的SDK源码仓库
+
+    ./pull_sdk.sh gitee
+
+    拉取github上的SDK对外输出仓库
+
+    ./pull_sdk.sh github
 
 4. 编译命令
 
