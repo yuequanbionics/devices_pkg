@@ -40,15 +40,15 @@ file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 set(SDK_INCLUDE_DIRS
         ${SDK_INC}/HARDWARE_TOP
         ${SDK_INC}/Z_SYS_SRC/CAN
-        ${SDK_INC}/Motor
-        ${SDK_INC}/Auto_Set_Id
+        ${SDK_INC}/Motors/Motor
+        ${SDK_INC}/Misc/Auto_Set_Id
         ${SDK_INC}/Uart_Pressure_Sensor
         ${SDK_INC}/Z_SYS_SRC/SYS
         ${SDK_INC}/Z_SYS_SRC/UDP
         ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include
         ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include/yaml-cpp
-        ${SDK_INC}/Switch_Board
-        ${SDK_INC}/Switch_Board/mcu/stm32h743
+        ${SDK_INC}/Switch_Boards/Switch_Board
+        ${SDK_INC}/Switch_Boards/Switch_Board/mcu/stm32h743
         ${SDK_INC}/Custom_Device/Servo_Feetech
         ${SDK_INC}/Custom_Device/Uart_Pressure_Sensor
         ${SDK_INC}/Custom_Device/Eyou_Motor

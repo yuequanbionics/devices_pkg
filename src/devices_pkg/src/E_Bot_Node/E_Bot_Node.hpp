@@ -12,7 +12,7 @@
 using namespace std;
 
 
-extern shared_ptr<Device_Struct> Device_Servo_SCS0009;
+extern shared_ptr<Device_class> Device_Servo_SCS0009;
 extern Servo_SCS0009 *Servo_Ctrl;
 
 class E_Bot_Node : public rclcpp::Node

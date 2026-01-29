@@ -62,10 +62,10 @@ private:
 
     void topic_callback(const devices_pkg::msg::YHandMsg::SharedPtr msg) const
     {
-        for (size_t i = 0; i < 2; i++)
+        for (size_t i = 0; i < 28; i++)
         {
             RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
-                        1, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+                        i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
         }
     }
     rclcpp::Publisher<devices_pkg::msg::YHandMsg>::SharedPtr publisher_;
