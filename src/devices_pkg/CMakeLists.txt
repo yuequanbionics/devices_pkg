@@ -54,7 +54,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Eyou_Motor
         ${SDK_INC}/Custom_Device/Motor_TaiHu
         ${SDK_INC}/Custom_Device/Motor_BenMo
-        ${SDK_INC}/Led_Device
+        ${SDK_INC}/Misc/Led_Device
         ${CMAKE_INSTALL_PREFIX}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/E_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Node
