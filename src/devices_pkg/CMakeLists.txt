@@ -75,6 +75,7 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
         ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
         ${SDK_LIB_ABS_DIR}/libPressure_Sensor_Custom_Device.so
+        ${SDK_LIB_ABS_DIR}/libLed_Device.so
 )
 
 # 定义消息文件
