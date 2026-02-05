@@ -75,6 +75,9 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libMotor_Device_TaiHu.so
         ${SDK_LIB_ABS_DIR}/libServo_Feetech_SCS0009.so
         ${SDK_LIB_ABS_DIR}/libPressure_Sensor_Custom_Device.so
+        ${SDK_LIB_ABS_DIR}/libLed_Device.so
+        ${SDK_LIB_ABS_DIR}/libMotor_Device_BenMo.so
+        ${SDK_LIB_ABS_DIR}/libEyou_Custom_Motor_Device.so
 )
 
 # 定义消息文件
@@ -87,6 +90,7 @@ set(MSG_FILES
         "msg/WBotMsg.msg"
         "msg/XHandMsg.msg"
         "msg/YHandMsg.msg"
+        "msg/Remote.msg"
 )
 
 # 生成消息接口代码
@@ -128,7 +132,14 @@ function(add_device_node TARGET_NAME)
     "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
     "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
    )   
-   endif()
+  endif()
+
+
+  if(${TARGET_NAME} STREQUAL "Remote_Node")
+  set(SOURCES_FILES
+  "src/W_Bot_Node/${TARGET_NAME}.cpp"
+ )   
+  endif()
 
   # 添加可执行文件
   add_executable(${TARGET_NAME}
@@ -170,8 +181,9 @@ endfunction()
 add_device_node(X_Hand_Node)
 add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
-#add_device_node(W_Bot_Node)
+add_device_node(W_Bot_Node)
 add_device_node(Test_Node)
+add_device_node(Remote_Node)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
