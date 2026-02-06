@@ -1,98 +1,164 @@
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-#include "UDP.hpp"
-#include "HARDWARE_TOP.hpp"
-#include "Custom_TOP.hpp"
-#include "Switch_Board.hpp"
-#include <filesystem>
-#include <iostream>
-#include "devices_pkg/msg/x_hand_msg.hpp"
-#include "devices_pkg/msg/y_hand_msg.hpp"
+#include "Test_Node.hpp"
 
-using namespace std;
-
-class Test_Node : public rclcpp::Node
+template <typename MsgT>
+Test_Node<MsgT>::Test_Node(const std::string& node_name)
+: Node(node_name+"_test_node")
 {
-public:
-    Test_Node()
-    : Node("test_node")
-    {
-        publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>("y_hand_subscriber", 10);
-        timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(2),
-            std::bind(&Test_Node::timer_callback, this));
-
-        subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>("y_hand_publisher", 10, \
-            std::bind(&Test_Node::topic_callback, this, std::placeholders::_1));
- }
-private:
-
-    void timer_callback()
-    {
-        auto message = devices_pkg::msg::YHandMsg();
-
-        // if (times % 500 * 2 == 0) {
-        //     test = -test;
-        // }
-        // times++;
-
-        // for (int i = 0; i < 6; i++) {
-        //     message.motors[i].pos = 0.5 + test;
-        //     message.motors[i].vel = 0;
-        //     message.motors[i].tor = 0;
-        //     message.motors[i].kp = 500;
-        //     message.motors[i].kd = 5;
-        // }
-        // message.motors[0].pos = 0.25 + test / 2;
-        // message.motors[1].pos = 0.1 + test / 5;
-
-        for(int i = 0; i < 28; i++)
-        {
-            message.motors[i].pos = 0.0;
-            message.motors[i].vel = 0.0;
-            message.motors[i].tor = -0.03;
-            message.motors[i].kp = 0.0;
-            message.motors[i].kd = 0.0;
-        }
-
-
-        publisher_->publish(message);
+    curr_node_name = node_name;
+    std::string topic_sub_name = node_name + "_subscriber";
+    std::string topic_pub_name = node_name + "_publisher";
     
-    }
+    
 
-    void topic_callback(const devices_pkg::msg::YHandMsg::SharedPtr msg) const
+    publisher_ = this->create_publisher<MsgT>(topic_sub_name, 10);
+    timer_ = this->create_wall_timer(
+        std::chrono::milliseconds(2),
+        std::bind(cb_map[curr_node_name], this));
+    subscription_ = this->create_subscription<MsgT>(topic_pub_name, 10, \
+        std::bind(topic_cb_map[curr_node_name], this, std::placeholders::_1));
+}
+
+template <typename MsgT>
+void Test_Node<MsgT>::y_hand_timer_callback()
+{
+    auto message = MsgT();
+
+    for(int i = 0; i < 28; i++)
     {
-        for (size_t i = 0; i < 28; i++)
-        {
-            RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
-                        i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
-        }
+        message.motors[i].pos = 0.0;
+        message.motors[i].vel = 0.0;
+        message.motors[i].tor = -0.03;
+        message.motors[i].kp = 0.0;
+        message.motors[i].kd = 0.0;
     }
-    rclcpp::Publisher<devices_pkg::msg::YHandMsg>::SharedPtr publisher_;
-    rclcpp::Subscription<devices_pkg::msg::YHandMsg>::SharedPtr subscription_;
-    rclcpp::TimerBase::SharedPtr timer_;
+    publisher_->publish(message);
+}
 
-    //float loop_time_step = 1000 * 1000 / 500;
-    int times = 0;
-    float test = 0.5;
-};
+template <typename MsgT>
+void Test_Node<MsgT>::x_hand_timer_callback()
+{
+    auto message = MsgT();
+
+    for(int i = 0; i < 28; i++)
+    {
+        message.motors[i].pos = 0.0;
+        message.motors[i].vel = 0.0;
+        message.motors[i].tor = -0.03;
+        message.motors[i].kp = 0.0;
+        message.motors[i].kd = 0.0;
+    }
+    publisher_->publish(message);
+}
+
+template <typename MsgT>
+void Test_Node<MsgT>::e_bot_timer_callback()
+{
+    auto message = MsgT();
+
+    for(int i = 0; i < 28; i++)
+    {
+        message.motors[i].pos = 0.0;
+        message.motors[i].vel = 0.0;
+        message.motors[i].tor = -0.03;
+        message.motors[i].kp = 0.0;
+        message.motors[i].kd = 0.0;
+    }
+    publisher_->publish(message);
+}
+
+template <typename MsgT>
+void Test_Node<MsgT>::w_bot_timer_callback()
+{
+    auto message = MsgT();
+
+    for(int i = 0; i < 28; i++)
+    {
+        message.motors[i].pos = 0.0;
+        message.motors[i].vel = 0.0;
+        message.motors[i].tor = -0.03;
+        message.motors[i].kp = 0.0;
+        message.motors[i].kd = 0.0;
+    }
+    publisher_->publish(message);
+}
+
+template <typename MsgT>
+void Test_Node<MsgT>::y_hand_topic_callback(const typename MsgT::SharedPtr msg) const
+{
+    for (size_t i = 0; i < 28; i++)
+    {
+        RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
+                    i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+    }
+}
+template <typename MsgT>
+void Test_Node<MsgT>::x_hand_topic_callback(const typename MsgT::SharedPtr msg) const
+{
+    for (size_t i = 0; i < 28; i++)
+    {
+        RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
+                    i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+    }
+}
+template <typename MsgT>
+void Test_Node<MsgT>::e_bot_topic_callback(const typename MsgT::SharedPtr msg) const
+{
+    for (size_t i = 0; i < 28; i++)
+    {
+        RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
+                    i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+    }
+}
+template <typename MsgT>
+void Test_Node<MsgT>::w_bot_topic_callback(const typename MsgT::SharedPtr msg) const
+{
+    for (size_t i = 0; i < 28; i++)
+    {
+        RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
+                    i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
+    }
+}
 
 int main(int argc, char *argv[])
-
 {
-
     rclcpp::init(argc, argv);
 
-    const auto TestNode = std::make_shared<Test_Node>();
+    std::string string_arg = argv[1];
 
-    // 创建多线程执行器
     rclcpp::executors::MultiThreadedExecutor executor;
 
-    executor.add_node(TestNode);
-    executor.spin();
+    if(string_arg == "y_hand")
+    {
+        using MsgT = devices_pkg::msg::YHandMsg;
+        const auto TestNode = std::make_shared<Test_Node<MsgT>>(string_arg);
+        executor.add_node(TestNode);
+        executor.spin();
+    }
+    else if(string_arg == "x_hand")
+    {
+        using MsgT = devices_pkg::msg::XHandMsg;
+        const auto TestNode = std::make_shared<Test_Node<MsgT>>(string_arg);
+        executor.add_node(TestNode);
+        executor.spin();
+    }
+    // else if(string_arg == "E_Bot")
+    // {
+    //     using MsgT = devices_pkg::msg::EBotMsg;
+    //     const auto TestNode = std::make_shared<Test_Node<MsgT>>(string_arg);
+    // }
+    // else if(string_arg == "W_Bot")
+    // {
+    //     using MsgT = devices_pkg::msg::WBotMsg;
+    //     const auto TestNode = std::make_shared<Test_Node<MsgT>>(string_arg);
+    // }
+    else
+    {
+        rclcpp::shutdown();
+        return -1;
+    }
+    
 
     // 关闭 ROS 2
     rclcpp::shutdown();
-
     return 0;
 }

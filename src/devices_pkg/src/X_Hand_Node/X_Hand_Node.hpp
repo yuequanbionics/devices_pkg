@@ -1,3 +1,6 @@
+#ifndef X_HAND_NODE_H_
+#define X_HAND_NODE_H_
+
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "UDP.hpp"
@@ -104,3 +107,5 @@ private:
 
 
 };
+
+#endif // X_HAND_NODE_H_

@@ -1,3 +1,6 @@
+#ifndef W_BOT_NODE_H_
+#define W_BOT_NODE_H_
+
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "UDP.hpp"
@@ -49,5 +52,6 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
 };
 
+#endif // W_BOT_NODE_H_
 
 

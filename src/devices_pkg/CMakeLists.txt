@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.15)
 project(devices_pkg)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# 关闭扩展，保证跨平台兼容性
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -56,6 +61,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Motor_BenMo
         ${SDK_INC}/Misc/Led_Device
         ${CMAKE_INSTALL_PREFIX}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/E_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/X_Hand_Node

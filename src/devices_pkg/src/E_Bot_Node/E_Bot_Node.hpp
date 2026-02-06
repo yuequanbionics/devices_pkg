@@ -1,3 +1,7 @@
+#ifndef E_BOT_NODE_H_
+#define E_BOT_NODE_H_
+
+
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "UDP.hpp"
@@ -44,3 +48,5 @@ private:
     rclcpp::Publisher<devices_pkg::msg::EBotMsg>::SharedPtr publisher_;
     Robot_Hardware *Robot_ptr;
 };
+
+#endif // E_BOT_NODE_H_ 
