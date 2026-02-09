@@ -42,7 +42,7 @@
 
 2. cd 工程文件夹
 
-3. 运行拉取SDK的shell脚本
+3. 运行拉取SDK的shell脚本(二选一)
 
     拉取gitee上的SDK源码仓库
 
@@ -69,3 +69,12 @@
     ros2 run devices_pkg 可执行文件名
 
     ros2 launch devices_pkg xxx.py
+
+    以Y_Hand为例：
+
+    启动 Y_Hand 单节点  ros2 run devices_pkg Y_Hand_Node
+
+    启动 Y_Hand + test 多节点 ros2 launch devices_pkg launch.py
+
+
+
