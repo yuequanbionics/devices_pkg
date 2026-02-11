@@ -169,10 +169,7 @@ private:
         Motor28_Control->Get_Motor_FB_Data( Motor28_Device,  &mu_this->sendMes.motors[27].pos,  &mu_this->sendMes.motors[27].vel,  &mu_this->sendMes.motors[27].tor);
 
 
-        publisher_->publish(sendMes);
-
-        
-        
+        publisher_->publish(sendMes); 
 
     }
 

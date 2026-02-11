@@ -17,7 +17,8 @@ def generate_launch_description():
     test_node_name, dev_executable, dev_node_name = node_mapping[curr_project]
 
     return LaunchDescription([
-        Node(
+        
+        Node(                            #测试节点
             package='devices_pkg',
             executable='Test_Node',      # CMakeLists.txt 中定义的可执行文件名
             name=test_node_name,            # 节点运行时的名称
@@ -25,7 +26,8 @@ def generate_launch_description():
             arguments=[curr_project],  # 传递命令行参数给main函数
             on_exit=Shutdown(reason="launch is shutting down") #launch退出时关闭节点
         ),
-        Node(
+
+        Node(                            #设备节点
             package='devices_pkg',
             executable=dev_executable, 
             name=dev_node_name,
