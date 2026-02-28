@@ -26,7 +26,7 @@ devices_pkg/Motor right_wrist_pitch
 devices_pkg/Motor right_wrist_roll
 
 devices_pkg/Motor head_pitch
-devices_pkg/Motor head_pitch
+devices_pkg/Motor head_yaw
 
 #本末-底盘电机
 

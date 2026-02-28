@@ -59,6 +59,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Eyou_Motor
         ${SDK_INC}/Custom_Device/Motor_TaiHu
         ${SDK_INC}/Custom_Device/Motor_BenMo
+        ${SDK_INC}/Custom_Device/IMU_YuanJi_Uart
         ${SDK_INC}/Misc/Led_Device
         ${CMAKE_INSTALL_PREFIX}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -84,6 +85,7 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libLed_Device.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device_BenMo.so
         ${SDK_LIB_ABS_DIR}/libEyou_Custom_Motor_Device.so
+        ${SDK_LIB_ABS_DIR}/libIMU_Device_YuanJi.so
 )
 
 # 定义消息文件
@@ -98,6 +100,7 @@ set(MSG_FILES
         "msg/XHandMsg.msg"
         "msg/YHandMsg.msg"
         "msg/Remote.msg"
+        "msg/WBotLED.msg"
         
 )
 
