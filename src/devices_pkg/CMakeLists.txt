@@ -92,11 +92,13 @@ set(MSG_FILES
         "msg/types/Motor.msg"
         "msg/types/Pressure.msg"
         "msg/types/Pretighten.msg"
+        "msg/types/LED.msg"
         "msg/EBotMsg.msg"
         "msg/WBotMsg.msg"
         "msg/XHandMsg.msg"
         "msg/YHandMsg.msg"
         "msg/Remote.msg"
+        
 )
 
 # 生成消息接口代码
@@ -124,21 +126,30 @@ install(DIRECTORY
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
+set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node")
+
 function(add_device_node TARGET_NAME)
 
   # 生成对应的输出文件名
   string(REPLACE "_Node" "" PROJECT_FILES_NAME ${TARGET_NAME})
   string(REPLACE "_Node" "_Out" PROJECT_OUT_NAME ${TARGET_NAME})
-  string(FIND ${TARGET_NAME} "Test_" IS_TEST_PROJECT)
+  # string(FIND ${TARGET_NAME} "Test_" IS_TEST_PROJECT)
 
-  if(NOT ${IS_TEST_PROJECT} EQUAL -1)
-    set(SOURCES_FILES "src/Test_Node.cpp")
-  else()
-    set(SOURCES_FILES
+  # if(NOT ${IS_TEST_PROJECT} EQUAL -1)
+  #   set(SOURCES_FILES "src/Test_Node.cpp")
+  # else()
+  #   set(SOURCES_FILES
+  #   "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
+  #   "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
+  #  )   
+  # endif()
+
+  if(${TARGET_NAME} IN_LIST TARGET_LIST)
+  set(SOURCES_FILES
     "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
     "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
-   )   
-  endif()
+  )   
+endif()
 
 
   if(${TARGET_NAME} STREQUAL "Remote_Node")
@@ -184,11 +195,11 @@ function(add_device_node TARGET_NAME)
 endfunction()
 
 # 添加设备节点
-add_device_node(X_Hand_Node)
+#add_device_node(X_Hand_Node)
 add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
-add_device_node(Test_Node)
+#add_device_node(Test_Node)
 add_device_node(Remote_Node)
 
 if(BUILD_TESTING)
