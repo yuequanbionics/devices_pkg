@@ -37,7 +37,7 @@ extern X_hand_FB FB_Datas[6];
 extern map<u8, vector<u16>> g_sensor_data;
 
 //声明外部函数
-int hardware_init(string ADDR);
+int hardware_init(string ADDR, string Config);
 void Get_FB(void);
 void Send(void);
 
@@ -49,7 +49,15 @@ public:
      X_Hand_Node()
      : Node("x_hand_node")
      {
-        hardware_init("src/devices_pkg/src/sdk/config/YAML/X_Hand/out/TOP.yaml");
+        string Config = R"(
+        PC_IP: 192.168.3.245
+        SN: asdf1234567
+        Boards:
+        - Id: 101
+          IP: 192.168.3.105
+          # Port: 19001
+        )";
+        hardware_init("src/devices_pkg/sdk/config/YAML/X_Hand/out/TOP.yaml",Config);
         publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>("x_hand_publisher", 10);
         subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>("x_hand_subscriber", 10, \
             std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));
