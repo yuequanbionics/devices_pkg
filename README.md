@@ -52,19 +52,25 @@
 
     ./pull_sdk.sh github
 
-4. 编译命令
+4. (如果是ARM平台）进sdk/目录下编译ARM平台下的第三方库
+  
+   ./Tool.sh make_third
+   ./Tool.sh make
+   
+
+5. 在sdk2ros/目录下编译命令
 
     colcon build  
 
-5. 执行ROS的shell配置脚本
+6. 执行ROS的shell配置脚本
 
     source ./install/setup.sh  
 
-6. 可执行文件路径
+7. 可执行文件路径
 
     /install/devices_pkg/lib/devices_pkg/  
 
-7. 运行节点  || 通过launch启动多节点(二选一)
+8. 运行节点  || 通过launch启动多节点(二选一)
 
     ros2 run devices_pkg 可执行文件名
 
