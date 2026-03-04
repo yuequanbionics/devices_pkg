@@ -118,7 +118,7 @@ public:
             std::chrono::milliseconds(10),
             std::bind(&W_Bot_Node::imu_timer_callback, this));
 
-        timer_imu = this->create_wall_timer(
+        timer_Motor = this->create_wall_timer(
             std::chrono::milliseconds(10),
             std::bind(&W_Bot_Node::motor_timer_callback, this));
  }
