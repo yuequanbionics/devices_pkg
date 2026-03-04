@@ -1,12 +1,11 @@
-#W_Bot数据类型
+#W_Bot电机数据类型
 
 #意优-下肢电机
 devices_pkg/Motor waist_roll
 devices_pkg/Motor waist_yaw
 devices_pkg/Motor knee
 devices_pkg/Motor hip
-devices_pkg/Motor ankel
-devices_pkg/Motor ankel_right
+devices_pkg/Motor ankle
 
 #钛虎-上肢电机
 devices_pkg/Motor left_shoulder_pitch
@@ -29,11 +28,9 @@ devices_pkg/Motor head_pitch
 devices_pkg/Motor head_yaw
 
 #本末-底盘电机
+devices_pkg/Motor wheel_left
+devices_pkg/Motor wheel_right
 
-
-#IMU
-devices_pkg/IMU chest
-devices_pkg/IMU chassis
 
 
 

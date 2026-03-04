@@ -95,12 +95,15 @@ set(MSG_FILES
         "msg/types/Pressure.msg"
         "msg/types/Pretighten.msg"
         "msg/types/LED.msg"
+        "msg/WBot/WBotMotor.msg"
+        "msg/WBot/WBotIMU.msg"
+        "msg/WBot/WBotLED.msg"
+        "msg/WBot/Remote.msg"
+        
         "msg/EBotMsg.msg"
-        "msg/WBotMsg.msg"
         "msg/XHandMsg.msg"
         "msg/YHandMsg.msg"
-        "msg/Remote.msg"
-        "msg/WBotLED.msg"
+      
         
 )
 
@@ -161,6 +164,12 @@ endif()
  )   
   endif()
 
+    if(${TARGET_NAME} STREQUAL "Test_Wbot_Node")
+  set(SOURCES_FILES
+  "src/Test_Wbot_Node.cpp"
+ )   
+  endif()
+
   # 添加可执行文件
   add_executable(${TARGET_NAME}
   ${SOURCES_FILES}
@@ -202,7 +211,7 @@ endfunction()
 add_device_node(Y_Hand_Node)
 add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
-#add_device_node(Test_Node)
+add_device_node(Test_Wbot_Node)
 add_device_node(Remote_Node)
 
 if(BUILD_TESTING)
