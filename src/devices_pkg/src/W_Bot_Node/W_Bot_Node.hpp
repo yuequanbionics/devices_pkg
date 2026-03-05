@@ -181,6 +181,7 @@ private:
             TaiHu_Device_T12->Send_MIT_PD_Control_Data(TaiHu_Device_12, get_message_motor->right_wrist_yaw.pos, 0.0f, 0.0f, 0.0f, 0.0f);
             TaiHu_Device_T13->Send_MIT_PD_Control_Data(TaiHu_Device_13, get_message_motor->right_wrist_pitch.pos, 0.0f, 0.0f, 0.0f, 0.0f);
             TaiHu_Device_T14->Send_MIT_PD_Control_Data(TaiHu_Device_14, get_message_motor->right_wrist_roll.pos, 0.0f, 0.0f, 0.0f, 0.0f);
+            
             TaiHu_Device_T15->Send_MIT_PD_Control_Data(TaiHu_Device_15, get_message_motor->head_pitch.pos, 0.0f, 0.0f, 0.0f, 0.0f);
             TaiHu_Device_T16->Send_MIT_PD_Control_Data(TaiHu_Device_16, get_message_motor->head_yaw.pos, 0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -196,22 +197,25 @@ private:
         
         Lower_Limbs_Motor_Hip_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Hip, &send_message.hip.pos, &Eyou_Speed_, &qqqq_);
         Lower_Limbs_Motor_Ankel_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Ankel, &send_message.ankle.pos, &Eyou_Speed_, &qqqq_);
+
         TaiHu_Device_T1->Get_Motor_FB_Data(TaiHu_Device_1, &send_message.left_shoulder_pitch.pos, &vel_, &cur_);
         TaiHu_Device_T2->Get_Motor_FB_Data(TaiHu_Device_2, &send_message.left_shoulder_roll.pos, &vel_, &cur_);
         TaiHu_Device_T3->Get_Motor_FB_Data(TaiHu_Device_3, &send_message.left_shoulder_yaw.pos, &vel_, &cur_);
         TaiHu_Device_T4->Get_Motor_FB_Data(TaiHu_Device_4, &send_message.left_elbow.pos, &vel_, &cur_);
         TaiHu_Device_T5->Get_Motor_FB_Data(TaiHu_Device_5, &send_message.left_wrist_yaw.pos, &vel_, &cur_);
-        TaiHu_Device_T6->Get_Motor_FB_Data(TaiHu_Device_6, &send_message.left_wrist_roll.pos, &vel_, &cur_);
+        TaiHu_Device_T6->Get_Motor_FB_Data(TaiHu_Device_6, &send_message.left_wrist_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T7->Get_Motor_FB_Data(TaiHu_Device_7, &send_message.left_wrist_roll.pos, &vel_, &cur_);
 
-        TaiHu_Device_T7->Get_Motor_FB_Data(TaiHu_Device_7, &send_message.right_shoulder_pitch.pos, &vel_, &cur_);
-        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.right_shoulder_roll.pos, &vel_, &cur_);
-        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.right_shoulder_yaw.pos, &vel_, &cur_);
-        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.right_elbow.pos, &vel_, &cur_);
-        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.right_wrist_yaw.pos, &vel_, &cur_);
-        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.right_wrist_pitch.pos, &vel_, &cur_);
-        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.right_wrist_roll.pos, &vel_, &cur_);
-        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.head_pitch.pos, &vel_, &cur_);
-        TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_yaw.pos, &vel_, &cur_);
+        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.right_shoulder_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.right_shoulder_roll.pos, &vel_, &cur_);
+        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.right_shoulder_yaw.pos, &vel_, &cur_);
+        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.right_elbow.pos, &vel_, &cur_);
+        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.right_wrist_yaw.pos, &vel_, &cur_);
+        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.right_wrist_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.right_wrist_roll.pos, &vel_, &cur_);
+
+        TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T16->Get_Motor_FB_Data(TaiHu_Device_16, &send_message.head_yaw.pos, &vel_, &cur_);
 
         Classis_Motor_T1->Get_Motor_FB_Data(Classis_Motor_1, &send_message.wheel_left.pos, &send_message.wheel_left.vel, &send_message.wheel_left.tor);
         Classis_Motor_T2->Get_Motor_FB_Data(Classis_Motor_2, &send_message.wheel_right.pos, &send_message.wheel_right.vel, &send_message.wheel_right.tor);
