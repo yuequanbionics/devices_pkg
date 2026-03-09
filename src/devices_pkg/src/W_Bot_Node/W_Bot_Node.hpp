@@ -187,6 +187,8 @@ private:
 
             Classis_Motor_T1->Send_MIT_PD_Control_Data(Classis_Motor_1, 0.0f, get_message_motor->wheel_left.vel, 0.0f, 0.0f, 0.0f);
             Classis_Motor_T2->Send_MIT_PD_Control_Data(Classis_Motor_2, 0.0f, get_message_motor->wheel_right.vel, 0.0f, 0.0f, 0.0f);
+
+            get_message_motor = nullptr;
         }
 
         auto send_message = devices_pkg::msg::WBotMotor();
