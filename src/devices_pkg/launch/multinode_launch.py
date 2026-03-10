@@ -19,12 +19,13 @@ Boards:
     
 
     node_mapping = {
-        'y_hand_node': (config_dev1, 'Y_Hand_Node','sub_name1', 'pub_name1'),
+        'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data',config_dev1),
         #'y_hand_node_2': (node1_Config, 'Y_Hand_Node','sub_name2', 'pub_name2'),
         #'y_hand_node_3': (node1_Config, 'Y_Hand_Node','sub_name3', 'pub_name3'),
+        'test_yhand_node': ("Test_Node", 'y_hand_data','y_hand_cmd', 'None')
     }
 
-    def create_custom_node(node_name, exe_name, dev_config, sub_name, pub_name):
+    def create_custom_node(node_name, exe_name, sub_name, pub_name,dev_config):
         return Node(
             package='devices_pkg',
             executable=exe_name,  # CMakeLists.txt 中定义的可执行文件名
@@ -35,8 +36,8 @@ Boards:
         )
 
     node_list = []
-    for node_name, (dev_config, exe_name, sub_name, pub_name) in node_mapping.items():
-        node = create_custom_node(node_name, exe_name, dev_config, sub_name, pub_name)
+    for node_name, ( exe_name, sub_name, pub_name, dev_config) in node_mapping.items():
+        node = create_custom_node(node_name, exe_name, sub_name, pub_name,dev_config)
         node_list.append(node)
 
     # 将所有节点传入LaunchDescription并返回

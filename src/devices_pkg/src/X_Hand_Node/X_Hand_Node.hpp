@@ -46,20 +46,17 @@ const int MOTOR_NUM = 6;
 class X_Hand_Node : public rclcpp::Node
 {
 public:
-     X_Hand_Node()
-     : Node("x_hand_node")
+     X_Hand_Node(
+        const std::string& node_name,
+        const std::string& pub_topic,
+        const std::string& sub_topic,
+        const std::string& dev_config
+     )
+     : Node(node_name)
      {
-        string Config = R"(
-        PC_IP: 192.168.3.245
-        SN: asdf1234567
-        Boards:
-        - Id: 101
-          IP: 192.168.3.105
-          # Port: 19001
-        )";
-        hardware_init("src/devices_pkg/sdk/config/YAML/X_Hand/out/TOP.yaml",Config);
-        publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>("x_hand_publisher", 10);
-        subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>("x_hand_subscriber", 10, \
+        hardware_init("src/devices_pkg/sdk/config/YAML/X_Hand/out/TOP.yaml",dev_config);
+        publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, 10);
+        subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>(sub_topic, 10, \
             std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));
      }
 

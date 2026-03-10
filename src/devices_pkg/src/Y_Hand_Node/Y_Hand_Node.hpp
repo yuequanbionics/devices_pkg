@@ -91,7 +91,9 @@ public:
      : Node(node_name)
      {
         hardware_init("src/devices_pkg/sdk/config/YAML/Y_Hand/out/TOP.yaml", dev_config);
+
         publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, 10);
+        
         subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, 10, \
             std::bind(&Y_Hand_Node::topic_callback, this, std::placeholders::_1));
      }

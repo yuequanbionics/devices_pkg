@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
-    const auto xhand_node = std::make_shared<X_Hand_Node>();
+    
+    const auto xhand_node = std::make_shared<X_Hand_Node>(argv[1],argv[2],argv[3],argv[4]);
     
     // 创建多线程执行器
     rclcpp::executors::MultiThreadedExecutor executor;

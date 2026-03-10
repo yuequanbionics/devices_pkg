@@ -55,6 +55,7 @@
 4. (如果是ARM平台）进sdk/目录下编译ARM平台下的第三方库
   
    ./Tool.sh make_third
+   
    ./Tool.sh make
    
 

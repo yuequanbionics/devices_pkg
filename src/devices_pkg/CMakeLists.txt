@@ -167,7 +167,13 @@ endif()
     if(${TARGET_NAME} STREQUAL "Test_Wbot_Node")
   set(SOURCES_FILES
   "src/Test_Wbot_Node.cpp"
- )   
+ )
+  endif()
+ 
+    if(${TARGET_NAME} STREQUAL "Test_Node")
+  set(SOURCES_FILES
+  "src/Test_Node.cpp"
+ )
   endif()
 
   # 添加可执行文件
@@ -207,11 +213,12 @@ endif()
 endfunction()
 
 # 添加设备节点
-#add_device_node(X_Hand_Node)
+add_device_node(X_Hand_Node)
 add_device_node(Y_Hand_Node)
-add_device_node(E_Bot_Node)
+#add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
 add_device_node(Test_Wbot_Node)
+add_device_node(Test_Node)
 add_device_node(Remote_Node)
 
 if(BUILD_TESTING)
