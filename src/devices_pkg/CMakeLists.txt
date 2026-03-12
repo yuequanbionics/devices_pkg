@@ -38,7 +38,7 @@ endif()
 
 set(TH_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/third_party/lib/install-${ARCH_SUFFIX}/lib) 
 set(SOK_PROJECT_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/Project)
-file(GLOB SPDLOG_ALL_FILES "${TH_LIB_DIR}/libspdlog.so*")
+file(GLOB SPDLOG_ALL_FILES "${TH_LIB_DIR}/libspdlogs.so*")
 file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 
 # 汇总SDK头文件路径
