@@ -53,6 +53,8 @@
     ./pull_sdk.sh github
 
 4. (如果是ARM平台）进sdk/目录下编译ARM平台下的第三方库
+
+   ./Tool.sh clean
   
    ./Tool.sh make_third
    
