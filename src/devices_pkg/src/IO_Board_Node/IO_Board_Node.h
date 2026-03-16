@@ -33,7 +33,7 @@ public:
         subscription_ = this->create_subscription<devices_pkg::msg::IOBoardMsg>(sub_topic, 10, \
             std::bind(&IO_Board_Node::topic_callback, this, std::placeholders::_1));
 
-        timer_io_board = this->create_wall_timer(std::chrono::microseconds(50),
+        timer_io_board = this->create_wall_timer(std::chrono::microseconds(20),
             std::bind(&IO_Board_Node::io_board_timer_callback, this));
     }
 

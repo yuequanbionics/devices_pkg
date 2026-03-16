@@ -19,10 +19,10 @@ Boards:
     
 
     node_mapping = {
-        'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data',config_dev1),
+        # 'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data',config_dev1),
         #'y_hand_node_2': (node1_Config, 'Y_Hand_Node','sub_name2', 'pub_name2'),
         #'y_hand_node_3': (node1_Config, 'Y_Hand_Node','sub_name3', 'pub_name3'),
-        'test_yhand_node': ("Test_Node", 'y_hand_data','y_hand_cmd', 'None'),
+        # 'test_yhand_node': ("Test_Node", 'y_hand_data','y_hand_cmd', 'None'),
         'io_board_node': ('IO_Board_Node', 'io_board_cmd', 'io_board_data', config_dev1)
     }
 
