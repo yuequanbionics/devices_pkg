@@ -16,23 +16,23 @@
 
 using namespace std;
 
-class Test_Wbot_Node : public rclcpp::Node
+class Test_W_Bot_Node : public rclcpp::Node
 {
 public:
-    Test_Wbot_Node()
+    Test_W_Bot_Node()
     : Node("test_wbot_node")
     {
         publisher_Motor_cmd = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_cmd", 10);
         publisher_LED_cmd = this->create_publisher<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10);
         subscription_IMU_data = this->create_subscription<devices_pkg::msg::WBotIMU>("wbot_imu_data", 10, \
-            std::bind(&Test_Wbot_Node::imu_data_topic_callback, this,std::placeholders::_1));
+            std::bind(&Test_W_Bot_Node::imu_data_topic_callback, this,std::placeholders::_1));
         subscription_Motor_Data = this->create_subscription<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10, \
-            std::bind(&Test_Wbot_Node::Motor_data_topic_callback, this, std::placeholders::_1));
+            std::bind(&Test_W_Bot_Node::Motor_data_topic_callback, this, std::placeholders::_1));
 
         std::this_thread::sleep_for(std::chrono::seconds(2));
         timer_Motor_cmd = this->create_wall_timer(
         std::chrono::milliseconds(10),
-        std::bind(&Test_Wbot_Node::Motor_timer_callback, this));
+        std::bind(&Test_W_Bot_Node::Motor_timer_callback, this));
     }
 
     void imu_data_topic_callback(const devices_pkg::msg::WBotIMU::SharedPtr msg)

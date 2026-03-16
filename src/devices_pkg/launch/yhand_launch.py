@@ -3,8 +3,10 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import Shutdown
 
-def generate_launch_description():
 
+
+
+def generate_launch_description():
 
     config_dev1 = """
 PC_IP: 192.168.3.245
@@ -20,9 +22,7 @@ Boards:
 
     node_mapping = {
         'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data',config_dev1),
-        #'y_hand_node_2': (node1_Config, 'Y_Hand_Node','sub_name2', 'pub_name2'),
-        #'y_hand_node_3': (node1_Config, 'Y_Hand_Node','sub_name3', 'pub_name3'),
-        'test_yhand_node': ("Test_Node", 'y_hand_data','y_hand_cmd', 'None')
+        'test_y_hand_node': ("Test_Y_Hand_Node", 'y_hand_data','y_hand_cmd', 'None')
     }
 
     def create_custom_node(node_name, exe_name, sub_name, pub_name,dev_config):

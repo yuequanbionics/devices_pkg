@@ -113,9 +113,6 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         DEPENDENCIES std_msgs
 )
 
-# 自动处理 setup.py, package.xml 和 launch 目录的路径问题
-#ament_python_install_package(${PROJECT_NAME})
-
 # 安装SDK库文件到lib目录
 install(FILES
         ${SDK_ALL_LIBS}
@@ -133,48 +130,33 @@ install(DIRECTORY
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node")
+set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_X_Hand_Node;Test_Y_Hand_Node")
 
 function(add_device_node TARGET_NAME)
 
+
+  if(${TARGET_NAME} IN_LIST TARGET_LIST)
   # 生成对应的输出文件名
   string(REPLACE "_Node" "" PROJECT_FILES_NAME ${TARGET_NAME})
   string(REPLACE "_Node" "_Out" PROJECT_OUT_NAME ${TARGET_NAME})
-  # string(FIND ${TARGET_NAME} "Test_" IS_TEST_PROJECT)
-
-  # if(NOT ${IS_TEST_PROJECT} EQUAL -1)
-  #   set(SOURCES_FILES "src/Test_Node.cpp")
-  # else()
-  #   set(SOURCES_FILES
-  #   "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
-  #   "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
-  #  )   
-  # endif()
-
-  if(${TARGET_NAME} IN_LIST TARGET_LIST)
   set(SOURCES_FILES
     "sdk/src/Project/${PROJECT_FILES_NAME}/out/${PROJECT_OUT_NAME}.cpp"
     "src/${TARGET_NAME}/${TARGET_NAME}.cpp"
-  )   
-endif()
+  )
 
+  elseif(${TARGET_NAME} IN_LIST TARGET_TEST_LIST)
+  string(REPLACE "Test_" "" FILES_NAME ${TARGET_NAME})
+  set(SOURCES_FILES
+    "src/${FILES_NAME}/${TARGET_NAME}.cpp"
+  )
 
-  if(${TARGET_NAME} STREQUAL "Remote_Node")
+  elseif(${TARGET_NAME} STREQUAL "Remote_Node")
   set(SOURCES_FILES
   "src/W_Bot_Node/${TARGET_NAME}.cpp"
- )   
+  )   
+  
   endif()
 
-    if(${TARGET_NAME} STREQUAL "Test_Wbot_Node")
-  set(SOURCES_FILES
-  "src/Test_Wbot_Node.cpp"
- )
-  endif()
- 
-    if(${TARGET_NAME} STREQUAL "Test_Node")
-  set(SOURCES_FILES
-  "src/Test_Node.cpp"
- )
-  endif()
 
   # 添加可执行文件
   add_executable(${TARGET_NAME}
@@ -217,8 +199,9 @@ add_device_node(X_Hand_Node)
 add_device_node(Y_Hand_Node)
 #add_device_node(E_Bot_Node)
 add_device_node(W_Bot_Node)
-add_device_node(Test_Wbot_Node)
-add_device_node(Test_Node)
+add_device_node(Test_W_Bot_Node)
+add_device_node(Test_Y_Hand_Node)
+add_device_node(Test_X_Hand_Node)
 add_device_node(Remote_Node)
 
 if(BUILD_TESTING)

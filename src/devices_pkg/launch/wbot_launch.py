@@ -34,7 +34,7 @@ Boards:
 
         Node(                            #设备节点
             package='devices_pkg',
-            executable='Test_Wbot_Node', 
+            executable='Test_W_Bot_Node', 
             name='test_wbot_node',
             output='screen',
             on_exit=Shutdown(reason="launch is shutting down")
