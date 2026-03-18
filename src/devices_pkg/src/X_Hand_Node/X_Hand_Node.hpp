@@ -37,7 +37,7 @@ extern X_hand_FB FB_Datas[6];
 extern map<u8, vector<u16>> g_sensor_data;
 
 //声明外部函数
-int hardware_init(string ADDR, string Config);
+int hardware_init(const string& ADDR, const string& Config);
 void Get_FB(void);
 void Send(void);
 

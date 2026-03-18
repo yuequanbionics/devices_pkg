@@ -13,7 +13,7 @@
 extern u8 R_IO[32];
 
 //声明外部函数
-int hardware_init(string ADDR, string Config);
+int hardware_init(const string& ADDR, const string& Config);
 void ROS_Get_GPIOx_Status();
 
 
