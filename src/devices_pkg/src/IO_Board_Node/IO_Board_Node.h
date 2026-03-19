@@ -26,7 +26,7 @@ public:
         const std::string& sub_topic,
         const std::string& dev_config
 
-        ) : Node("IO_Board_Node")
+        ) : Node(node_name)
     {
         hardware_init("src/devices_pkg/sdk/config/YAML/IO_Board/out/TOP.yaml", dev_config);
         publisher_ = this->create_publisher<devices_pkg::msg::IOBoardMsg>(pub_topic, 10);
@@ -41,7 +41,7 @@ public:
 private:
     void topic_callback(const devices_pkg::msg::IOBoardMsg::SharedPtr msg) const
     {
-
+        &msg;
     }
 
     void io_board_timer_callback()
