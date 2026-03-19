@@ -60,7 +60,7 @@ void Test_Node<MsgT>::y_hand_topic_callback(const typename MsgT::SharedPtr msg) 
 {
     for (size_t i = 0; i < 28; i++)
     {
-        RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
+        RCLCPP_INFO(this->get_logger(), "Received motor %zu  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
                     i, msg->motors[i].pos, msg->motors[i].vel, msg->motors[i].tor, msg->motors[i].kp, msg->motors[i].kd);
     }
 
@@ -69,6 +69,7 @@ void Test_Node<MsgT>::y_hand_topic_callback(const typename MsgT::SharedPtr msg) 
 template <typename MsgT>
 void Test_Node<MsgT>::x_hand_topic_callback(const typename MsgT::SharedPtr msg) const
 {
+    *msg;
     // for (size_t i = 0; i < 28; i++)
     // {
     //     RCLCPP_INFO(this->get_logger(), "Received motor %d  pos=%f, vel=%f, tor=%f, kp=%f, kd=%f",
