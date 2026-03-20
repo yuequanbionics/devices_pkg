@@ -50,11 +50,13 @@ public:
         const std::string& node_name,
         const std::string& pub_topic,
         const std::string& sub_topic,
+        const std::string& dev_type,
         const std::string& dev_config
      )
      : Node(node_name)
      {
-        hardware_init("src/devices_pkg/sdk/config/YAML/X_Hand/out/TOP.yaml",dev_config);
+        string yaml_path = "src/devices_pkg/sdk/config/YAML/X_Hand/out" + dev_type + "/TOP.yaml";
+        hardware_init(yaml_path, dev_config);
         publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, 10);
         subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>(sub_topic, 10, \
             std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));

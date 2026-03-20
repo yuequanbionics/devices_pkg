@@ -1,4 +1,4 @@
-#include "Test_Wbot_Node.hpp"
+#include "Test_W_Bot_Node.hpp"
 
 
 int main(int argc, char *argv[])
@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
     rclcpp::init(argc, argv);
 
     //std::string string_arg = argv[1];
-    const auto WBot_Node = std::make_shared<Test_Wbot_Node>();
+    const auto WBot_Node = std::make_shared<Test_W_Bot_Node>();
 
     rclcpp::executors::MultiThreadedExecutor executor;
 
