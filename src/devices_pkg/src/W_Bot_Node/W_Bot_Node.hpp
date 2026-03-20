@@ -85,7 +85,7 @@ extern Led_Device *Led_Device_Chassis_Ptr;
 extern RGB_Data RGB_Datas[2];
 
 
-extern int hardware_init(string ADDR, string Config);
+extern int hardware_init(const string& ADDR, const string& Config);
 
 float Eyou_Speed_ = 1;
 float Eyou_Acc_ = 1;

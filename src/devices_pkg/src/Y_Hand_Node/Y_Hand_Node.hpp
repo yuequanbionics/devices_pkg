@@ -75,7 +75,7 @@ extern Motor *Motor27_Control;
 extern Motor *Motor28_Control;
 
 //声明外部函数
-int hardware_init(string ADDR, string Config);
+int hardware_init(const string& ADDR, const string& Config);
 int hand_pretighten(float F, uint32_t time_ms);
 
 const int MOTOR_NUM = 28;

@@ -67,6 +67,7 @@ set(SDK_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/X_Hand_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Y_Hand_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/IO_Board_Node
 
 )
 
@@ -95,6 +96,7 @@ set(MSG_FILES
         "msg/types/Pressure.msg"
         "msg/types/Pretighten.msg"
         "msg/types/LED.msg"
+        "msg/IOBoardMsg.msg"
         "msg/WBot/WBotMotor.msg"
         "msg/WBot/WBotIMU.msg"
         "msg/WBot/WBotLED.msg"
@@ -113,6 +115,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         DEPENDENCIES std_msgs
 )
 
+# 自动处理 setup.py, package.xml 和 launch 目录的路径问题
+#ament_python_install_package(${PROJECT_NAME})
+
 # 安装SDK库文件到lib目录
 install(FILES
         ${SDK_ALL_LIBS}
@@ -129,7 +134,7 @@ install(DIRECTORY
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node")
+set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node;;IO_Board_Node")
 set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_X_Hand_Node;Test_Y_Hand_Node")
 
 function(add_device_node TARGET_NAME)
@@ -198,6 +203,7 @@ endfunction()
 add_device_node(X_Hand_Node)
 add_device_node(Y_Hand_Node)
 #add_device_node(E_Bot_Node)
+add_device_node(IO_Board_Node)
 add_device_node(W_Bot_Node)
 add_device_node(Test_W_Bot_Node)
 add_device_node(Test_Y_Hand_Node)
