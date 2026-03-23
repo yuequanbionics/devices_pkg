@@ -112,8 +112,8 @@ public:
     )
     : Node("w_bot_node")
     {
-        std::string path = "src/devices_pkg/sdk/config/YAML/W_Bot/out/TOP.yaml";
-        hardware_init(path, dev_config);
+        std::string yaml_path = "src/devices_pkg/sdk/config/YAML/W_Bot/out/TOP.yaml";
+        hardware_init(yaml_path, dev_config);
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10);
         publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>("wbot_imu_data", 10);
         publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_battery_data", 10);

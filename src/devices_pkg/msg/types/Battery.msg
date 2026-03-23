@@ -1,4 +1,4 @@
-uint16 total_voltage   # 总电压（单位：0.01V）
-int16 current          # 电流（有符号，单位：0.01A）
+float32 total_voltage   # 总电压（单位：0.01V）
+float32 current          # 电流（有符号，单位：0.01A）
 uint8 soc              # SOC（单位：1%）
-uint16 soh             # SOH（单位：0.1%）
+float32 soh             # SOH（单位：0.1%）

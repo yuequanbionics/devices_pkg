@@ -7,7 +7,7 @@ def generate_launch_description():
 
     config_dev1 = """
 PC_IP: 192.168.3.245
-SN: YQ212232602001
+SN: YQ212232602002
 Boards:
   - Id: 101
     IP: 192.168.3.101
