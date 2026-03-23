@@ -6,6 +6,7 @@ from launch.actions import Shutdown
 #根据SN后缀判断设备类型
 def check_sn_suffix(config_str):
     sn_value = None
+    # 1. 解析配置字符串，提取 SN 值
     for line in config_str.strip().split('\n'):
         line_clean = line.strip()
         if not line_clean or line_clean.startswith('#'):
@@ -13,10 +14,40 @@ def check_sn_suffix(config_str):
         if line_clean.startswith('SN:'):
             sn_value = line_clean.split(':', 1)[1].strip()
             break
+    
+    # 2. 如果未提取到 SN 值，直接返回 self_1.0
     if sn_value is None:
         return 'self_1.0'
-    if len(sn_value) > 0 and sn_value[-1] == 'M':
+    
+    # 3. 提取 SN 值最后非数字的两位字符（核心逻辑）
+    # 倒序遍历，先过滤掉末尾的所有数字，再取最后两位非数字字符
+    non_digit_chars = []
+    # 倒序遍历每个字符，收集非数字字符
+    for char in reversed(sn_value):
+        if not char.isdigit():
+            non_digit_chars.append(char)
+        else:
+            # 遇到数字就停止（只取末尾数字前的非数字字符）
+            break
+    # 反转回正序，得到 "末尾数字前的非数字字符序列"
+    non_digit_suffix = ''.join(reversed(non_digit_chars))
+    # 取最后两位（不足两位则取全部）
+    check_suffix = non_digit_suffix[-2:] if len(non_digit_suffix) >= 2 else non_digit_suffix
+    
+    # 4. 根据后缀规则返回对应结果
+    # 规则1：不是纯字母 → 返回 self_1.0
+    if not check_suffix.isalpha():
+        return 'self_1.0'
+    # 规则2：匹配 SG → 返回 self_g
+    elif check_suffix == 'SG':
+        return 'self_g_1.0'
+    # 规则3：匹配 MG → 返回 m2_g
+    elif check_suffix == 'MG':
+        return 'mz_g_1.0'
+    # 规则4：匹配 M（仅1位） → 返回 m2
+    elif check_suffix == 'M':
         return 'mz_1.0'
+    # 其他纯字母情况（如 AB、S 等）→ 返回 self_1.0
     else:
         return 'self_1.0'
     

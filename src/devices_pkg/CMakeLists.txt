@@ -60,6 +60,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Motor_TaiHu
         ${SDK_INC}/Custom_Device/Motor_BenMo
         ${SDK_INC}/Custom_Device/IMU_YuanJi_Uart
+        ${SDK_INC}/Custom_Device/Battery_BMS_V2
         ${SDK_INC}/Misc/Led_Device
         ${CMAKE_INSTALL_PREFIX}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -87,6 +88,7 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libMotor_Device_BenMo.so
         ${SDK_LIB_ABS_DIR}/libEyou_Custom_Motor_Device.so
         ${SDK_LIB_ABS_DIR}/libIMU_Device_YuanJi.so
+        ${SDK_LIB_ABS_DIR}/libBattery_BMS_V2_Device.so
 )
 
 # 定义消息文件
@@ -96,11 +98,13 @@ set(MSG_FILES
         "msg/types/Pressure.msg"
         "msg/types/Pretighten.msg"
         "msg/types/LED.msg"
+        "msg/types/Battery.msg"
         "msg/IOBoardMsg.msg"
         "msg/WBot/WBotMotor.msg"
         "msg/WBot/WBotIMU.msg"
         "msg/WBot/WBotLED.msg"
         "msg/WBot/Remote.msg"
+        "msg/WBot/WBotBattery.msg"
         
         "msg/EBotMsg.msg"
         "msg/XHandMsg.msg"
@@ -134,7 +138,7 @@ install(DIRECTORY
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node;;IO_Board_Node")
+set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;E_Bot_Node;W_Bot_Node;IO_Board_Node")
 set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_X_Hand_Node;Test_Y_Hand_Node")
 
 function(add_device_node TARGET_NAME)
