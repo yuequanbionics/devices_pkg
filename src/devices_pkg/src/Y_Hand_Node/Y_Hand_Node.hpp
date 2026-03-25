@@ -118,8 +118,8 @@ private:
             Motor7_Control->Send_MIT_PD_Control_Data(Motor7_Device, msg->motors[6].pos, msg->motors[6].vel, msg->motors[6].tor, msg->motors[6].kp, msg->motors[6].kd);
             Motor8_Control->Send_MIT_PD_Control_Data(Motor8_Device, msg->motors[7].pos, msg->motors[7].vel, msg->motors[7].tor, msg->motors[7].kp, msg->motors[7].kd);
             Motor9_Control->Send_MIT_PD_Control_Data(Motor9_Device, msg->motors[8].pos, msg->motors[8].vel, msg->motors[8].tor, msg->motors[8].kp, msg->motors[8].kd);
-            Motor10_Control->Send_MIT_PD_Control_Data(Motor10_Device, msg->motors[9].pos, msg->motors[9].vel, msg->motors[5].tor, msg->motors[9].kp, msg->motors[9].kd);
-            Motor11_Control->Send_MIT_PD_Control_Data(Motor11_Device, msg->motors[10].pos, msg->motors[10].vel, msg->motors[5].tor, msg->motors[10].kp, msg->motors[10].kd);
+            Motor10_Control->Send_MIT_PD_Control_Data(Motor10_Device, msg->motors[9].pos, msg->motors[9].vel, msg->motors[9].tor, msg->motors[9].kp, msg->motors[9].kd);
+            Motor11_Control->Send_MIT_PD_Control_Data(Motor11_Device, msg->motors[10].pos, msg->motors[10].vel, msg->motors[10].tor, msg->motors[10].kp, msg->motors[10].kd);
             Motor12_Control->Send_MIT_PD_Control_Data(Motor12_Device, msg->motors[11].pos, msg->motors[11].vel, msg->motors[11].tor, msg->motors[11].kp, msg->motors[11].kd);
             Motor13_Control->Send_MIT_PD_Control_Data(Motor13_Device, msg->motors[12].pos, msg->motors[12].vel, msg->motors[12].tor, msg->motors[12].kp, msg->motors[12].kd);
             Motor14_Control->Send_MIT_PD_Control_Data(Motor14_Device, msg->motors[13].pos, msg->motors[13].vel, msg->motors[13].tor, msg->motors[13].kp, msg->motors[13].kd);

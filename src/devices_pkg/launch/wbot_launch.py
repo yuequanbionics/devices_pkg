@@ -7,7 +7,7 @@ def generate_launch_description():
 
     config_dev1 = """
 PC_IP: 192.168.3.245
-SN: YQ212232602001
+SN: YQ212232602002
 Boards:
   - Id: 101
     IP: 192.168.3.101
@@ -32,12 +32,12 @@ Boards:
             on_exit=Shutdown(reason="launch is shutting down") #launch退出时关闭节点
         ),
 
-        Node(                            #设备节点
-            package='devices_pkg',
-            executable='Test_W_Bot_Node', 
-            name='test_wbot_node',
-            output='screen',
-            on_exit=Shutdown(reason="launch is shutting down")
-        )
+        # Node(                            #设备节点
+        #     package='devices_pkg',
+        #     executable='Test_W_Bot_Node', 
+        #     name='test_wbot_node',
+        #     output='screen',
+        #     on_exit=Shutdown(reason="launch is shutting down")
+        # )
 
     ])

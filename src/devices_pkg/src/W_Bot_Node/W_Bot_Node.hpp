@@ -12,11 +12,13 @@
 #include "devices_pkg/msg/w_bot_motor.hpp"
 #include "devices_pkg/msg/w_bot_imu.hpp"
 #include "devices_pkg/msg/w_bot_led.hpp"
+#include "devices_pkg/msg/w_bot_battery.hpp"
 #include "Eyou_Motor_TOP.hpp"
 #include "Motor_TaiHu.hpp"
 #include "IMU_YuanJi.hpp"
 #include "Led_Device.hpp"
 #include "Motor_BM_M1502D.hpp"
+#include "Battery_BMS_V2.hpp"
 
 using namespace std;
 
@@ -84,6 +86,10 @@ extern Led_Device *Led_Device_Shoulder_Ptr;
 extern Led_Device *Led_Device_Chassis_Ptr;
 extern RGB_Data RGB_Datas[2];
 
+extern BMS_Consolidated_Data current_data_1;  // 电池数据
+extern BMS_Consolidated_Data current_data_2;  // 电池数据
+extern BMS_Consolidated_Data current_data_3;  // 电池数据
+extern BMS_Consolidated_Data current_data_4;  // 电池数据
 
 extern int hardware_init(const string& ADDR, const string& Config);
 
@@ -106,10 +112,11 @@ public:
     )
     : Node("w_bot_node")
     {
-        std::string path = "src/devices_pkg/sdk/config/YAML/W_Bot/out/TOP.yaml";
-        hardware_init(path, dev_config);
+        std::string yaml_path = "src/devices_pkg/sdk/config/YAML/W_Bot/out/TOP.yaml";
+        hardware_init(yaml_path, dev_config);
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10);
         publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>("wbot_imu_data", 10);
+        publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_battery_data", 10);
         subscription_Motor = this->create_subscription<devices_pkg::msg::WBotMotor>("wbot_motor_cmd", 10, \
             std::bind(&W_Bot_Node::Motor_topic_callback, this, std::placeholders::_1));
         subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10, \
@@ -121,6 +128,10 @@ public:
         timer_Motor = this->create_wall_timer(
             std::chrono::milliseconds(10),
             std::bind(&W_Bot_Node::motor_timer_callback, this));
+
+        timer_Battery = this->create_wall_timer(
+            std::chrono::milliseconds(1000),
+            std::bind(&W_Bot_Node::battery_timer_callback, this));
  }
 private:
 
@@ -228,6 +239,33 @@ private:
     }
 
 
+    void battery_timer_callback()
+    {
+        auto battery_message = devices_pkg::msg::WBotBattery();
+
+        battery_message.battery_upper.total_voltage = current_data_1.total_voltage;
+        battery_message.battery_upper.current = current_data_1.current;
+        battery_message.battery_upper.soc = current_data_1.soc;
+        battery_message.battery_upper.soh = current_data_1.soh;
+
+        battery_message.battery_lower.total_voltage = current_data_2.total_voltage;
+        battery_message.battery_lower.current = current_data_2.current;
+        battery_message.battery_lower.soc = current_data_2.soc;
+        battery_message.battery_lower.soh = current_data_2.soh;
+
+        battery_message.battery_left.total_voltage = current_data_3.total_voltage;
+        battery_message.battery_left.current = current_data_3.current;
+        battery_message.battery_left.soc = current_data_3.soc;
+        battery_message.battery_left.soh = current_data_3.soh;
+
+        battery_message.battery_right.total_voltage = current_data_4.total_voltage;
+        battery_message.battery_right.current = current_data_4.current;
+        battery_message.battery_right.soc = current_data_4.soc;
+        battery_message.battery_right.soh = current_data_4.soh;
+
+        // 发布电池状态消息
+         publisher_Battery->publish(battery_message);
+    }   
     void led_topic_callback(const devices_pkg::msg::WBotLED::SharedPtr msg) const
     {
         auto get_message = msg;
@@ -249,10 +287,12 @@ private:
 
     rclcpp::Publisher<devices_pkg::msg::WBotMotor>::SharedPtr publisher_Motor;
     rclcpp::Publisher<devices_pkg::msg::WBotIMU>::SharedPtr publisher_IMU;
+    rclcpp::Publisher<devices_pkg::msg::WBotBattery>::SharedPtr publisher_Battery;
     rclcpp::Subscription<devices_pkg::msg::WBotMotor>::SharedPtr subscription_Motor;
     rclcpp::Subscription<devices_pkg::msg::WBotLED>::SharedPtr subscription_LED;
     rclcpp::TimerBase::SharedPtr timer_imu;
     rclcpp::TimerBase::SharedPtr timer_Motor;
+    rclcpp::TimerBase::SharedPtr timer_Battery;
 };
 
 #endif // W_BOT_NODE_H_
