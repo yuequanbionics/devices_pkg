@@ -52,6 +52,10 @@ extern shared_ptr<Device_class> IMU_Device_1;
 extern shared_ptr<Device_class> IMU_Device_2;
 extern shared_ptr<Device_class>  Led_Shoulder_Devices;
 extern shared_ptr<Device_class>  Led_Chassis_Devices;
+extern shared_ptr<Device_class> Battery_BMS_V2_1;
+extern shared_ptr<Device_class> Battery_BMS_V2_2;
+extern shared_ptr<Device_class> Battery_BMS_V2_3;
+extern shared_ptr<Device_class> Battery_BMS_V2_4;
 extern Eyou_Motor *Lower_Limbs_Motor_Waist_Roll_Ctl;
 extern Eyou_Motor *Lower_Limbs_Motor_Waist_Yaw_Ctl;
 extern Eyou_Motor *Lower_Limbs_Motor_Knee_Ctl;
@@ -73,6 +77,10 @@ extern Motor_TaiHu *TaiHu_Device_T13;
 extern Motor_TaiHu *TaiHu_Device_T14;
 extern Motor_TaiHu *TaiHu_Device_T15;
 extern Motor_TaiHu *TaiHu_Device_T16;
+extern BMS_V2_Protocol* Battery_BMS_V2_T1;
+extern BMS_V2_Protocol* Battery_BMS_V2_T2;
+extern BMS_V2_Protocol* Battery_BMS_V2_T3;
+extern BMS_V2_Protocol* Battery_BMS_V2_T4;
 
 extern shared_ptr<Device_class>  Classis_Motor_1;
 extern shared_ptr<Device_class>  Classis_Motor_2;
@@ -86,10 +94,10 @@ extern Led_Device *Led_Device_Shoulder_Ptr;
 extern Led_Device *Led_Device_Chassis_Ptr;
 extern RGB_Data RGB_Datas[2];
 
-extern BMS_Consolidated_Data current_data_1;  // 电池数据
-extern BMS_Consolidated_Data current_data_2;  // 电池数据
-extern BMS_Consolidated_Data current_data_3;  // 电池数据
-extern BMS_Consolidated_Data current_data_4;  // 电池数据
+BMS_Consolidated_Data current_data_1;  // 电池数据
+BMS_Consolidated_Data current_data_2;  // 电池数据
+BMS_Consolidated_Data current_data_3;  // 电池数据
+BMS_Consolidated_Data current_data_4;  // 电池数据
 
 extern int hardware_init(const string& ADDR, const string& Config);
 
@@ -242,6 +250,11 @@ private:
     void battery_timer_callback()
     {
         auto battery_message = devices_pkg::msg::WBotBattery();
+
+        current_data_1 = Battery_BMS_V2_T1->Get_Consolidated_Data();
+        current_data_2 = Battery_BMS_V2_T2->Get_Consolidated_Data();
+        current_data_3 = Battery_BMS_V2_T3->Get_Consolidated_Data();
+        current_data_4 = Battery_BMS_V2_T4->Get_Consolidated_Data();
 
         battery_message.battery_upper.total_voltage = current_data_1.total_voltage;
         battery_message.battery_upper.current = current_data_1.current;
