@@ -55,7 +55,7 @@ public:
      )
      : Node(node_name)
      {
-        string yaml_path = "src/devices_pkg/sdk/config/YAML/X_Hand/out" + dev_type + "/TOP.yaml";
+        string yaml_path = "src/devices_pkg/sdk/config/YAML/X_Hand/out/" + dev_type + "/TOP.yaml";
         hardware_init(yaml_path, dev_config);
         publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, 10);
         subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>(sub_topic, 10, \
