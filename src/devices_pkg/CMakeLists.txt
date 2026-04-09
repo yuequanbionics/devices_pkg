@@ -113,6 +113,7 @@ set(MSG_FILES
         
         "msg/EBotMsg.msg"
         "msg/XHandMsg.msg"
+        "msg/XHandSensorMsg.msg"
         "msg/XHandBrushedMsg.msg"
         "msg/YHandMsg.msg"
       
