@@ -9,7 +9,7 @@ Test_X_Hand_Node<MsgT>::Test_X_Hand_Node(
     publisher_ = this->create_publisher<MsgT>(pub_topic, 10);
     timer_ = this->create_wall_timer(
         std::chrono::milliseconds(10),
-        std::bind(&Test_X_Hand_Node<MsgT>::x_hand_timer_callback, this));
+        std::bind(&Test_X_Hand_Node<MsgT>::timer_callback, this));
 
     sensor_subscription_ = this->create_subscription<devices_pkg::msg::XHandSensorMsg>(
         "sensor_data", 10,
@@ -22,6 +22,31 @@ Test_X_Hand_Node<MsgT>::Test_X_Hand_Node(
 template <typename MsgT>
 void Test_X_Hand_Node<MsgT>::x_hand_timer_callback() {
     auto message = MsgT();
+    publisher_->publish(message);
+}
+
+static int times = 0;
+static float test = 0.5;
+
+template <typename MsgT>
+void Test_X_Hand_Node<MsgT>::timer_callback() {
+    auto message = MsgT();
+
+    if (times % 500 * 2 == 0) {
+        test = -test;
+    }
+    times++;
+
+    for (int i = 0; i < 6; i++) {
+        message.motors[i].pos = 0.5 + test;
+        message.motors[i].vel = 0;
+        message.motors[i].tor = 0;
+        message.motors[i].kp = 500;
+        message.motors[i].kd = 5;
+    }
+    message.motors[0].pos = 0.25 + test / 2;
+    message.motors[1].pos = 0.1 + test / 5;
+
     publisher_->publish(message);
 }
 
@@ -52,8 +77,8 @@ void Test_X_Hand_Node<MsgT>::x_hand_sensor_callback(const devices_pkg::msg::XHan
 
         // 检查数据是否有效
         if (pressure_data.finger.empty()) {
-            RCLCPP_INFO(this->get_logger(), "%s (ID: %d): 无数据",
-                        sensor_name.c_str(), sensor_id);
+            // RCLCPP_INFO(this->get_logger(), "%s (ID: %d): 无数据",
+            //             sensor_name.c_str(), sensor_id);
         } else {
             // 创建数据字符串
             std::ostringstream data_stream;
@@ -68,7 +93,7 @@ void Test_X_Hand_Node<MsgT>::x_hand_sensor_callback(const devices_pkg::msg::XHan
             data_stream << "]";
 
             // 打印传感器数据
-            RCLCPP_INFO(this->get_logger(), "%s", data_stream.str().c_str());
+            // RCLCPP_INFO(this->get_logger(), "%s", data_stream.str().c_str());
 
             // // 可选：打印数据统计信息
             // if (!pressure_data.finger.empty()) {

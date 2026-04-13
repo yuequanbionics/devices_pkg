@@ -26,6 +26,7 @@ class Test_X_Hand_Node : public rclcpp::Node {
         const std::string& sub_topic);
 
     void x_hand_timer_callback();
+    void timer_callback();
     void x_hand_topic_callback(const typename MsgT::SharedPtr msg) const;
     void x_hand_sensor_callback(const devices_pkg::msg::XHandSensorMsg::SharedPtr msg) const;
 
