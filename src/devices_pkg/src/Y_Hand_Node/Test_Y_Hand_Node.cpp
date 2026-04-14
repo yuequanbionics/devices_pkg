@@ -55,11 +55,16 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
-    rclcpp::executors::MultiThreadedExecutor executor;
+    if (argc < 5)
+    {
+        cout << "Invalid or incomplete parameters" << endl;
+        return -1;
+    }
 
     using MsgT = devices_pkg::msg::YHandMsg;
     const auto TestNode = std::make_shared<Test_Y_Hand_Node<MsgT>>(argv[1]);
     TestNode->create_objects(argv[2], argv[3]);
+    rclcpp::executors::MultiThreadedExecutor executor;
     executor.add_node(TestNode);
     executor.spin();
 

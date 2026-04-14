@@ -17,6 +17,12 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
+    if (argc < 5)
+    {
+        cout << "Invalid or incomplete parameters" << endl;
+        return -1;
+    }
+    
     const auto yhand_node = std::make_shared<Y_Hand_Node>(argv[1], argv[4]);
     yhand_node->create_objects(argv[2], argv[3]);
     
