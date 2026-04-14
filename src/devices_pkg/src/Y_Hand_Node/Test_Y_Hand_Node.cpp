@@ -1,14 +1,18 @@
 #include "Test_Y_Hand_Node.hpp"
 
 template <typename MsgT>
-Test_Y_Hand_Node<MsgT>::Test_Y_Hand_Node (
-        const std::string& node_name,
-        const std::string& pub_topic,
-        const std::string& sub_topic)
+Test_Y_Hand_Node<MsgT>::Test_Y_Hand_Node (const std::string& node_name)
 : Node(node_name)
 {
 
-    publisher_ = this->create_publisher<MsgT>(pub_topic, 10);
+}
+
+template <typename MsgT>
+void Test_Y_Hand_Node<MsgT>::create_objects(
+        const std::string& pub_topic,
+        const std::string& sub_topic)
+{
+     publisher_ = this->create_publisher<MsgT>(pub_topic, 10);
     timer_ = this->create_wall_timer(
         std::chrono::milliseconds(10),
         std::bind(&Test_Y_Hand_Node<MsgT>::y_hand_timer_callback, this));
@@ -54,7 +58,8 @@ int main(int argc, char *argv[])
     rclcpp::executors::MultiThreadedExecutor executor;
 
     using MsgT = devices_pkg::msg::YHandMsg;
-    const auto TestNode = std::make_shared<Test_Y_Hand_Node<MsgT>>(argv[1], argv[2], argv[3]);
+    const auto TestNode = std::make_shared<Test_Y_Hand_Node<MsgT>>(argv[1]);
+    TestNode->create_objects(argv[2], argv[3]);
     executor.add_node(TestNode);
     executor.spin();
 

@@ -84,16 +84,17 @@ class Y_Hand_Node : public rclcpp::Node
 public:
      Y_Hand_Node(
         const std::string& node_name,
-        const std::string& pub_topic,
-        const std::string& sub_topic,
         const std::string& dev_config
      )
      : Node(node_name)
      {
         hardware_init("src/devices_pkg/sdk/config/YAML/Y_Hand/out/TOP.yaml", dev_config);
+     }
 
+     void create_objects(
+        const std::string& pub_topic,
+        const std::string& sub_topic) {
         publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, 10);
-        
         subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, 10, \
             std::bind(&Y_Hand_Node::topic_callback, this, std::placeholders::_1));
      }

@@ -17,7 +17,8 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
-    const auto yhand_node = std::make_shared<Y_Hand_Node>(argv[1],argv[2],argv[3],argv[4]);
+    const auto yhand_node = std::make_shared<Y_Hand_Node>(argv[1], argv[4]);
+    yhand_node->create_objects(argv[2], argv[3]);
     
     // 创建多线程执行器
     rclcpp::executors::MultiThreadedExecutor executor;

@@ -20,11 +20,11 @@ template <typename MsgT>
 class Test_Y_Hand_Node : public rclcpp::Node
 {
 public:
-    Test_Y_Hand_Node( 
-        const std::string& node_name,
+    Test_Y_Hand_Node(const std::string& node_name);
+
+    void create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic);
-
     void y_hand_timer_callback();
     void y_hand_topic_callback(const typename MsgT::SharedPtr msg) const;
 
