@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
-    if (argc < 5)
+    if (argc < 4)
     {
         cout << "Invalid or incomplete parameters" << endl;
         return -1;
