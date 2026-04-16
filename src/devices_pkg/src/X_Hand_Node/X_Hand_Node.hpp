@@ -49,14 +49,23 @@ const int MOTOR_NUM = 6;
 class X_Hand_Node : public rclcpp::Node {
    public:
     X_Hand_Node(
-        const std::string& node_name,
+        const std::string& node_name)
+        : Node(node_name) {
+        
+    }
+
+     int create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic,
         const std::string& dev_type,
-        const std::string& dev_config)
-        : Node(node_name) {
+        const std::string& dev_config) {
+
         string yaml_path = "src/devices_pkg/sdk/config/YAML/X_Hand/out/" + dev_type + "/TOP.yaml";
-        hardware_init(yaml_path, dev_config);
+        if(hardware_init(yaml_path, dev_config) != 0)
+        {
+            cout << "Hardware initialization failed" << endl;
+            return -1;
+        }
         publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, 10);
         sensor_publisher_ = this->create_publisher<devices_pkg::msg::XHandSensorMsg>("sensor_data", 10);
         subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>(sub_topic, 10,
@@ -64,7 +73,10 @@ class X_Hand_Node : public rclcpp::Node {
         timer_Sensor = this->create_wall_timer(
             std::chrono::milliseconds(100),
             std::bind(&X_Hand_Node::sensor_timer_callback, this));
-    }
+
+        return 0;
+     }
+
 
    private:
     void sensor_timer_callback() {

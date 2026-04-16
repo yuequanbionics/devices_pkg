@@ -8,7 +8,7 @@ Test_Y_Hand_Node<MsgT>::Test_Y_Hand_Node (const std::string& node_name)
 }
 
 template <typename MsgT>
-void Test_Y_Hand_Node<MsgT>::create_objects(
+int Test_Y_Hand_Node<MsgT>::create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic)
 {
@@ -18,6 +18,7 @@ void Test_Y_Hand_Node<MsgT>::create_objects(
         std::bind(&Test_Y_Hand_Node<MsgT>::y_hand_timer_callback, this));
     subscription_ = this->create_subscription<MsgT>(sub_topic, 10, \
         std::bind(&Test_Y_Hand_Node<MsgT>::y_hand_topic_callback, this, std::placeholders::_1));
+    return 0;
 }
 
 template <typename MsgT>
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
     if (argc < 4)
     {
         cout << "Invalid or incomplete parameters" << endl;
+        rclcpp::shutdown();
         return -1;
     }
 

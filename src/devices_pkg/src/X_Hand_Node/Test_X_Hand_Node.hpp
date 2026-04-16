@@ -21,7 +21,10 @@ template <typename MsgT>
 class Test_X_Hand_Node : public rclcpp::Node {
    public:
     Test_X_Hand_Node(
-        const std::string& node_name,
+        const std::string& node_name);
+
+
+    int create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic);
 

@@ -1,11 +1,15 @@
 #include "Test_X_Hand_Node.hpp"
 
 template <typename MsgT>
-Test_X_Hand_Node<MsgT>::Test_X_Hand_Node(
-    const std::string& node_name,
-    const std::string& pub_topic,
-    const std::string& sub_topic)
+Test_X_Hand_Node<MsgT>::Test_X_Hand_Node(const std::string& node_name)
     : Node(node_name) {
+
+}
+
+template <typename MsgT>
+int Test_X_Hand_Node<MsgT>::create_objects(
+    const std::string& pub_topic,
+    const std::string& sub_topic) {
     publisher_ = this->create_publisher<MsgT>(pub_topic, 10);
     timer_ = this->create_wall_timer(
         std::chrono::milliseconds(10),
@@ -17,6 +21,7 @@ Test_X_Hand_Node<MsgT>::Test_X_Hand_Node(
 
     subscription_ = this->create_subscription<MsgT>(sub_topic, 10,
                                                     std::bind(&Test_X_Hand_Node<MsgT>::x_hand_topic_callback, this, std::placeholders::_1));
+    return 0;
 }
 
 template <typename MsgT>
@@ -124,10 +129,17 @@ void Test_X_Hand_Node<MsgT>::x_hand_topic_callback(const typename MsgT::SharedPt
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
 
+    if (argc < 4)
+    {
+        cout << "Invalid or incomplete parameters" << endl;
+        return -1;
+    }
+
     rclcpp::executors::MultiThreadedExecutor executor;
 
     using MsgT = devices_pkg::msg::XHandMsg;
-    const auto TestNode = std::make_shared<Test_X_Hand_Node<MsgT>>(argv[1], argv[2], argv[3]);
+    const auto TestNode = std::make_shared<Test_X_Hand_Node<MsgT>>(argv[1]);
+    TestNode->create_objects(argv[2], argv[3]);
     executor.add_node(TestNode);
     executor.spin();
 
