@@ -45,6 +45,7 @@ file(GLOB YAML_ALL_FILES "${TH_LIB_DIR}/libyaml-cpp.so*")
 set(SDK_INCLUDE_DIRS
         ${SDK_INC}/HARDWARE_TOP
         ${SDK_INC}/Z_SYS_SRC/CAN
+        ${SDK_INC}/Z_SYS_SRC/Socket_CAN
         ${SDK_INC}/Motors/Motor
         ${SDK_INC}/Misc/Auto_Set_Id
         ${SDK_INC}/Uart_Pressure_Sensor
@@ -81,6 +82,7 @@ set(SDK_ALL_LIBS
         ${YAML_ALL_FILES}
         ${SDK_LIB_ABS_DIR}/libHARDWARE_TOP.so
         ${SDK_LIB_ABS_DIR}/libSwitch_Board.so
+        ${SDK_LIB_ABS_DIR}/libSwitch_Board_Orin.so
         ${SDK_LIB_ABS_DIR}/libAuto_Set_Id.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device.so
         ${SDK_LIB_ABS_DIR}/libMotor_Interpolation.so
