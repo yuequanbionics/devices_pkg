@@ -51,18 +51,15 @@ class X_Hand_Node : public rclcpp::Node {
     X_Hand_Node(
         const std::string& node_name)
         : Node(node_name) {
-        
     }
 
-     int create_objects(
+    int create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic,
         const std::string& dev_type,
         const std::string& dev_config) {
-
         string yaml_path = "src/devices_pkg/sdk/config/YAML/X_Hand/out/" + dev_type + "/TOP.yaml";
-        if(hardware_init(yaml_path, dev_config) != 0)
-        {
+        if (hardware_init(yaml_path, dev_config) != 0) {
             cout << "Hardware initialization failed" << endl;
             return -1;
         }
@@ -75,11 +72,19 @@ class X_Hand_Node : public rclcpp::Node {
             std::bind(&X_Hand_Node::sensor_timer_callback, this));
 
         return 0;
-     }
-
+    }
 
    private:
     void sensor_timer_callback() {
+        if (Tactile_Sensor_Control == nullptr) {
+            static bool first_warning = true;
+            if (first_warning) {
+                RCLCPP_WARN_ONCE(this->get_logger(),
+                                 "Tactile_Sensor_Control is null, sensor callback disabled");
+                first_warning = false;
+            }
+            return;
+        }
         auto sensor_message = devices_pkg::msg::XHandSensorMsg();
         static const vector<uint8_t> sensor_ids = {
             HW_THUMB_ID,          // 拇指

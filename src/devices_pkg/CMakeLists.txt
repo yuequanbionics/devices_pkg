@@ -54,6 +54,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include
         ${SDK_INC}/../third_party/lib/install-${ARCH_SUFFIX}/include/yaml-cpp
         ${SDK_INC}/Switch_Boards/Switch_Board
+        ${SDK_INC}/Switch_Boards/Switch_Board_Orin
         ${SDK_INC}/Switch_Boards/Switch_Board/mcu/stm32h743
         ${SDK_INC}/Custom_Device/Servo_Feetech
         ${SDK_INC}/Custom_Device/Uart_Pressure_Sensor
@@ -214,17 +215,17 @@ endfunction()
 
 # 添加设备节点
 add_device_node(X_Hand_Node)
-add_device_node(X_Hand_Brushed_Node)
-add_device_node(Y_Hand_Node)
+# add_device_node(X_Hand_Brushed_Node)
+# add_device_node(Y_Hand_Node)
 #add_device_node(E_Bot_Node)
-add_device_node(IO_Board_Node)
-add_device_node(W_Bot_Node)
-add_device_node(W_Bot_Double_Node)
-add_device_node(Test_W_Bot_Node)
-add_device_node(Test_W_Bot_Double_Node)
-add_device_node(Test_Y_Hand_Node)
+# add_device_node(IO_Board_Node)
+# add_device_node(W_Bot_Node)
+# add_device_node(W_Bot_Double_Node)
+# add_device_node(Test_W_Bot_Node)
+# add_device_node(Test_W_Bot_Double_Node)
+# add_device_node(Test_Y_Hand_Node)
 add_device_node(Test_X_Hand_Node)
-add_device_node(Test_X_Hand_Brushed_Node)
+# add_device_node(Test_X_Hand_Brushed_Node)
 add_device_node(Remote_Node)
 
 if(BUILD_TESTING)
