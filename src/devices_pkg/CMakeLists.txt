@@ -113,6 +113,7 @@ set(MSG_FILES
         "msg/WBot/Remote.msg"
         "msg/WBotDouble/WBotDoubleMotor.msg"
         "msg/WBot/WBotBattery.msg"
+        "msg/WBot/WBotCollision.msg"
         
         "msg/EBotMsg.msg"
         "msg/XHandMsg.msg"

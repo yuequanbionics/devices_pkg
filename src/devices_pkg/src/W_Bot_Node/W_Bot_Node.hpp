@@ -3,6 +3,9 @@
 
 #include <filesystem>
 #include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <math.h>
 
 #include "Battery_BMS_V2.hpp"
 #include "Custom_TOP.hpp"
@@ -12,6 +15,9 @@
 #include "Led_Device.hpp"
 #include "Motor_BM_M1502D.hpp"
 #include "Motor_TaiHu.hpp"
+#include <filesystem>
+#include "GPIO.hpp"
+#include "syst.hpp"
 #include "Switch_Board.hpp"
 #include "UDP.hpp"
 #include "devices_pkg/msg/w_bot_battery.hpp"
@@ -25,6 +31,7 @@ using namespace std;
 
 // 声明外部变量
 extern Robot_Hardware* Test_Robot;
+extern shared_ptr<Device_class> Chassis_Main_Switch_Board;
 extern shared_ptr<Device_class> Lower_Limbs_Motor_Waist_Roll;
 extern shared_ptr<Device_class> Lower_Limbs_Motor_Waist_Yaw;
 extern shared_ptr<Device_class> Lower_Limbs_Motor_Knee;
@@ -57,6 +64,7 @@ extern shared_ptr<Device_class> Battery_BMS_V2_1;
 extern shared_ptr<Device_class> Battery_BMS_V2_2;
 extern shared_ptr<Device_class> Battery_BMS_V2_3;
 extern shared_ptr<Device_class> Battery_BMS_V2_4;
+extern Main_B* Chassis_Main_Switch_Board_Control;
 extern Eyou_Motor* Lower_Limbs_Motor_Waist_Roll_Ctl;
 extern Eyou_Motor* Lower_Limbs_Motor_Waist_Yaw_Ctl;
 extern Eyou_Motor* Lower_Limbs_Motor_Knee_Ctl;
@@ -122,6 +130,7 @@ class W_Bot_Node : public rclcpp::Node {
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10);
         publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>("wbot_imu_data", 10);
         publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_battery_data", 10);
+        publisher_Collision = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_collision_data", 10);
         subscription_Motor = this->create_subscription<devices_pkg::msg::WBotMotor>("wbot_motor_cmd", 10,
                                                                                     std::bind(&W_Bot_Node::Motor_topic_callback, this, std::placeholders::_1));
         subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10,
@@ -137,6 +146,10 @@ class W_Bot_Node : public rclcpp::Node {
         timer_Battery = this->create_wall_timer(
             std::chrono::milliseconds(1000),
             std::bind(&W_Bot_Node::battery_timer_callback, this));
+        
+        timer_Collision_Bar = this->create_wall_timer(
+            std::chrono::milliseconds(1000),
+            std::bind(&W_Bot_Node::Collision_timer_callback, this));
     }
 
    private:
@@ -266,6 +279,21 @@ class W_Bot_Node : public rclcpp::Node {
         // 发布电池状态消息
         publisher_Battery->publish(battery_message);
     }
+
+
+    void Collision_timer_callback(){
+        auto collision_message = devices_pkg::msg::WBotCollision();
+        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr || collision_message.CB == nullptr)
+        {
+            cout << "Fun Get_Buttons_State() param invalid.";
+            return;
+        }
+        Chassis_Main_Switch_Board_Control->m_GPIO.GPIOx_Read(Chassis_Main_Switch_Board, GPIOD, GPIO_PIN_11,  1000);
+        usleep(2000);
+        collision_message.CB[0] = Chassis_Main_Switch_Board_Control->m_GPIO.Get_GPIOx_Value(GPIOD, GPIO_PIN_11);
+        publisher_Collision->publish(collision_message);
+    }
+
     void led_topic_callback(const devices_pkg::msg::WBotLED::SharedPtr msg) const {
         auto get_message = msg;
 
@@ -285,11 +313,13 @@ class W_Bot_Node : public rclcpp::Node {
     rclcpp::Publisher<devices_pkg::msg::WBotMotor>::SharedPtr publisher_Motor;
     rclcpp::Publisher<devices_pkg::msg::WBotIMU>::SharedPtr publisher_IMU;
     rclcpp::Publisher<devices_pkg::msg::WBotBattery>::SharedPtr publisher_Battery;
+    rclcpp::Publisher<devices_pkg::msg::WBotCollision>::SharedPtr publisher_Collision;
     rclcpp::Subscription<devices_pkg::msg::WBotMotor>::SharedPtr subscription_Motor;
     rclcpp::Subscription<devices_pkg::msg::WBotLED>::SharedPtr subscription_LED;
     rclcpp::TimerBase::SharedPtr timer_imu;
     rclcpp::TimerBase::SharedPtr timer_Motor;
     rclcpp::TimerBase::SharedPtr timer_Battery;
+    rclcpp::TimerBase::SharedPtr timer_Collision_Bar;
 };
 
 #endif  // W_BOT_NODE_H_
