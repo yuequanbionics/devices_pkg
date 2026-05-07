@@ -24,6 +24,7 @@
 #include "devices_pkg/msg/w_bot_imu.hpp"
 #include "devices_pkg/msg/w_bot_led.hpp"
 #include "devices_pkg/msg/w_bot_motor.hpp"
+#include "devices_pkg/msg/w_bot_collision.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
@@ -130,7 +131,7 @@ class W_Bot_Node : public rclcpp::Node {
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10);
         publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>("wbot_imu_data", 10);
         publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_battery_data", 10);
-        publisher_Collision = this->create_publisher<devices_pkg::msg::WBotBattery>("wbot_collision_data", 10);
+        publisher_Collision = this->create_publisher<devices_pkg::msg::WBotCollision>("wbot_collision_data", 10);
         subscription_Motor = this->create_subscription<devices_pkg::msg::WBotMotor>("wbot_motor_cmd", 10,
                                                                                     std::bind(&W_Bot_Node::Motor_topic_callback, this, std::placeholders::_1));
         subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10,
@@ -148,7 +149,7 @@ class W_Bot_Node : public rclcpp::Node {
             std::bind(&W_Bot_Node::battery_timer_callback, this));
         
         timer_Collision_Bar = this->create_wall_timer(
-            std::chrono::milliseconds(1000),
+            std::chrono::milliseconds(100),
             std::bind(&W_Bot_Node::Collision_timer_callback, this));
     }
 
@@ -283,13 +284,12 @@ class W_Bot_Node : public rclcpp::Node {
 
     void Collision_timer_callback(){
         auto collision_message = devices_pkg::msg::WBotCollision();
-        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr || collision_message.cb == nullptr)
+        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr)
         {
             cout << "Fun Get_Buttons_State() param invalid.";
             return;
         }
         Chassis_Main_Switch_Board_Control->m_GPIO.GPIOx_Read(Chassis_Main_Switch_Board, GPIOD, GPIO_PIN_11,  1000);
-        usleep(2000);
         collision_message.cb[0] = Chassis_Main_Switch_Board_Control->m_GPIO.Get_GPIOx_Value(GPIOD, GPIO_PIN_11);
         publisher_Collision->publish(collision_message);
     }
