@@ -283,14 +283,14 @@ class W_Bot_Node : public rclcpp::Node {
 
     void Collision_timer_callback(){
         auto collision_message = devices_pkg::msg::WBotCollision();
-        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr || collision_message.CB == nullptr)
+        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr || collision_message.cb == nullptr)
         {
             cout << "Fun Get_Buttons_State() param invalid.";
             return;
         }
         Chassis_Main_Switch_Board_Control->m_GPIO.GPIOx_Read(Chassis_Main_Switch_Board, GPIOD, GPIO_PIN_11,  1000);
         usleep(2000);
-        collision_message.CB[0] = Chassis_Main_Switch_Board_Control->m_GPIO.Get_GPIOx_Value(GPIOD, GPIO_PIN_11);
+        collision_message.cb[0] = Chassis_Main_Switch_Board_Control->m_GPIO.Get_GPIOx_Value(GPIOD, GPIO_PIN_11);
         publisher_Collision->publish(collision_message);
     }
 
