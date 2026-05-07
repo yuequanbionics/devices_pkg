@@ -5,6 +5,11 @@ from launch.actions import Shutdown
 
 #根据SN后缀判断设备类型
 def check_sn_suffix(config_str):
+
+    # 判断如果配置字符串是 'None'，直接返回指定值 （适用于FDCan）
+    if config_str == 'None':
+        return 'mz_g_orin_fdcan_1.0'
+    
     sn_value = None
     # 1. 解析配置字符串，提取 SN 值
     for line in config_str.strip().split('\n'):
