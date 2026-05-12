@@ -34,17 +34,24 @@
 
 
 
-1. SSH || HTTPS克隆包含子仓库(二选一)
+1. 代码拉取后 devices_pkg 为 ros2 package 便于集成到自己的工程中
 
-    git clone git@xxxx.com:xxxxxxxxxxxxx.git
+2. cd devices_pkg
 
-    git clone https://xxxxx.com/xxxxxxxx.git
+3. 如果想成为一个独立的工程 需要创建 workspace 。否则集成到自己工程后跳转到第 4. 步
 
-2. cd 工程文件夹
+   ./create_workspace.sh
 
-3. 运行拉取SDK的shell脚本(二选一)
+    cd ..
 
-    拉取gitee上的SDK源码仓库
+    此时看到 devices_pkg_ws 文件夹就是工程文件 。
+
+
+4. 运行拉取 SDK 的 shell 脚本(二选一)
+
+    cd devices_pkg_ws/src/devices_pkg
+
+    拉取gitee上的SDK源码仓库 (需要手动编译)
 
     ./pull_sdk.sh gitee
 
@@ -52,7 +59,7 @@
 
     ./pull_sdk.sh github
 
-4. (如果是ARM平台）进sdk/目录下编译ARM平台下的第三方库
+5. (如果是ARM平台）进sdk/目录下编译ARM平台下的第三方库
 
    ./Tool.sh clean
   
@@ -60,20 +67,19 @@
    
    ./Tool.sh make
    
-
-5. 在sdk2ros/目录下编译命令
+6. 回到 devices_pkg_ws 目录下编译命令
 
     colcon build  
 
-6. 执行ROS的shell配置脚本
+7. 执行ROS的shell配置脚本
 
     source ./install/setup.sh  
 
-7. 可执行文件路径
+8. 可执行文件路径
 
     /install/devices_pkg/lib/devices_pkg/  
 
-8. 运行节点  || 通过launch启动多节点(二选一)
+9. 运行节点  || 通过launch启动多节点(二选一)
 
     ros2 run devices_pkg 可执行文件名
 
