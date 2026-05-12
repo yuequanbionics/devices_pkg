@@ -22,12 +22,18 @@ extern shared_ptr<Device_class> X_Hand_3_D;
 extern shared_ptr<Device_class> X_Hand_4_D;
 extern shared_ptr<Device_class> X_Hand_5_D;
 extern shared_ptr<Device_class> X_Hand_6_D;
+extern shared_ptr<Device_class> X_Hand_Msg_1_D;
+extern shared_ptr<Device_class> X_Hand_Msg_2_D;
+extern shared_ptr<Device_class> X_Hand_Msg_3_D;
 extern X_Hand_Protocol* X_Hand_1_Control;
 extern X_Hand_Protocol* X_Hand_2_Control;
 extern X_Hand_Protocol* X_Hand_3_Control;
 extern X_Hand_Protocol* X_Hand_4_Control;
 extern X_Hand_Protocol* X_Hand_5_Control;
 extern X_Hand_Protocol* X_Hand_6_Control;
+extern X_Hand_Protocol* X_Hand_Msg_1_Control;
+extern X_Hand_Protocol* X_Hand_Msg_2_Control;
+extern X_Hand_Protocol* X_Hand_Msg_3_Control;
 
 //声明外部函数
 extern int hardware_init(string ADDR, string Config);
@@ -56,12 +62,12 @@ public:
     void reset_motors() {
         const u16 reset = 0;
 
-        X_Hand_1_Control->Set_Motor(reset, 0);
-        X_Hand_2_Control->Set_Motor(reset, 0);
-        X_Hand_3_Control->Set_Motor(reset, 0);
-        X_Hand_4_Control->Set_Motor(reset, 0);
-        X_Hand_5_Control->Set_Motor(reset, 0);
-        X_Hand_6_Control->Set_Motor(reset, 0);
+        X_Hand_1_Control->Set_Motor(X_Hand_1_D, reset, 0);
+        X_Hand_2_Control->Set_Motor(X_Hand_2_D, reset, 0);
+        X_Hand_3_Control->Set_Motor(X_Hand_3_D, reset, 0);
+        X_Hand_4_Control->Set_Motor(X_Hand_4_D, reset, 0);
+        X_Hand_5_Control->Set_Motor(X_Hand_5_D, reset, 0);
+        X_Hand_6_Control->Set_Motor(X_Hand_6_D, reset, 0);
 
         robot->Send_Buff_Data();
 
@@ -74,12 +80,12 @@ private:
 
     void motor_timer_callback(){
         if(get_message_motor != nullptr){
-            X_Hand_1_Control->Set_Motor(get_message_motor->motors[0].pos, 0);
-            X_Hand_2_Control->Set_Motor(get_message_motor->motors[1].pos, 0);
-            X_Hand_3_Control->Set_Motor(get_message_motor->motors[2].pos, 0);
-            X_Hand_4_Control->Set_Motor(get_message_motor->motors[3].pos, 0);
-            X_Hand_5_Control->Set_Motor(get_message_motor->motors[4].pos, 0);
-            X_Hand_6_Control->Set_Motor(get_message_motor->motors[5].pos, 0);
+            X_Hand_1_Control->Set_Motor(X_Hand_1_D, get_message_motor->motors[0].pos, 0);
+            X_Hand_2_Control->Set_Motor(X_Hand_2_D, get_message_motor->motors[1].pos, 0);
+            X_Hand_3_Control->Set_Motor(X_Hand_3_D, get_message_motor->motors[2].pos, 0);
+            X_Hand_4_Control->Set_Motor(X_Hand_4_D, get_message_motor->motors[3].pos, 0);
+            X_Hand_5_Control->Set_Motor(X_Hand_5_D, get_message_motor->motors[4].pos, 0);
+            X_Hand_6_Control->Set_Motor(X_Hand_6_D, get_message_motor->motors[5].pos, 0);
             robot->Send_Buff_Data();
 
             publisher_Motor->publish(*get_message_motor);
