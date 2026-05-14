@@ -14,6 +14,16 @@
 
 using namespace std;
 
+typedef enum{
+SHOULDER_PITCH = 1,
+SHOULDER_ROLL,
+SHOULDER_YAW,
+ELBOW,
+WRIST_YAW,
+WRIST_PITCH,
+WRIST_ROLL,
+}ARM_Angle_T;
+
 class Test_W_Bot_Double_Node : public rclcpp::Node
 {
 public:
@@ -29,8 +39,11 @@ public:
 
         std::this_thread::sleep_for(std::chrono::seconds(2));
         timer_Motor_cmd = this->create_wall_timer(
-        std::chrono::milliseconds(10),
+        std::chrono::milliseconds(1000), // 仅使用指定位置时，此处为10
         std::bind(&Test_W_Bot_Double_Node::Motor_timer_callback, this));
+
+        flag = SHOULDER_PITCH - 1;
+        reset_zero = true;
     }
 
     // void imu_data_topic_callback(const devices_pkg::msg::WBotIMU::SharedPtr msg)
@@ -56,30 +69,59 @@ public:
         auto send_message = devices_pkg::msg::WBotDoubleMotor();
 
         float pos = 0.0f;
+        float pp = 2.0f;
 
-        // send_message.waist_roll.pos = pos;
-        // send_message.waist_yaw.pos = pos;
-        // send_message.knee.pos = pos;
-        // send_message.hip.pos = pos;
-        // send_message.ankle.pos = pos;
-        send_message.left_shoulder_pitch.pos = pos;
-        send_message.left_shoulder_roll.pos = pos;
-        send_message.left_shoulder_yaw.pos = pos;
-        send_message.left_elbow.pos = pos;
-        send_message.left_wrist_yaw.pos = pos;
-        send_message.left_wrist_pitch.pos = pos;
-        send_message.left_wrist_roll.pos = pos;
-        send_message.right_shoulder_pitch.pos = pos;
-        send_message.right_shoulder_roll.pos = pos;
-        send_message.right_shoulder_yaw.pos = pos;
-        send_message.right_elbow.pos = pos;
-        send_message.right_wrist_yaw.pos = pos;
-        send_message.right_wrist_pitch.pos = pos;
-        send_message.right_wrist_roll.pos = pos;
-        send_message.head_pitch.pos = pos;
-        send_message.head_yaw.pos = pos;
-        // send_message.wheel_left.vel = 50.0f;
-        // send_message.wheel_right.vel = -50.0f;
+        if(reset_zero == true){
+            // send_message.waist_roll.pos = pos;
+            // send_message.waist_yaw.pos = pos;
+            // send_message.knee.pos = pos;
+            // send_message.hip.pos = pos;
+            // send_message.ankle.pos = pos;
+            send_message.left_shoulder_pitch.pos = pos;
+            send_message.left_shoulder_roll.pos = pos;
+            send_message.left_shoulder_yaw.pos = pos;
+            send_message.left_elbow.pos = pos;
+            send_message.left_wrist_yaw.pos = pos;
+            send_message.left_wrist_pitch.pos = pos;
+            send_message.left_wrist_roll.pos = pos;
+            send_message.right_shoulder_pitch.pos = pos;
+            send_message.right_shoulder_roll.pos = pos;
+            send_message.right_shoulder_yaw.pos = pos;
+            send_message.right_elbow.pos = pos;
+            send_message.right_wrist_yaw.pos = pos;
+            send_message.right_wrist_pitch.pos = pos;
+            send_message.right_wrist_roll.pos = pos;
+            send_message.head_pitch.pos = pos;
+            send_message.head_yaw.pos = pos;
+            // send_message.wheel_left.vel = 50.0f;
+            // send_message.wheel_right.vel = -50.0f;
+        }else{
+            flag = (flag >= WRIST_ROLL) ? SHOULDER_PITCH : (flag + 1);
+            // send_message.waist_roll.pos = pos;
+            // send_message.waist_yaw.pos = pos;
+            // send_message.knee.pos = pos;
+            // send_message.hip.pos = pos;
+            // send_message.ankle.pos = pos;
+            send_message.left_shoulder_pitch.pos = pos + (flag == SHOULDER_PITCH ? pp : pos);
+            send_message.left_shoulder_roll.pos = pos + (flag == SHOULDER_ROLL ? pp : pos);
+            send_message.left_shoulder_yaw.pos = pos + (flag == SHOULDER_YAW ? pp : pos);
+            send_message.left_elbow.pos = pos + (flag == ELBOW ? pp : pos);
+            send_message.left_wrist_yaw.pos = pos + (flag == WRIST_YAW ? pp : pos);
+            send_message.left_wrist_pitch.pos = pos + (flag == WRIST_PITCH ? pp : pos);
+            send_message.left_wrist_roll.pos = pos + (flag == WRIST_ROLL ? pp : pos);
+            send_message.right_shoulder_pitch.pos = pos + (flag == SHOULDER_PITCH ? pp : pos);
+            send_message.right_shoulder_roll.pos = pos + (flag == SHOULDER_ROLL ? pp : pos);
+            send_message.right_shoulder_yaw.pos = pos + (flag == SHOULDER_YAW ? pp : pos);
+            send_message.right_elbow.pos = pos + (flag == ELBOW ? pp : pos);
+            send_message.right_wrist_yaw.pos = pos + (flag == WRIST_YAW ? pp : pos);
+            send_message.right_wrist_pitch.pos = pos + (flag == WRIST_PITCH ? pp : pos);
+            send_message.right_wrist_roll.pos = pos + (flag == WRIST_ROLL ? pp : pos);
+            send_message.head_pitch.pos = pos;
+            send_message.head_yaw.pos = pos;
+            // send_message.wheel_left.vel = 50.0f;
+            // send_message.wheel_right.vel = -50.0f;
+        }
+        reset_zero = !reset_zero; // 仅使用指定位置时，注释此处
         publisher_Motor_cmd->publish(send_message);
     }
 
@@ -91,6 +133,8 @@ private:
     rclcpp::Subscription<devices_pkg::msg::WBotDoubleMotor>::SharedPtr subscription_Motor_Data;
     rclcpp::TimerBase::SharedPtr timer_Motor_cmd;
 
+    int flag;
+    bool reset_zero;
 };
 
 
