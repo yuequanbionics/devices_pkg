@@ -22,6 +22,8 @@ ELBOW,
 WRIST_YAW,
 WRIST_PITCH,
 WRIST_ROLL,
+HEAD_PITCH,
+HEAD_YAW,
 }ARM_Angle_T;
 
 class Test_W_Bot_Double_Node : public rclcpp::Node
@@ -96,7 +98,7 @@ public:
             // send_message.wheel_left.vel = 50.0f;
             // send_message.wheel_right.vel = -50.0f;
         }else{
-            flag = (flag >= WRIST_ROLL) ? SHOULDER_PITCH : (flag + 1);
+            flag = (flag >= HEAD_YAW) ? SHOULDER_PITCH : (flag + 1);
             // send_message.waist_roll.pos = pos;
             // send_message.waist_yaw.pos = pos;
             // send_message.knee.pos = pos;
@@ -116,8 +118,8 @@ public:
             send_message.right_wrist_yaw.pos = pos + (flag == WRIST_YAW ? pp : pos);
             send_message.right_wrist_pitch.pos = pos + (flag == WRIST_PITCH ? pp : pos);
             send_message.right_wrist_roll.pos = pos + (flag == WRIST_ROLL ? pp : pos);
-            send_message.head_pitch.pos = pos;
-            send_message.head_yaw.pos = pos;
+            send_message.head_pitch.pos = pos + (flag == HEAD_PITCH ? pp : pos);
+            send_message.head_yaw.pos = pos + (flag == HEAD_YAW ? pp : pos);
             // send_message.wheel_left.vel = 50.0f;
             // send_message.wheel_right.vel = -50.0f;
         }
