@@ -21,7 +21,7 @@ Boards:
     
 
     node_mapping = {
-        'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data',config_dev1),
+        'y_hand_node': ('Y_Hand_Node','y_hand_cmd', 'y_hand_data','None'),
         'test_y_hand_node': ("Test_Y_Hand_Node", 'y_hand_data','y_hand_cmd', 'None')
     }
 

@@ -30,7 +30,7 @@ void Test_Y_Hand_Node<MsgT>::y_hand_timer_callback()
     {
         message.motors[i].pos = 0.0;
         message.motors[i].vel = 0.0;
-        message.motors[i].tor = -0.05;
+        message.motors[i].tor = 0.0;
         message.motors[i].kp = 0.0;
         message.motors[i].kd = 0.0;
     }
