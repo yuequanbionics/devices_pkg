@@ -82,6 +82,28 @@ public:
         send_message.head_yaw.pos = pos;
         send_message.wheel_left.vel = 50.0f;
         send_message.wheel_right.vel = -50.0f;
+
+
+        float kp = 1.0f;
+        send_message.left_shoulder_pitch.kp = kp;
+        send_message.left_shoulder_roll.kp = kp;
+        send_message.left_shoulder_yaw.kp = kp;
+        send_message.left_elbow.kp = kp;
+        send_message.left_wrist_yaw.kp = kp;
+        send_message.left_wrist_pitch.kp = kp;
+        send_message.left_wrist_roll.kp = kp;
+        send_message.right_shoulder_pitch.kp = kp;
+        send_message.right_shoulder_roll.kp = kp;
+        send_message.right_shoulder_yaw.kp = kp;
+        send_message.right_elbow.kp = kp;
+        send_message.right_wrist_yaw.kp = kp;
+        send_message.right_wrist_pitch.kp = kp;
+        send_message.right_wrist_roll.kp = kp;
+        send_message.head_pitch.kp = kp;
+        send_message.head_yaw.kp = kp;
+
+
+
         publisher_Motor_cmd->publish(send_message);
     }
 
