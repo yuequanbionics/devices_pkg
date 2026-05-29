@@ -71,7 +71,7 @@ public:
         auto send_message = devices_pkg::msg::WBotDoubleMotor();
 
         float pos = 0.0f;
-        float pp = 2.0f;
+        float pp = 5.0f;
 
         if(reset_zero == true){
             // send_message.waist_roll.pos = pos;
@@ -124,6 +124,25 @@ public:
             // send_message.wheel_right.vel = -50.0f;
         }
         reset_zero = !reset_zero; // 仅使用指定位置时，注释此处
+
+        float kp = 1.0f;
+        send_message.left_shoulder_pitch.kp = kp;
+        send_message.left_shoulder_roll.kp = kp;
+        send_message.left_shoulder_yaw.kp = kp;
+        send_message.left_elbow.kp = kp;
+        send_message.left_wrist_yaw.kp = kp;
+        send_message.left_wrist_pitch.kp = kp;
+        send_message.left_wrist_roll.kp = kp;
+        send_message.right_shoulder_pitch.kp = kp;
+        send_message.right_shoulder_roll.kp = kp;
+        send_message.right_shoulder_yaw.kp = kp;
+        send_message.right_elbow.kp = kp;
+        send_message.right_wrist_yaw.kp = kp;
+        send_message.right_wrist_pitch.kp = kp;
+        send_message.right_wrist_roll.kp = kp;
+        send_message.head_pitch.kp = kp;
+        send_message.head_yaw.kp = kp;
+        
         publisher_Motor_cmd->publish(send_message);
     }
 
