@@ -1,32 +1,32 @@
 #ifndef W_BOT_NODE_H_
 #define W_BOT_NODE_H_
 
-#include <filesystem>
-#include <iostream>
-#include <iomanip>
-#include <ctime>
 #include <math.h>
+
+#include <ctime>
+#include <filesystem>
+#include <iomanip>
+#include <iostream>
 
 #include "Battery_BMS_V2.hpp"
 #include "Custom_TOP.hpp"
 #include "Eyou_Motor_TOP.hpp"
+#include "GPIO.hpp"
 #include "HARDWARE_TOP.hpp"
 #include "IMU_YuanJi.hpp"
 #include "Led_Device.hpp"
 #include "Motor_BM_M1502D.hpp"
 #include "Motor_TaiHu.hpp"
-#include <filesystem>
-#include "GPIO.hpp"
-#include "syst.hpp"
 #include "Switch_Board.hpp"
 #include "UDP.hpp"
 #include "devices_pkg/msg/w_bot_battery.hpp"
+#include "devices_pkg/msg/w_bot_collision.hpp"
 #include "devices_pkg/msg/w_bot_imu.hpp"
 #include "devices_pkg/msg/w_bot_led.hpp"
 #include "devices_pkg/msg/w_bot_motor.hpp"
-#include "devices_pkg/msg/w_bot_collision.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "syst.hpp"
 
 using namespace std;
 
@@ -147,7 +147,7 @@ class W_Bot_Node : public rclcpp::Node {
         timer_Battery = this->create_wall_timer(
             std::chrono::milliseconds(1000),
             std::bind(&W_Bot_Node::battery_timer_callback, this));
-        
+
         timer_Collision_Bar = this->create_wall_timer(
             std::chrono::milliseconds(100),
             std::bind(&W_Bot_Node::Collision_timer_callback, this));
@@ -191,7 +191,7 @@ class W_Bot_Node : public rclcpp::Node {
             Lower_Limbs_Motor_Knee_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Knee, get_message_motor->knee.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Hip_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Hip, get_message_motor->hip.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Ankel_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Ankel, get_message_motor->ankle.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
-            TaiHu_Device_T1->Send_MIT_PD_Control_Data(TaiHu_Device_1, get_message_motor->left_shoulder_pitch.pos,get_message_motor->left_shoulder_pitch.vel,get_message_motor->left_shoulder_pitch.tor, get_message_motor->left_shoulder_pitch.kp, get_message_motor->left_shoulder_pitch.kd);
+            TaiHu_Device_T1->Send_MIT_PD_Control_Data(TaiHu_Device_1, get_message_motor->left_shoulder_pitch.pos, get_message_motor->left_shoulder_pitch.vel, get_message_motor->left_shoulder_pitch.tor, get_message_motor->left_shoulder_pitch.kp, get_message_motor->left_shoulder_pitch.kd);
             TaiHu_Device_T2->Send_MIT_PD_Control_Data(TaiHu_Device_2, get_message_motor->left_shoulder_roll.pos, get_message_motor->left_shoulder_roll.vel, get_message_motor->left_shoulder_roll.tor, get_message_motor->left_shoulder_roll.kp, get_message_motor->left_shoulder_roll.kd);
             TaiHu_Device_T3->Send_MIT_PD_Control_Data(TaiHu_Device_3, get_message_motor->left_shoulder_yaw.pos, get_message_motor->left_shoulder_yaw.vel, get_message_motor->left_shoulder_yaw.tor, get_message_motor->left_shoulder_yaw.kp, get_message_motor->left_shoulder_yaw.kd);
             TaiHu_Device_T4->Send_MIT_PD_Control_Data(TaiHu_Device_4, get_message_motor->left_elbow.pos, get_message_motor->left_elbow.vel, get_message_motor->left_elbow.tor, get_message_motor->left_elbow.kp, get_message_motor->left_elbow.kd);
@@ -257,39 +257,37 @@ class W_Bot_Node : public rclcpp::Node {
         current_data_3 = Battery_BMS_V2_T3->Get_Consolidated_Data();
         current_data_4 = Battery_BMS_V2_T4->Get_Consolidated_Data();
 
-        battery_message.battery_upper.total_voltage = current_data_1.total_voltage;
-        battery_message.battery_upper.current = current_data_1.current;
-        battery_message.battery_upper.soc = current_data_1.soc;
-        battery_message.battery_upper.soh = current_data_1.soh;
+        battery_message.battery_left.total_voltage = current_data_1.total_voltage;
+        battery_message.battery_left.current = current_data_1.current;
+        battery_message.battery_left.soc = current_data_1.soc;
+        battery_message.battery_left.soh = current_data_1.soh;
 
-        battery_message.battery_lower.total_voltage = current_data_2.total_voltage;
-        battery_message.battery_lower.current = current_data_2.current;
-        battery_message.battery_lower.soc = current_data_2.soc;
-        battery_message.battery_lower.soh = current_data_2.soh;
+        battery_message.battery_right.total_voltage = current_data_2.total_voltage;
+        battery_message.battery_right.current = current_data_2.current;
+        battery_message.battery_right.soc = current_data_2.soc;
+        battery_message.battery_right.soh = current_data_2.soh;
 
-        battery_message.battery_left.total_voltage = current_data_3.total_voltage;
-        battery_message.battery_left.current = current_data_3.current;
-        battery_message.battery_left.soc = current_data_3.soc;
-        battery_message.battery_left.soh = current_data_3.soh;
+        battery_message.battery_lower.total_voltage = current_data_3.total_voltage;
+        battery_message.battery_lower.current = current_data_3.current;
+        battery_message.battery_lower.soc = current_data_3.soc;
+        battery_message.battery_lower.soh = current_data_3.soh;
 
-        battery_message.battery_right.total_voltage = current_data_4.total_voltage;
-        battery_message.battery_right.current = current_data_4.current;
-        battery_message.battery_right.soc = current_data_4.soc;
-        battery_message.battery_right.soh = current_data_4.soh;
+        battery_message.battery_upper.total_voltage = current_data_4.total_voltage;
+        battery_message.battery_upper.current = current_data_4.current;
+        battery_message.battery_upper.soc = current_data_4.soc;
+        battery_message.battery_upper.soh = current_data_4.soh;
 
         // 发布电池状态消息
         publisher_Battery->publish(battery_message);
     }
 
-
-    void Collision_timer_callback(){
+    void Collision_timer_callback() {
         auto collision_message = devices_pkg::msg::WBotCollision();
-        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr)
-        {
+        if (Chassis_Main_Switch_Board_Control == nullptr || Chassis_Main_Switch_Board == nullptr) {
             cout << "Fun Get_Buttons_State() param invalid.";
             return;
         }
-        Chassis_Main_Switch_Board_Control->m_GPIO.GPIOx_Read(Chassis_Main_Switch_Board, GPIOD, GPIO_PIN_11,  1000);
+        Chassis_Main_Switch_Board_Control->m_GPIO.GPIOx_Read(Chassis_Main_Switch_Board, GPIOD, GPIO_PIN_11, 1000);
         collision_message.cb[0] = Chassis_Main_Switch_Board_Control->m_GPIO.Get_GPIOx_Value(GPIOD, GPIO_PIN_11);
         publisher_Collision->publish(collision_message);
     }
