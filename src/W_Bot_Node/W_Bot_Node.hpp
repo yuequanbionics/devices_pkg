@@ -7,7 +7,8 @@
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
-
+#include <map>
+#include <string>
 #include "Battery_BMS_V2.hpp"
 #include "Custom_TOP.hpp"
 #include "Eyou_Motor_TOP.hpp"
@@ -109,6 +110,8 @@ BMS_Consolidated_Data current_data_2;  // 电池数据
 BMS_Consolidated_Data current_data_3;  // 电池数据
 BMS_Consolidated_Data current_data_4;  // 电池数据
 
+extern int (*Wbot_Error_DL_ROS)(shared_ptr<Device_class> Device, std::string Info, Err_Level Level);
+
 extern int hardware_init(const string& ADDR, const string& Config);
 
 float Eyou_Speed_ = 1;
@@ -120,12 +123,15 @@ devices_pkg::msg::WBotMotor::SharedPtr get_message_motor = nullptr;
 
 class W_Bot_Node : public rclcpp::Node {
    public:
+
+   static W_Bot_Node* self_ptr;
     W_Bot_Node(
         // const std::string& node_name,
         // const std::string& pub_topic,
         // const std::string& sub_topic,
         const std::string& dev_config)
         : Node("w_bot_node") {
+        self_ptr = this;
         std::string yaml_path = "src/devices_pkg/sdk/config/YAML/W_Bot/out/TOP.yaml";
         hardware_init(yaml_path, dev_config);
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>("wbot_motor_data", 10);
@@ -136,6 +142,8 @@ class W_Bot_Node : public rclcpp::Node {
                                                                                     std::bind(&W_Bot_Node::Motor_topic_callback, this, std::placeholders::_1));
         subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10,
                                                                                 std::bind(&W_Bot_Node::led_topic_callback, this, std::placeholders::_1));
+
+        publisher_Error = this->create_publisher<std_msgs::msg::String>("wbot_error_data", 10);
         timer_imu = this->create_wall_timer(
             std::chrono::milliseconds(10),
             std::bind(&W_Bot_Node::imu_timer_callback, this));
@@ -151,6 +159,8 @@ class W_Bot_Node : public rclcpp::Node {
         timer_Collision_Bar = this->create_wall_timer(
             std::chrono::milliseconds(100),
             std::bind(&W_Bot_Node::Collision_timer_callback, this));
+
+        Wbot_Error_DL_ROS = Wbot_Error_callback;
     }
 
    private:
@@ -185,13 +195,13 @@ class W_Bot_Node : public rclcpp::Node {
     }
 
     void motor_timer_callback() {
-        if (get_message_motor != nullptr) {
+         if (get_message_motor != nullptr) {
             Lower_Limbs_Motor_Waist_Yaw_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Waist_Yaw, get_message_motor->waist_yaw.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Waist_Roll_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Waist_Roll, get_message_motor->waist_roll.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Knee_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Knee, get_message_motor->knee.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Hip_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Hip, get_message_motor->hip.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Ankel_Ctl->Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Ankel, get_message_motor->ankle.pos, Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
-            TaiHu_Device_T1->Send_MIT_PD_Control_Data(TaiHu_Device_1, get_message_motor->left_shoulder_pitch.pos, get_message_motor->left_shoulder_pitch.vel, get_message_motor->left_shoulder_pitch.tor, get_message_motor->left_shoulder_pitch.kp, get_message_motor->left_shoulder_pitch.kd);
+            TaiHu_Device_T1->Send_MIT_PD_Control_Data(TaiHu_Device_1, get_message_motor->left_shoulder_pitch.pos,get_message_motor->left_shoulder_pitch.vel,get_message_motor->left_shoulder_pitch.tor, get_message_motor->left_shoulder_pitch.kp, get_message_motor->left_shoulder_pitch.kd);
             TaiHu_Device_T2->Send_MIT_PD_Control_Data(TaiHu_Device_2, get_message_motor->left_shoulder_roll.pos, get_message_motor->left_shoulder_roll.vel, get_message_motor->left_shoulder_roll.tor, get_message_motor->left_shoulder_roll.kp, get_message_motor->left_shoulder_roll.kd);
             TaiHu_Device_T3->Send_MIT_PD_Control_Data(TaiHu_Device_3, get_message_motor->left_shoulder_yaw.pos, get_message_motor->left_shoulder_yaw.vel, get_message_motor->left_shoulder_yaw.tor, get_message_motor->left_shoulder_yaw.kp, get_message_motor->left_shoulder_yaw.kd);
             TaiHu_Device_T4->Send_MIT_PD_Control_Data(TaiHu_Device_4, get_message_motor->left_elbow.pos, get_message_motor->left_elbow.vel, get_message_motor->left_elbow.tor, get_message_motor->left_elbow.kp, get_message_motor->left_elbow.kd);
@@ -218,31 +228,30 @@ class W_Bot_Node : public rclcpp::Node {
 
         auto send_message = devices_pkg::msg::WBotMotor();
 
-        Lower_Limbs_Motor_Waist_Yaw_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Yaw, &send_message.waist_yaw.pos, &send_message.waist_yaw.vel, &qqqq_);
-        Lower_Limbs_Motor_Waist_Roll_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Roll, &send_message.waist_roll.pos, &send_message.waist_roll.vel, &qqqq_);
-        Lower_Limbs_Motor_Knee_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Knee, &send_message.knee.pos, &send_message.knee.vel, &qqqq_);
+        Lower_Limbs_Motor_Waist_Yaw_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Yaw, &send_message.waist_yaw.pos, &send_message.waist_yaw.vel, &send_message.waist_yaw.tor,&send_message.waist_yaw.temp[0], &send_message.waist_yaw.error);
+        Lower_Limbs_Motor_Waist_Roll_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Roll, &send_message.waist_roll.pos, &send_message.waist_roll.vel, &send_message.waist_roll.tor,&send_message.waist_roll.temp[0], &send_message.waist_roll.error);
+        Lower_Limbs_Motor_Knee_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Knee, &send_message.knee.pos, &send_message.knee.vel, &send_message.knee.tor,&send_message.knee.temp[0], &send_message.knee.error);
 
-        Lower_Limbs_Motor_Hip_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Hip, &send_message.hip.pos, &send_message.hip.vel, &qqqq_);
-        Lower_Limbs_Motor_Ankel_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Ankel, &send_message.ankle.pos, &send_message.ankle.vel, &qqqq_);
+        Lower_Limbs_Motor_Hip_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Hip, &send_message.hip.pos, &send_message.hip.vel, &send_message.hip.tor,&send_message.hip.temp[0], &send_message.hip.error);
+        Lower_Limbs_Motor_Ankel_Ctl->Get_Motor_FB_Data(Lower_Limbs_Motor_Ankel, &send_message.ankle.pos, &send_message.ankle.vel, &send_message.ankle.tor,&send_message.ankle.temp[0], &send_message.ankle.error);
 
-        TaiHu_Device_T1->Get_Motor_FB_Data(TaiHu_Device_1, &send_message.left_shoulder_pitch.pos, &send_message.left_shoulder_pitch.vel, &send_message.left_shoulder_pitch.tor);
-        TaiHu_Device_T2->Get_Motor_FB_Data(TaiHu_Device_2, &send_message.left_shoulder_roll.pos, &send_message.left_shoulder_roll.vel, &send_message.left_shoulder_roll.tor);
-        TaiHu_Device_T3->Get_Motor_FB_Data(TaiHu_Device_3, &send_message.left_shoulder_yaw.pos, &send_message.left_shoulder_yaw.vel, &send_message.left_shoulder_yaw.tor);
-        TaiHu_Device_T4->Get_Motor_FB_Data(TaiHu_Device_4, &send_message.left_elbow.pos, &send_message.left_elbow.vel, &send_message.left_elbow.tor);
-        TaiHu_Device_T5->Get_Motor_FB_Data(TaiHu_Device_5, &send_message.left_wrist_yaw.pos, &send_message.left_wrist_yaw.vel, &send_message.left_wrist_yaw.tor);
-        TaiHu_Device_T6->Get_Motor_FB_Data(TaiHu_Device_6, &send_message.left_wrist_pitch.pos, &send_message.left_wrist_pitch.vel, &send_message.left_wrist_pitch.tor);
-        TaiHu_Device_T7->Get_Motor_FB_Data(TaiHu_Device_7, &send_message.left_wrist_roll.pos, &send_message.left_wrist_roll.vel, &send_message.left_wrist_roll.tor);
+        TaiHu_Device_T1->Get_Motor_FB_Data(TaiHu_Device_1, &send_message.left_shoulder_pitch.pos, &send_message.left_shoulder_pitch.vel, &send_message.left_shoulder_pitch.tor, &send_message.left_shoulder_pitch.temp[0], &send_message.left_shoulder_pitch.error);
+        TaiHu_Device_T2->Get_Motor_FB_Data(TaiHu_Device_2, &send_message.left_shoulder_roll.pos, &send_message.left_shoulder_roll.vel, &send_message.left_shoulder_roll.tor, &send_message.left_shoulder_roll.temp[0], &send_message.left_shoulder_roll.error);
+        TaiHu_Device_T3->Get_Motor_FB_Data(TaiHu_Device_3, &send_message.left_shoulder_yaw.pos, &send_message.left_shoulder_yaw.vel, &send_message.left_shoulder_yaw.tor, &send_message.left_shoulder_yaw.temp[0], &send_message.left_shoulder_yaw.error);
+        TaiHu_Device_T4->Get_Motor_FB_Data(TaiHu_Device_4, &send_message.left_elbow.pos, &send_message.left_elbow.vel, &send_message.left_elbow.tor, &send_message.left_elbow.temp[0], &send_message.left_elbow.error);
+        TaiHu_Device_T5->Get_Motor_FB_Data(TaiHu_Device_5, &send_message.left_wrist_yaw.pos, &send_message.left_wrist_yaw.vel, &send_message.left_wrist_yaw.tor, &send_message.left_wrist_yaw.temp[0], &send_message.left_wrist_yaw.error);
+        TaiHu_Device_T6->Get_Motor_FB_Data(TaiHu_Device_6, &send_message.left_wrist_pitch.pos, &send_message.left_wrist_pitch.vel, &send_message.left_wrist_pitch.tor, &send_message.left_wrist_pitch.temp[0], &send_message.left_wrist_pitch.error);
+        TaiHu_Device_T7->Get_Motor_FB_Data(TaiHu_Device_7, &send_message.left_wrist_roll.pos, &send_message.left_wrist_roll.vel, &send_message.left_wrist_roll.tor, &send_message.left_wrist_roll.temp[0], &send_message.left_wrist_roll.error);
 
-        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.right_shoulder_pitch.pos, &send_message.right_shoulder_pitch.vel, &send_message.right_shoulder_pitch.tor);
-        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.right_shoulder_roll.pos, &send_message.right_shoulder_roll.vel, &send_message.right_shoulder_roll.tor);
-        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.right_shoulder_yaw.pos, &send_message.right_shoulder_yaw.vel, &send_message.right_shoulder_yaw.tor);
-        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.right_elbow.pos, &send_message.right_elbow.vel, &send_message.right_elbow.tor);
-        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.right_wrist_yaw.pos, &send_message.right_wrist_yaw.vel, &send_message.right_wrist_yaw.tor);
-        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.right_wrist_pitch.pos, &send_message.right_wrist_pitch.vel, &send_message.right_wrist_pitch.tor);
-        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.right_wrist_roll.pos, &send_message.right_wrist_roll.vel, &send_message.right_wrist_roll.tor);
-
-        TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_pitch.pos, &send_message.head_pitch.vel, &send_message.head_pitch.tor);
-        TaiHu_Device_T16->Get_Motor_FB_Data(TaiHu_Device_16, &send_message.head_yaw.pos, &send_message.head_yaw.vel, &send_message.head_yaw.tor);
+        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.right_shoulder_pitch.pos, &send_message.right_shoulder_pitch.vel, &send_message.right_shoulder_pitch.tor, &send_message.right_shoulder_pitch.temp[0], &send_message.right_shoulder_pitch.error);
+        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.right_shoulder_roll.pos, &send_message.right_shoulder_roll.vel, &send_message.right_shoulder_roll.tor, &send_message.right_shoulder_roll.temp[0], &send_message.right_shoulder_roll.error);
+        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.right_shoulder_yaw.pos, &send_message.right_shoulder_yaw.vel, &send_message.right_shoulder_yaw.tor, &send_message.right_shoulder_yaw.temp[0], &send_message.right_shoulder_yaw.error);
+        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.right_elbow.pos, &send_message.right_elbow.vel, &send_message.right_elbow.tor, &send_message.right_elbow.temp[0], &send_message.right_elbow.error);
+        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.right_wrist_yaw.pos, &send_message.right_wrist_yaw.vel, &send_message.right_wrist_yaw.tor, &send_message.right_wrist_yaw.temp[0], &send_message.right_wrist_yaw.error);
+        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.right_wrist_pitch.pos, &send_message.right_wrist_pitch.vel, &send_message.right_wrist_pitch.tor, &send_message.right_wrist_pitch.temp[0], &send_message.right_wrist_pitch.error);
+        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.right_wrist_roll.pos, &send_message.right_wrist_roll.vel, &send_message.right_wrist_roll.tor, &send_message.right_wrist_roll.temp[0], &send_message.right_wrist_roll.error);
+        TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_pitch.pos, &send_message.head_pitch.vel, &send_message.head_pitch.tor, &send_message.head_pitch.temp[0], &send_message.head_pitch.error);
+        TaiHu_Device_T16->Get_Motor_FB_Data(TaiHu_Device_16, &send_message.head_yaw.pos, &send_message.head_yaw.vel, &send_message.head_yaw.tor, &send_message.head_yaw.temp[0], &send_message.head_yaw.error);
         Classis_Motor_T1->Get_Motor_FB_Data(Classis_Motor_1, &send_message.wheel_left.pos, &send_message.wheel_left.vel, &send_message.wheel_left.tor);
         Classis_Motor_T2->Get_Motor_FB_Data(Classis_Motor_2, &send_message.wheel_right.pos, &send_message.wheel_right.vel, &send_message.wheel_right.tor);
 
@@ -308,10 +317,31 @@ class W_Bot_Node : public rclcpp::Node {
         Led_Device_Shoulder_Ptr->Led_Set_Every_Color(Led_Shoulder_Devices, 1, 1, 11, &RGB_Datas[1]);
     }
 
+    static int Wbot_Error_callback(shared_ptr<Device_class> Device, std::string Info, Err_Level Level)
+    {
+
+        if (self_ptr)
+        {
+            std_msgs::msg::String error_message;
+            shared_ptr<std::map<std::string, Err_Level>> history_error_Map = Device->Error_Map;
+
+
+            error_message.data = "Error: " + Info + ", Level: " + to_string(Level) + "\n";
+            error_message.data += "history:\n";
+            for (const auto& error_entry : *history_error_Map)
+            {
+                error_message.data += "Error: " + error_entry.first + ", Level: " + to_string(error_entry.second) + "\n";
+            }
+            self_ptr->publisher_Error->publish(error_message);
+        }
+        return 0;
+    }
+
     rclcpp::Publisher<devices_pkg::msg::WBotMotor>::SharedPtr publisher_Motor;
     rclcpp::Publisher<devices_pkg::msg::WBotIMU>::SharedPtr publisher_IMU;
     rclcpp::Publisher<devices_pkg::msg::WBotBattery>::SharedPtr publisher_Battery;
     rclcpp::Publisher<devices_pkg::msg::WBotCollision>::SharedPtr publisher_Collision;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_Error;
     rclcpp::Subscription<devices_pkg::msg::WBotMotor>::SharedPtr subscription_Motor;
     rclcpp::Subscription<devices_pkg::msg::WBotLED>::SharedPtr subscription_LED;
     rclcpp::TimerBase::SharedPtr timer_imu;
@@ -319,5 +349,8 @@ class W_Bot_Node : public rclcpp::Node {
     rclcpp::TimerBase::SharedPtr timer_Battery;
     rclcpp::TimerBase::SharedPtr timer_Collision_Bar;
 };
+
+// 静态指针初始化
+W_Bot_Node* W_Bot_Node::self_ptr = nullptr;
 
 #endif  // W_BOT_NODE_H_
