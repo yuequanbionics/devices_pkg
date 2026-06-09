@@ -149,8 +149,8 @@ install(DIRECTORY
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-set(TARGET_LIST "Y_Hand_Node;X_Hand_Node;X_Hand_Brushed_Node;E_Bot_Node;W_Bot_Node;W_Bot_Double_Node;IO_Board_Node")
-set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_W_Bot_Double_Node;Test_X_Hand_Node;Test_X_Hand_Brushed_Node;Test_Y_Hand_Node")
+set(TARGET_LIST "Y_Hand_Node;Y_Hand_M1_Node;X_Hand_Node;X_Hand_Brushed_Node;E_Bot_Node;W_Bot_Node;W_Bot_Double_Node;IO_Board_Node")
+set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_W_Bot_Double_Node;Test_X_Hand_Node;Test_X_Hand_Brushed_Node;Test_Y_Hand_Node;Test_Y_Hand_M1_Node")
 
 function(add_device_node TARGET_NAME)
 
@@ -218,6 +218,7 @@ endfunction()
 add_device_node(X_Hand_Node)
 # add_device_node(X_Hand_Brushed_Node)
 add_device_node(Y_Hand_Node)
+add_device_node(Y_Hand_M1_Node)
 #add_device_node(E_Bot_Node)
 # add_device_node(IO_Board_Node)
 add_device_node(W_Bot_Node)
@@ -225,6 +226,7 @@ add_device_node(W_Bot_Node)
 add_device_node(Test_W_Bot_Node)
 # add_device_node(Test_W_Bot_Double_Node)
 add_device_node(Test_Y_Hand_Node)
+add_device_node(Test_Y_Hand_M1_Node)
 add_device_node(Test_X_Hand_Node)
 # add_device_node(Test_X_Hand_Brushed_Node)
 add_device_node(Remote_Node)
