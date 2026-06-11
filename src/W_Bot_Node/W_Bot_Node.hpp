@@ -313,7 +313,7 @@ class W_Bot_Node : public rclcpp::Node {
             RGB_Datas[0].G_data[i] = get_message->led_lower.arr_g[i];
             RGB_Datas[0].B_data[i] = get_message->led_lower.arr_b[i];
         }
-        Led_Device_Chassis_Ptr->Led_Set_Every_Color(Led_Chassis_Devices, 1, 1, 11, &RGB_Datas[0]);
+        Led_Device_Chassis_Ptr->Led_Set_Every_Color(Led_Chassis_Devices, 1, 1, 20, &RGB_Datas[0]);
         Led_Device_Shoulder_Ptr->Led_Set_Every_Color(Led_Shoulder_Devices, 1, 1, 11, &RGB_Datas[1]);
     }
 
