@@ -1,1 +1,1 @@
-int32[2] mtemp
+float32 mtemp

@@ -310,23 +310,38 @@ class W_Bot_Node : public rclcpp::Node {
     void Temp_Get_callback() {
         auto send_message = devices_pkg::msg::WBotMotorTem();
 
-        TaiHu_Device_T1->Get_Motor_Temp(TaiHu_Device_1, &send_message.left_shoulder_pitch.mtemp[0]);
-        TaiHu_Device_T2->Get_Motor_Temp(TaiHu_Device_2, &send_message.left_shoulder_roll.mtemp[0]);
-        TaiHu_Device_T3->Get_Motor_Temp(TaiHu_Device_3, &send_message.left_shoulder_yaw.mtemp[0]);
-        TaiHu_Device_T4->Get_Motor_Temp(TaiHu_Device_4, &send_message.left_elbow.mtemp[0]);
-        TaiHu_Device_T5->Get_Motor_Temp(TaiHu_Device_5, &send_message.left_wrist_yaw.mtemp[0]);
-        TaiHu_Device_T6->Get_Motor_Temp(TaiHu_Device_6, &send_message.left_wrist_pitch.mtemp[0]);
-        TaiHu_Device_T7->Get_Motor_Temp(TaiHu_Device_7, &send_message.left_wrist_roll.mtemp[0]);
+        TaiHu_Device_T1->Get_Motor_Temp(TaiHu_Device_1, &send_message.left_shoulder_pitch.mtemp);
+        TaiHu_Device_T2->Get_Motor_Temp(TaiHu_Device_2, &send_message.left_shoulder_roll.mtemp);
+        TaiHu_Device_T3->Get_Motor_Temp(TaiHu_Device_3, &send_message.left_shoulder_yaw.mtemp);
+        TaiHu_Device_T4->Get_Motor_Temp(TaiHu_Device_4, &send_message.left_elbow.mtemp);
+        TaiHu_Device_T5->Get_Motor_Temp(TaiHu_Device_5, &send_message.left_wrist_yaw.mtemp);
+        TaiHu_Device_T6->Get_Motor_Temp(TaiHu_Device_6, &send_message.left_wrist_pitch.mtemp);
+        TaiHu_Device_T7->Get_Motor_Temp(TaiHu_Device_7, &send_message.left_wrist_roll.mtemp);
 
-        TaiHu_Device_T8 ->Get_Motor_Temp(TaiHu_Device_8,  &send_message.right_shoulder_pitch.mtemp[0]);
-        TaiHu_Device_T9 ->Get_Motor_Temp(TaiHu_Device_9,  &send_message.right_shoulder_roll.mtemp[0]);
-        TaiHu_Device_T10->Get_Motor_Temp(TaiHu_Device_10, &send_message.right_shoulder_yaw.mtemp[0]);
-        TaiHu_Device_T11->Get_Motor_Temp(TaiHu_Device_11, &send_message.right_elbow.mtemp[0]);
-        TaiHu_Device_T12->Get_Motor_Temp(TaiHu_Device_12, &send_message.right_wrist_yaw.mtemp[0]);
-        TaiHu_Device_T13->Get_Motor_Temp(TaiHu_Device_13, &send_message.right_wrist_pitch.mtemp[0]);
-        TaiHu_Device_T14->Get_Motor_Temp(TaiHu_Device_14, &send_message.right_wrist_roll.mtemp[0]);
-        TaiHu_Device_T15->Get_Motor_Temp(TaiHu_Device_15, &send_message.head_pitch.mtemp[0]);
-        TaiHu_Device_T16->Get_Motor_Temp(TaiHu_Device_16, &send_message.head_yaw.mtemp[0]);
+        TaiHu_Device_T8 ->Get_Motor_Temp(TaiHu_Device_8,  &send_message.right_shoulder_pitch.mtemp);
+        TaiHu_Device_T9 ->Get_Motor_Temp(TaiHu_Device_9,  &send_message.right_shoulder_roll.mtemp);
+        TaiHu_Device_T10->Get_Motor_Temp(TaiHu_Device_10, &send_message.right_shoulder_yaw.mtemp);
+        TaiHu_Device_T11->Get_Motor_Temp(TaiHu_Device_11, &send_message.right_elbow.mtemp);
+        TaiHu_Device_T12->Get_Motor_Temp(TaiHu_Device_12, &send_message.right_wrist_yaw.mtemp);
+        TaiHu_Device_T13->Get_Motor_Temp(TaiHu_Device_13, &send_message.right_wrist_pitch.mtemp);
+        TaiHu_Device_T14->Get_Motor_Temp(TaiHu_Device_14, &send_message.right_wrist_roll.mtemp);
+        TaiHu_Device_T15->Get_Motor_Temp(TaiHu_Device_15, &send_message.head_pitch.mtemp);
+        TaiHu_Device_T16->Get_Motor_Temp(TaiHu_Device_16, &send_message.head_yaw.mtemp);
+
+        Lower_Limbs_Motor_Waist_Yaw_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Waist_Yaw);
+        send_message.waist_yaw.mtemp = Lower_Limbs_Motor_Waist_Yaw_Ctl->now_tem;
+
+        Lower_Limbs_Motor_Waist_Roll_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Waist_Roll);
+        send_message.waist_roll.mtemp = Lower_Limbs_Motor_Waist_Roll_Ctl->now_tem;
+
+        Lower_Limbs_Motor_Knee_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Knee);
+        send_message.knee.mtemp = Lower_Limbs_Motor_Knee_Ctl->now_tem;
+
+        Lower_Limbs_Motor_Hip_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Hip);
+        send_message.hip.mtemp = Lower_Limbs_Motor_Hip_Ctl->now_tem;
+
+        Lower_Limbs_Motor_Ankel_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Ankel);
+        send_message.ankle.mtemp = Lower_Limbs_Motor_Ankel_Ctl->now_tem;
 
         publisher_MotorTem->publish(send_message);
     }
