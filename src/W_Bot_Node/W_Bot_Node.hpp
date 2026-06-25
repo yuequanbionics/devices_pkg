@@ -163,7 +163,7 @@ class W_Bot_Node : public rclcpp::Node {
             std::bind(&W_Bot_Node::Collision_timer_callback, this));
 
         timer_Temp_Get = this->create_wall_timer(
-            std::chrono::milliseconds(100),
+            std::chrono::milliseconds(1000),
             std::bind(&W_Bot_Node::Temp_Get_callback, this));
 
         Wbot_Error_DL_ROS = Wbot_Error_callback;
@@ -327,21 +327,26 @@ class W_Bot_Node : public rclcpp::Node {
         TaiHu_Device_T14->Get_Motor_Temp(TaiHu_Device_14, &send_message.right_wrist_roll.mtemp);
         TaiHu_Device_T15->Get_Motor_Temp(TaiHu_Device_15, &send_message.head_pitch.mtemp);
         TaiHu_Device_T16->Get_Motor_Temp(TaiHu_Device_16, &send_message.head_yaw.mtemp);
-
+        
+        usleep(1000);
         Lower_Limbs_Motor_Waist_Yaw_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Waist_Yaw);
-        send_message.waist_yaw.mtemp = Lower_Limbs_Motor_Waist_Yaw_Ctl->now_tem;
+        send_message.waist_yaw.mtemp = Lower_Limbs_Motor_Waist_Yaw_Ctl->Motor_Temp_Data.last_valid_temp;
 
+        usleep(1000);
         Lower_Limbs_Motor_Waist_Roll_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Waist_Roll);
-        send_message.waist_roll.mtemp = Lower_Limbs_Motor_Waist_Roll_Ctl->now_tem;
+        send_message.waist_roll.mtemp = Lower_Limbs_Motor_Waist_Roll_Ctl->Motor_Temp_Data.last_valid_temp;
 
+        usleep(1000);
         Lower_Limbs_Motor_Knee_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Knee);
-        send_message.knee.mtemp = Lower_Limbs_Motor_Knee_Ctl->now_tem;
+        send_message.knee.mtemp = Lower_Limbs_Motor_Knee_Ctl->Motor_Temp_Data.last_valid_temp;
 
+        usleep(1000);
         Lower_Limbs_Motor_Hip_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Hip);
-        send_message.hip.mtemp = Lower_Limbs_Motor_Hip_Ctl->now_tem;
+        send_message.hip.mtemp = Lower_Limbs_Motor_Hip_Ctl->Motor_Temp_Data.last_valid_temp;
 
+        usleep(1000);
         Lower_Limbs_Motor_Ankel_Ctl->Eyou_Get_Tem(Lower_Limbs_Motor_Ankel);
-        send_message.ankle.mtemp = Lower_Limbs_Motor_Ankel_Ctl->now_tem;
+        send_message.ankle.mtemp = Lower_Limbs_Motor_Ankel_Ctl->Motor_Temp_Data.last_valid_temp;
 
         publisher_MotorTem->publish(send_message);
     }
