@@ -106,6 +106,7 @@ set(MSG_FILES
         "msg/types/Pretighten.msg"
         "msg/types/LED.msg"
         "msg/types/Battery.msg"
+        "msg/types/WBottem.msg"
         "msg/IOBoardMsg.msg"
         "msg/WBot/WBotMotor.msg"
         "msg/WBot/WBotIMU.msg"
@@ -114,6 +115,7 @@ set(MSG_FILES
         "msg/WBotDouble/WBotDoubleMotor.msg"
         "msg/WBot/WBotBattery.msg"
         "msg/WBot/WBotCollision.msg"
+        "msg/WBot/WBotMotorTem.msg"
         
         "msg/EBotMsg.msg"
         "msg/XHandMsg.msg"
