@@ -145,6 +145,9 @@ class W_Bot_Node : public rclcpp::Node {
         subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>("wbot_led_cmd", 10,
                                                                                 std::bind(&W_Bot_Node::led_topic_callback, this, std::placeholders::_1));
 
+        subscription_Motor_Stop = this->create_subscription<std_msgs::msg::String>("wbot_motor_stop", 10, \
+            std::bind(&W_Bot_Node::Motor_Stop_topic_callback, this, std::placeholders::_1));
+
         publisher_Error = this->create_publisher<std_msgs::msg::String>("wbot_error_data", 10);
         timer_imu = this->create_wall_timer(
             std::chrono::milliseconds(10),
@@ -367,6 +370,27 @@ class W_Bot_Node : public rclcpp::Node {
         Led_Device_Shoulder_Ptr->Led_Set_Every_Color(Led_Shoulder_Devices, 1, 1, 11, &RGB_Datas[1]);
     }
 
+    void Motor_Stop_topic_callback(const std_msgs::msg::String::SharedPtr msg) const
+    {
+        RCLCPP_INFO_STREAM(this->get_logger(), "Motor_Stop_topic_callback: " << msg->data);
+        if(!msg->data.empty()){
+            Lower_Limbs_Motor_Waist_Roll_Ctl->Eyou_Hold_Break(Lower_Limbs_Motor_Waist_Roll,0);
+            Lower_Limbs_Motor_Waist_Roll_Ctl->Motor_EN(Lower_Limbs_Motor_Waist_Roll,0);
+
+            Lower_Limbs_Motor_Waist_Yaw_Ctl->Eyou_Hold_Break(Lower_Limbs_Motor_Waist_Yaw,0);
+            Lower_Limbs_Motor_Waist_Yaw_Ctl->Motor_EN(Lower_Limbs_Motor_Waist_Yaw,0);
+
+            Lower_Limbs_Motor_Knee_Ctl->Eyou_Hold_Break(Lower_Limbs_Motor_Knee,0);
+            Lower_Limbs_Motor_Knee_Ctl->Motor_EN(Lower_Limbs_Motor_Knee,0);
+
+            Lower_Limbs_Motor_Hip_Ctl->Eyou_Hold_Break(Lower_Limbs_Motor_Hip,0);
+            Lower_Limbs_Motor_Hip_Ctl->Motor_EN(Lower_Limbs_Motor_Hip,0);
+
+            Lower_Limbs_Motor_Ankel_Ctl->Eyou_Hold_Break(Lower_Limbs_Motor_Ankel,0);
+            Lower_Limbs_Motor_Ankel_Ctl->Motor_EN(Lower_Limbs_Motor_Ankel,0);
+        }
+    }
+
     static int Wbot_Error_callback(shared_ptr<Device_class> Device, std::string Info, Err_Level Level)
     {
 
@@ -395,6 +419,7 @@ class W_Bot_Node : public rclcpp::Node {
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_Error;
     rclcpp::Subscription<devices_pkg::msg::WBotMotor>::SharedPtr subscription_Motor;
     rclcpp::Subscription<devices_pkg::msg::WBotLED>::SharedPtr subscription_LED;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_Motor_Stop;
     rclcpp::TimerBase::SharedPtr timer_imu;
     rclcpp::TimerBase::SharedPtr timer_Motor;
     rclcpp::TimerBase::SharedPtr timer_Battery;
