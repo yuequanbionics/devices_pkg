@@ -425,6 +425,7 @@ class W_Bot_Node : public rclcpp::Node {
     rclcpp::TimerBase::SharedPtr timer_Battery;
     rclcpp::TimerBase::SharedPtr timer_Collision_Bar;
     rclcpp::TimerBase::SharedPtr timer_Temp_Get;
+    
 };
 
 // 静态指针初始化
