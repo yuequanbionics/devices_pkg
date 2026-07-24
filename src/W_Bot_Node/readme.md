@@ -46,7 +46,7 @@ int Send_MIT_PD_Control_Data(std::shared_ptr<Device_class> Device_P, float Rad, 
 2. **模式切换规则**（通过 P/D 参数自动判断，优先级从高到低）：
    - P 参数（P_N_Rad）≠ 0 → 位置环控制
    - P 参数 = 0 且 D 参数（D_N_Rad_s）≠ 0 → 速度环控制
-   - P 参数 = 0 且 D 参数 = 0 → 电流环控制（暂不使用）
+   - P 参数 = 0 且 D 参数 = 0 → 电流环控制
 
 ## 二、模式切换约束（重要）
 
@@ -64,7 +64,7 @@ int Send_MIT_PD_Control_Data(std::shared_ptr<Device_class> Device_P, float Rad, 
 | Device_P      | -              必传       必传        设备句柄
 | Rad           | 度             有效        无效       目标位置值
 | Speed_Rad_S   | 度/秒          无效        有效        目标速度值（需转RPM）
-| Force_N       | N             无效        无效        力矩值
+| Force_N       | mA             无效        无效        电流值
 | P_N_Rad       | -             有效        无效        位置环P参数（仅用于模式切换）
 | D_N_Rad_s     | -             无效        有效        速度环D参数（仅用于模式切换）
 

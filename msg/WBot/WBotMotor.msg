@@ -1,5 +1,8 @@
 #W_Bot电机数据类型
 
+# 头部消息
+std_msgs/Header header
+
 #意优-下肢电机
 devices_pkg/Motor waist_roll
 devices_pkg/Motor waist_yaw

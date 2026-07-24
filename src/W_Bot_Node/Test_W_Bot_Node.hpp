@@ -59,6 +59,9 @@ public:
 
         float pos = 5.0f;
 
+        send_message.header.stamp = this->now();
+        send_message.header.frame_id = "wbot_motor_data";
+
         send_message.waist_roll.pos = pos;
         send_message.waist_yaw.pos = pos;
         send_message.knee.pos = pos;
