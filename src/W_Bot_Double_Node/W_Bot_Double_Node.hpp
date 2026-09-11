@@ -60,7 +60,7 @@ float Eyou_Speed_ = 1;
 float Eyou_Acc_ = 1;
 float Eyou_Dec_ = 1;
 float qqqq_ = 0.0f;
-float pos_,vel_,cur_ = 0.0f;
+float pos_,vel_,cur_ = NAN;
 devices_pkg::msg::WBotDoubleMotor::SharedPtr get_message_motor = nullptr;
 
 
@@ -106,13 +106,13 @@ private:
             TaiHu_Device_T6->Send_MIT_PD_Control_Data(TaiHu_Device_6, get_message_motor->right_wrist_pitch.pos, get_message_motor->right_wrist_pitch.vel, get_message_motor->right_wrist_pitch.tor, get_message_motor->right_wrist_pitch.kp, get_message_motor->right_wrist_pitch.kd);
             TaiHu_Device_T7->Send_MIT_PD_Control_Data(TaiHu_Device_7, get_message_motor->right_wrist_roll.pos, get_message_motor->right_wrist_roll.vel, get_message_motor->right_wrist_roll.tor, get_message_motor->right_wrist_roll.kp, get_message_motor->right_wrist_roll.kd);
 
-            TaiHu_Device_T8->Send_MIT_PD_Control_Data(TaiHu_Device_8, get_message_motor->right_shoulder_pitch.pos, get_message_motor->right_shoulder_pitch.vel, get_message_motor->right_shoulder_pitch.tor, get_message_motor->right_shoulder_pitch.kp, get_message_motor->right_shoulder_pitch.kd);
-            TaiHu_Device_T9->Send_MIT_PD_Control_Data(TaiHu_Device_9, get_message_motor->right_shoulder_roll.pos, get_message_motor->right_shoulder_roll.vel, get_message_motor->right_shoulder_roll.tor, get_message_motor->right_shoulder_roll.kp, get_message_motor->right_shoulder_roll.kd);
-            TaiHu_Device_T10->Send_MIT_PD_Control_Data(TaiHu_Device_10, get_message_motor->right_shoulder_yaw.pos, get_message_motor->right_shoulder_yaw.vel, get_message_motor->right_shoulder_yaw.tor, get_message_motor->right_shoulder_yaw.kp, get_message_motor->right_shoulder_yaw.kd);
-            TaiHu_Device_T11->Send_MIT_PD_Control_Data(TaiHu_Device_11, get_message_motor->right_elbow.pos, get_message_motor->right_elbow.vel, get_message_motor->right_elbow.tor, get_message_motor->right_elbow.kp, get_message_motor->right_elbow.kd);
-            TaiHu_Device_T12->Send_MIT_PD_Control_Data(TaiHu_Device_12, get_message_motor->right_wrist_yaw.pos, get_message_motor->right_wrist_yaw.vel, get_message_motor->right_wrist_yaw.tor, get_message_motor->right_wrist_yaw.kp, get_message_motor->right_wrist_yaw.kd);
-            TaiHu_Device_T13->Send_MIT_PD_Control_Data(TaiHu_Device_13, get_message_motor->right_wrist_pitch.pos, get_message_motor->right_wrist_pitch.vel, get_message_motor->right_wrist_pitch.tor, get_message_motor->right_wrist_pitch.kp, get_message_motor->right_wrist_pitch.kd);
-            TaiHu_Device_T14->Send_MIT_PD_Control_Data(TaiHu_Device_14, get_message_motor->right_wrist_roll.pos, get_message_motor->right_wrist_roll.vel, get_message_motor->right_wrist_roll.tor, get_message_motor->right_wrist_roll.kp, get_message_motor->right_wrist_roll.kd);
+            TaiHu_Device_T8->Send_MIT_PD_Control_Data(TaiHu_Device_8, get_message_motor->left_shoulder_pitch.pos, get_message_motor->left_shoulder_pitch.vel, get_message_motor->left_shoulder_pitch.tor, get_message_motor->left_shoulder_pitch.kp, get_message_motor->left_shoulder_pitch.kd);
+            TaiHu_Device_T9->Send_MIT_PD_Control_Data(TaiHu_Device_9, get_message_motor->left_shoulder_roll.pos, get_message_motor->left_shoulder_roll.vel, get_message_motor->left_shoulder_roll.tor, get_message_motor->left_shoulder_roll.kp, get_message_motor->left_shoulder_roll.kd);
+            TaiHu_Device_T10->Send_MIT_PD_Control_Data(TaiHu_Device_10, get_message_motor->left_shoulder_yaw.pos, get_message_motor->left_shoulder_yaw.vel, get_message_motor->left_shoulder_yaw.tor, get_message_motor->left_shoulder_yaw.kp, get_message_motor->left_shoulder_yaw.kd);
+            TaiHu_Device_T11->Send_MIT_PD_Control_Data(TaiHu_Device_11, get_message_motor->left_elbow.pos, get_message_motor->left_elbow.vel, get_message_motor->left_elbow.tor, get_message_motor->left_elbow.kp, get_message_motor->left_elbow.kd);
+            TaiHu_Device_T12->Send_MIT_PD_Control_Data(TaiHu_Device_12, get_message_motor->left_wrist_yaw.pos, get_message_motor->left_wrist_yaw.vel, get_message_motor->left_wrist_yaw.tor, get_message_motor->left_wrist_yaw.kp, get_message_motor->left_wrist_yaw.kd);
+            TaiHu_Device_T13->Send_MIT_PD_Control_Data(TaiHu_Device_13, get_message_motor->left_wrist_pitch.pos, get_message_motor->left_wrist_pitch.vel, get_message_motor->left_wrist_pitch.tor, get_message_motor->left_wrist_pitch.kp, get_message_motor->left_wrist_pitch.kd);
+            TaiHu_Device_T14->Send_MIT_PD_Control_Data(TaiHu_Device_14, get_message_motor->left_wrist_roll.pos, get_message_motor->left_wrist_roll.vel, get_message_motor->left_wrist_roll.tor, get_message_motor->left_wrist_roll.kp, get_message_motor->left_wrist_roll.kd);
 
             // TaiHu_Device_T15->Send_MIT_PD_Control_Data(TaiHu_Device_15, get_message_motor->head_pitch.pos, get_message_motor->head_pitch.vel, get_message_motor->head_pitch.tor, get_message_motor->head_pitch.kp, get_message_motor->head_pitch.kd);
             // TaiHu_Device_T16->Send_MIT_PD_Control_Data(TaiHu_Device_16, get_message_motor->head_yaw.pos, get_message_motor->head_yaw.vel, get_message_motor->head_yaw.tor, get_message_motor->head_yaw.kp, get_message_motor->head_yaw.kd);
@@ -131,13 +131,13 @@ private:
         TaiHu_Device_T6->Get_Motor_FB_Data(TaiHu_Device_6, &send_message.right_wrist_pitch.pos, &vel_, &cur_);
         TaiHu_Device_T7->Get_Motor_FB_Data(TaiHu_Device_7, &send_message.right_wrist_roll.pos, &vel_, &cur_);
 
-        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.right_shoulder_pitch.pos, &vel_, &cur_);
-        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.right_shoulder_roll.pos, &vel_, &cur_);
-        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.right_shoulder_yaw.pos, &vel_, &cur_);
-        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.right_elbow.pos, &vel_, &cur_);
-        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.right_wrist_yaw.pos, &vel_, &cur_);
-        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.right_wrist_pitch.pos, &vel_, &cur_);
-        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.right_wrist_roll.pos, &vel_, &cur_);
+        TaiHu_Device_T8->Get_Motor_FB_Data(TaiHu_Device_8, &send_message.left_shoulder_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T9->Get_Motor_FB_Data(TaiHu_Device_9, &send_message.left_shoulder_roll.pos, &vel_, &cur_);
+        TaiHu_Device_T10->Get_Motor_FB_Data(TaiHu_Device_10, &send_message.left_shoulder_yaw.pos, &vel_, &cur_);
+        TaiHu_Device_T11->Get_Motor_FB_Data(TaiHu_Device_11, &send_message.left_elbow.pos, &vel_, &cur_);
+        TaiHu_Device_T12->Get_Motor_FB_Data(TaiHu_Device_12, &send_message.left_wrist_yaw.pos, &vel_, &cur_);
+        TaiHu_Device_T13->Get_Motor_FB_Data(TaiHu_Device_13, &send_message.left_wrist_pitch.pos, &vel_, &cur_);
+        TaiHu_Device_T14->Get_Motor_FB_Data(TaiHu_Device_14, &send_message.left_wrist_roll.pos, &vel_, &cur_);
 
         // TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_pitch.pos, &vel_, &cur_);
         // TaiHu_Device_T16->Get_Motor_FB_Data(TaiHu_Device_16, &send_message.head_yaw.pos, &vel_, &cur_);

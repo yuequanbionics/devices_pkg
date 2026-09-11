@@ -119,7 +119,7 @@ float Eyou_Speed_ = 1;
 float Eyou_Acc_ = 1;
 float Eyou_Dec_ = 1;
 float qqqq_ = 0.0f;
-float pos_, vel_, cur_ = 0.0f;
+float pos_, vel_, cur_ = NAN;
 devices_pkg::msg::WBotMotor::SharedPtr get_message_motor = nullptr;
 
 class W_Bot_Node : public rclcpp::Node {
@@ -135,7 +135,7 @@ class W_Bot_Node : public rclcpp::Node {
         self_ptr = this;
         std::string yaml_path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot/out/TOP.yaml";
         hardware_init(yaml_path, dev_config);
-        std::string set_name = "w_bot";
+        std::string set_name = "wbot";
         // std::string set_name = node_name;
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>(set_name + "_motor_data", 10);
         publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>(set_name + "_imu_data", 10);
