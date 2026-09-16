@@ -29,6 +29,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "syst.hpp"
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 using namespace std;
 
@@ -133,7 +134,8 @@ class W_Bot_Node : public rclcpp::Node {
         const std::string& dev_config)
         : Node(node_name) {
         self_ptr = this;
-        std::string yaml_path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot/out/TOP.yaml";
+        //std::string yaml_path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot/out/TOP.yaml";
+        auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/W_Bot/out/TOP.yaml";
         hardware_init(yaml_path, dev_config);
         std::string set_name = "wbot";
         // std::string set_name = node_name;

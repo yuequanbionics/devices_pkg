@@ -15,6 +15,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 
 # 统一架构判断，获取安装目录后缀
@@ -203,7 +204,7 @@ function(add_device_node TARGET_NAME)
   target_include_directories(${TARGET_NAME} PRIVATE ${SDK_INCLUDE_DIRS})
 
   # 链接 ROS2 依赖
-  ament_target_dependencies(${TARGET_NAME} rclcpp std_msgs)
+  ament_target_dependencies(${TARGET_NAME} rclcpp std_msgs ament_index_cpp)
 
   # 确保消息接口先编译完成
   add_dependencies(${TARGET_NAME} ${cpp_typesupport_target})
