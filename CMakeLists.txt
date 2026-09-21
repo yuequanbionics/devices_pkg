@@ -153,6 +153,7 @@ install(DIRECTORY
 install(
   DIRECTORY
     sdk/config/YAML
+    sdk/script/python/Tool
   DESTINATION
     share/${PROJECT_NAME}/
 )
