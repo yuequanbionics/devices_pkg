@@ -2,7 +2,9 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import Shutdown
+from ament_index_python.packages import get_package_share_directory
 
+#import os
 import sys
 from pathlib import Path
 # Get_SN.py在launch目录
@@ -15,7 +17,11 @@ from xhand_launch import check_sn_suffix
 
 
 def generate_launch_description():
-    SNs = DEC("/home/toko/SP/sdk_2")
+    pkg_path = get_package_share_directory("devices_pkg")
+    #sdk_path = os.path.join(pkg_path, "/install/devices_pkg/share/devices_pkg")
+    #print(sdk_path)
+    print(pkg_path)
+    SNs = DEC(pkg_path)
     print(SNs)
 
     node_mapping = {
@@ -43,7 +49,7 @@ PC_IP: 192.168.3.245
 SN: """ + sn + """
 Boards:
   - Id: 101
-    IP: 192.168.3.106
+    IP: 192.168.3.107
     # Port: 19001
 """
                 node_mapping['x_hand_node_R'] = ('X_Hand_Node','x_hand_cmd_R', 'x_hand_data_R',config_dev_R)

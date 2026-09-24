@@ -158,6 +158,14 @@ install(
     share/${PROJECT_NAME}/
 )
 
+# 安装bin文件到share/<package_name>目录
+install(DIRECTORY
+  sdk/bin
+  DESTINATION share/${PROJECT_NAME}/
+  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+  DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
