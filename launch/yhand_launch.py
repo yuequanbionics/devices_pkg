@@ -3,7 +3,8 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import Shutdown
 
-
+def check_sn_suffix(config_str):
+    return "defalut"
 
 
 def generate_launch_description():

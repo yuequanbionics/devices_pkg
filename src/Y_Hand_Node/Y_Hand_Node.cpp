@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
 
-    if (argc < 5)
+    if (argc < 6)
     {
         cout << "Invalid or incomplete parameters" << endl;
         rclcpp::shutdown();
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     }
     
     const auto yhand_node = std::make_shared<Y_Hand_Node>(argv[1]);
-    if(yhand_node->create_objects(argv[2], argv[3], argv[4]) != 0)
+    if(yhand_node->create_objects(argv[2], argv[3], argv[4], argv[5]) != 0)
     {
         cout << "Failed to create objects" << endl;
         rclcpp::shutdown();

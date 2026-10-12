@@ -91,6 +91,7 @@ public:
      int create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic,
+        const std::string& dev_type,
         const std::string& dev_config) {
 
         if(hardware_init("install/devices_pkg/share/devices_pkg/YAML/Y_Hand/out/TOP.yaml", dev_config) != 0)
