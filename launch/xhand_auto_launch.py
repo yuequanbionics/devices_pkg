@@ -31,7 +31,7 @@ def generate_launch_description():
 
     for sn in SNs:
         if(sn[:2] == "1X"):
-            if(int(sn[11]) % 2 != 0):
+            if(int(sn[10]) % 2 != 0):
                 print("x_hand_node_L SN:" + sn)
                 config_dev_L = """
 PC_IP: 192.168.3.245
