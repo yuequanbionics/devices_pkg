@@ -24,8 +24,8 @@ CMake 通过 `add_device_node(X_Hand_Node)` 将 `X_Hand_Out.cpp` 与 `X_Hand_Nod
 # 手动配置：SN、PC/主控板 IP 写死在 xhand_launch.py 的 config_dev1 中，按实际修改
 ros2 launch devices_pkg xhand_launch.py
 
-# 自动配置：调用 Get_SN 工具读取设备 SN，按 SN 第 12 位奇偶分配左/右手
-ros2 launch devices_pkg xhand_Auto.py
+# 自动配置：调用 Get_SN 工具读取设备 SN，按 SN 第 11 位奇偶分配左/右手
+ros2 launch devices_pkg xhand_auto_launch.py
 ```
 
 两种 launch 都会同时启动硬件节点和测试节点。测试节点以 10 ms 周期发送预设指令驱动硬件，运行前确认运动范围与安全条件。自动 launch 未检测到设备时只启动两个测试节点。
@@ -103,11 +103,18 @@ SDK 下发为 MIT-PD 控制，常见用法：纯位置控制设 `tor=0, vel=0` �
 | 后缀为`M`               | `mz_1.0`                            |
 | 其他（含未解析到 SN）     | `self_1.0`                          |
 
-### 4.2 xhand_Auto.py（自动读取 SN）
+### 4.2 xhand_auto_launch.py（自动读取 SN）
 
-适用于左右双手同时部署。流程：`Get_SN.DEC(pkg_path)` 读取并解码设备 SN 列表 → 只处理 `1X` 开头的 SN → 按 `sn[11]` 奇偶分配：
+PC 侧需为网卡配置以下地址（两组并存，便于同时搜到不同网段的设备）：
 
-| SN 第 12 位 | 节点              | 主控板 IP     | 话题后缀 |
+| IP 地址       | 子网掩码      | 网关        |
+| ------------- | ------------- | ----------- |
+| 192.168.3.245 | 255.255.255.0 | 192.168.3.1 |
+| 192.168.3.245 | 255.255.0.0   | -           |
+
+适用于左右双手同时部署。流程：`Get_SN.DEC(pkg_path)` 读取并解码设备 SN 列表 → 只处理 `1X` 开头的 SN → 按 `sn[10]`（SN 第 11 位字符）奇偶分配：
+
+| SN 第 11 位 | 节点              | 主控板 IP     | 话题后缀 |
 | ----------- | ----------------- | ------------- | -------- |
 | 奇数        | `x_hand_node_L` | 192.168.3.106 | `_L`   |
 | 偶数        | `x_hand_node_R` | 192.168.3.107 | `_R`   |
@@ -117,7 +124,7 @@ SDK 下发为 MIT-PD 控制，常见用法：纯位置控制设 `tor=0, vel=0` �
 `Get_SN.py`（`sdk/script/python/Tool/`，构建后安装到 `share/devices_pkg/Tool/`）：
 
 - 按架构选择原生可执行文件：优先 `bin/Tool/{x86|arm64}/Get_SN`，不存在时回退 `bin/Tool/ubuntu20.04/{x86|arm64}/Get_SN`，经 `subprocess` 执行获取原始数字 SN。
-- 用模板/掩码（`SN_MOD`/`SN_MSK`）将数字 SN 解码为可读字符串（如 `1X1T2605061`）。
+- 用模板/掩码（`SN_MOD`/`SN_MSK`）解码：X-Hand 适用 `1X1T0000000`、`1X1T0000000S`、`1X1T0000000SG`（另有 `1Y2S` 系列用于 Y-Hand）。模板中字母位占 2 位数字（1–26→a–z，29–54→A–Z）、数字位占 1 位数字，掩码标记固定校验位；解码结果形如 `1X1T2605061`。
 - 通过 `/tmp/dec_sn.lock` 排他文件锁阻塞等待，串行化并发调用。
 
 ## 5. 整体架构
@@ -132,13 +139,13 @@ SDK 下发为 MIT-PD 控制，常见用法：纯位置控制设 `tor=0, vel=0` �
 
 文件依赖关系：
 
-| 源文件                 | 依赖目标                               | 方式                                                       |
-| ---------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| `xhand_launch.py`    | `X_Hand_Node` / `Test_X_Hand_Node` | 启动并传命令行参数                                         |
-| `xhand_Auto.py`      | `xhand_launch.py`、`Get_SN.py`     | import`check_sn_suffix()`、`DEC()`                     |
-| `X_Hand_Node.hpp`    | `X_Hand_Out.cpp`                     | extern`hardware_init` / `Get_FB` / `Send` 及全局变量 |
-| `XHandMsg.msg`       | `types/Motor.msg`                    | 引用                                                       |
-| `XHandSensorMsg.msg` | `types/Pressure.msg`                 | 引用                                                       |
+| 源文件                   | 依赖目标                               | 方式                                                       |
+| ------------------------ | -------------------------------------- | ---------------------------------------------------------- |
+| `xhand_launch.py`      | `X_Hand_Node` / `Test_X_Hand_Node` | 启动并传命令行参数                                         |
+| `xhand_auto_launch.py` | `xhand_launch.py`、`Get_SN.py`     | import`check_sn_suffix()`、`DEC()`                     |
+| `X_Hand_Node.hpp`      | `X_Hand_Out.cpp`                     | extern`hardware_init` / `Get_FB` / `Send` 及全局变量 |
+| `XHandMsg.msg`         | `types/Motor.msg`                    | 引用                                                       |
+| `XHandSensorMsg.msg`   | `types/Pressure.msg`                 | 引用                                                       |
 
 关键关联：
 
@@ -208,5 +215,5 @@ devices_pkg/
 │   └── types/Motor.msg、Pressure.msg
 └── launch/
     ├── xhand_launch.py               # 手动 SN 配置启动
-    └── xhand_Auto.py                 # 自动读取 SN，区分左/右手
+    └── xhand_auto_launch.py          # 自动读取 SN，区分左/右手
 ```
