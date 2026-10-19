@@ -25,8 +25,8 @@ def generate_launch_description():
     print(SNs)
 
     node_mapping = {
-        'test_y_hand_node_L': ("Test_Y_Hand_Node", 'y_hand_data_L','y_hand_cmd_L', 'None'),
-        'test_y_hand_node_R': ("Test_Y_Hand_Node", 'y_hand_data_R','y_hand_cmd_R', 'None')
+        # 'test_y_hand_node_L': ("Test_Y_Hand_Node", 'y_hand_data_L','y_hand_cmd_L', 'None'),
+        # 'test_y_hand_node_R': ("Test_Y_Hand_Node", 'y_hand_data_R','y_hand_cmd_R', 'None')
     }
 
     for sn in SNs:
