@@ -9,6 +9,7 @@
 #include "Hw_Pressure_Sensor.hpp"
 #include "Switch_Board.hpp"
 #include "UDP.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "devices_pkg/msg/x_hand_msg.hpp"
 #include "devices_pkg/msg/x_hand_sensor_msg.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -58,7 +59,7 @@ class X_Hand_Node : public rclcpp::Node {
         const std::string& sub_topic,
         const std::string& dev_type,
         const std::string& dev_config) {
-        string yaml_path = "install/devices_pkg/share/devices_pkg/YAML/X_Hand/out/" + dev_type + "/TOP.yaml";
+        std::string yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/X_Hand/out/" + dev_type + "/TOP.yaml";
         if (hardware_init(yaml_path, dev_config) != 0) {
             cout << "Hardware initialization failed" << endl;
             return -1;
