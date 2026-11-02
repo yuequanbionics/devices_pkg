@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <iostream>
 #include "devices_pkg/msg/y_hand_msg.hpp"
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 using namespace std;
 
@@ -94,7 +95,8 @@ public:
         const std::string& dev_type,
         const std::string& dev_config) {
 
-        if(hardware_init("install/devices_pkg/share/devices_pkg/YAML/Y_Hand/out/TOP.yaml", dev_config) != 0)
+        auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/Y_Hand/out/TOP.yaml";  
+        if(hardware_init(yaml_path, dev_config) != 0)
         {
             cout << "Hardware initialization failed" << endl;
             return -1;

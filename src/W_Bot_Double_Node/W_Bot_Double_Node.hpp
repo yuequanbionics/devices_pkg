@@ -11,6 +11,7 @@
 #include <iostream>
 #include "devices_pkg/msg/w_bot_double_motor.hpp"
 #include "Motor_TaiHu.hpp"
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 using namespace std;
 
@@ -75,8 +76,9 @@ public:
     )
     : Node(node_name)
     {
-        std::string path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot_Double/out/TOP.yaml";
-        hardware_init(path, dev_config);
+        //std::string path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot_Double/out/TOP.yaml";
+        auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/W_Bot_Double/out/TOP.yaml";
+        hardware_init(yaml_path, dev_config);
         publisher_Motor = this->create_publisher<devices_pkg::msg::WBotDoubleMotor>("wbot_motor_double_data", 10);
         subscription_Motor = this->create_subscription<devices_pkg::msg::WBotDoubleMotor>("wbot_motor_double_cmd", 10, \
             std::bind(&W_Bot_Double_Node::Motor_topic_callback, this, std::placeholders::_1));
