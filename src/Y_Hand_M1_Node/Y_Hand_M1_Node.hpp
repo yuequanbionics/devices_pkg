@@ -72,8 +72,9 @@ public:
             cout << "Hardware initialization failed" << endl;
             return -1;
         }
-        publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, 10);
-        subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, 10, \
+        auto SensorQos = rclcpp::SensorDataQoS();
+        publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, SensorQos);
+        subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, SensorQos, \
             std::bind(&Y_Hand_M1_Node::topic_callback, this, std::placeholders::_1));
 
         return 0;

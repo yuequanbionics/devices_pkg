@@ -29,6 +29,11 @@ def generate_launch_description():
         # 'test_y_hand_node_R': ("Test_Y_Hand_Node", 'y_hand_data_R','y_hand_cmd_R', 'None')
     }
 
+    max_cur_limit_1 = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,
+                       0.5,0.5,0.5,0.5,0.5,0.5,0.5,
+                       0.5,0.5,0.5,0.5,0.5,0.5,0.5,
+                       0.5,0.5,0.5,0.5,0.5,0.5,0.5]
+
     for sn in SNs:
         if(sn[:2] == "1Y"):
             if(int(sn[10]) % 2 != 0):
@@ -41,7 +46,7 @@ Boards:
     IP: 192.168.3.106
     # Port: 19001
 """
-                node_mapping['y_hand_node_L'] = ('Y_Hand_Node','y_hand_cmd_L', 'y_hand_data_L',config_dev_L)
+                node_mapping['y_hand_node_L'] = ('Y_Hand_Node','y_hand_cmd_L', 'y_hand_data_L',config_dev_L,max_cur_limit_1)
             else:
                 print("y_hand_node_R SN:" + sn)
                 config_dev_R = """
@@ -52,22 +57,25 @@ Boards:
     IP: 192.168.3.107
     # Port: 19001
 """
-                node_mapping['y_hand_node_R'] = ('Y_Hand_Node','y_hand_cmd_R', 'y_hand_data_R',config_dev_R)
+                node_mapping['y_hand_node_R'] = ('Y_Hand_Node','y_hand_cmd_R', 'y_hand_data_R',config_dev_R,max_cur_limit_1)
 
-    def create_custom_node(node_name, exe_name, sub_name, pub_name,dev_type,dev_config):
+    def create_custom_node(node_name, exe_name, sub_name, pub_name,dev_config,limit_array):
         return Node(
             package='devices_pkg',
             executable=exe_name,  # CMakeLists.txt 中定义的可执行文件名
             name=node_name,           # 节点运行时的名称
             output='screen',         # 将节点的输出打印到屏幕
-            arguments=[node_name,pub_name,sub_name,dev_type,dev_config],  # 传递命令行参数给main函数
+            arguments=[node_name,pub_name,sub_name,dev_config],  # 传递命令行参数给main函数
+            parameters=[
+                {"max_current_limit": limit_array}
+            ],
             on_exit=Shutdown(reason="launch is shutting down")  # launch退出时关闭节点
         )
 
     node_list = []
-    for node_name, ( exe_name, sub_name, pub_name, dev_config) in node_mapping.items():
+    for node_name, ( exe_name, sub_name, pub_name, dev_config, limit_array) in node_mapping.items():
         dev_type = check_sn_suffix(dev_config)
-        node = create_custom_node(node_name, exe_name, sub_name, pub_name,dev_type,dev_config)
+        node = create_custom_node(node_name, exe_name, sub_name, pub_name,dev_config,limit_array)
         node_list.append(node)
 
     # 将所有节点传入LaunchDescription并返回

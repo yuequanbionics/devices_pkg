@@ -64,8 +64,10 @@ class X_Hand_Node : public rclcpp::Node {
             cout << "Hardware initialization failed" << endl;
             return -1;
         }
-        publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, 10);
-        sensor_publisher_ = this->create_publisher<devices_pkg::msg::XHandSensorMsg>("sensor_data", 10);
+
+        auto SensorQos = rclcpp::SensorDataQoS();
+        publisher_ = this->create_publisher<devices_pkg::msg::XHandMsg>(pub_topic, SensorQos);
+        sensor_publisher_ = this->create_publisher<devices_pkg::msg::XHandSensorMsg>("sensor_data", SensorQos);
         subscription_ = this->create_subscription<devices_pkg::msg::XHandMsg>(sub_topic, 10,
                                                                               std::bind(&X_Hand_Node::topic_callback, this, std::placeholders::_1));
         timer_Sensor = this->create_wall_timer(

@@ -92,7 +92,7 @@ public:
      int create_objects(
         const std::string& pub_topic,
         const std::string& sub_topic,
-        const std::string& dev_type,
+        //const std::string& dev_type,
         const std::string& dev_config) {
 
         auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/Y_Hand/out/TOP.yaml";  
@@ -102,37 +102,48 @@ public:
             return -1;
         }
 
-        Motor1_Control->Set_I_Max( Motor1_Device, 0.5);
-        Motor2_Control->Set_I_Max( Motor2_Device, 0.5);
-        Motor3_Control->Set_I_Max( Motor3_Device, 0.5);
-        Motor4_Control->Set_I_Max( Motor4_Device, 0.5);
-        Motor5_Control->Set_I_Max( Motor5_Device, 0.5);
-        Motor6_Control->Set_I_Max( Motor6_Device, 0.5);
-        Motor7_Control->Set_I_Max( Motor7_Device, 0.5);
-        Motor8_Control->Set_I_Max( Motor8_Device, 0.5);
-        Motor9_Control->Set_I_Max( Motor9_Device, 0.5);
-        Motor10_Control->Set_I_Max(Motor10_Device, 0.5);
-        Motor11_Control->Set_I_Max(Motor11_Device, 0.5);
-        Motor12_Control->Set_I_Max(Motor12_Device, 0.5);
-        Motor13_Control->Set_I_Max(Motor13_Device, 0.5);
-        Motor14_Control->Set_I_Max(Motor14_Device, 0.5);
-        Motor15_Control->Set_I_Max(Motor15_Device, 0.5);
-        Motor16_Control->Set_I_Max(Motor16_Device, 0.5);
-        Motor17_Control->Set_I_Max(Motor17_Device, 0.5);
-        Motor18_Control->Set_I_Max(Motor18_Device, 0.5);
-        Motor19_Control->Set_I_Max(Motor19_Device, 0.5);
-        Motor20_Control->Set_I_Max(Motor20_Device, 0.5);
-        Motor21_Control->Set_I_Max(Motor21_Device, 0.5);
-        Motor22_Control->Set_I_Max(Motor22_Device, 0.5);
-        Motor23_Control->Set_I_Max(Motor23_Device, 0.5);
-        Motor24_Control->Set_I_Max(Motor24_Device, 0.5);
-        Motor25_Control->Set_I_Max(Motor25_Device, 0.5);
-        Motor26_Control->Set_I_Max(Motor26_Device, 0.5);
-        Motor27_Control->Set_I_Max(Motor27_Device, 0.5);
-        Motor28_Control->Set_I_Max(Motor28_Device, 0.5);
+        this->declare_parameter<std::vector<double>>("max_current_limit", {});
+        std::vector<double> max_current_limit;
+        this->get_parameter("max_current_limit", max_current_limit);
 
-        publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, 10);
-        subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, 10, \
+        if(max_current_limit.size() != 28)
+        {
+            cout << "The number of maximum current limit parameters is less than 28." << endl;
+            return -1;
+        }
+
+        Motor1_Control->Set_I_Max( Motor1_Device, max_current_limit.at(0));
+        Motor2_Control->Set_I_Max( Motor2_Device, max_current_limit.at(1));
+        Motor3_Control->Set_I_Max( Motor3_Device, max_current_limit.at(2));
+        Motor4_Control->Set_I_Max( Motor4_Device, max_current_limit.at(3));
+        Motor5_Control->Set_I_Max( Motor5_Device, max_current_limit.at(4));
+        Motor6_Control->Set_I_Max( Motor6_Device, max_current_limit.at(5));
+        Motor7_Control->Set_I_Max( Motor7_Device, max_current_limit.at(6));
+        Motor8_Control->Set_I_Max( Motor8_Device, max_current_limit.at(7));
+        Motor9_Control->Set_I_Max( Motor9_Device, max_current_limit.at(8));
+        Motor10_Control->Set_I_Max(Motor10_Device, max_current_limit.at(9));
+        Motor11_Control->Set_I_Max(Motor11_Device, max_current_limit.at(10));
+        Motor12_Control->Set_I_Max(Motor12_Device, max_current_limit.at(11));
+        Motor13_Control->Set_I_Max(Motor13_Device, max_current_limit.at(12));
+        Motor14_Control->Set_I_Max(Motor14_Device, max_current_limit.at(13));
+        Motor15_Control->Set_I_Max(Motor15_Device, max_current_limit.at(14));
+        Motor16_Control->Set_I_Max(Motor16_Device, max_current_limit.at(15));
+        Motor17_Control->Set_I_Max(Motor17_Device, max_current_limit.at(16));
+        Motor18_Control->Set_I_Max(Motor18_Device, max_current_limit.at(17));
+        Motor19_Control->Set_I_Max(Motor19_Device, max_current_limit.at(18));
+        Motor20_Control->Set_I_Max(Motor20_Device, max_current_limit.at(19));
+        Motor21_Control->Set_I_Max(Motor21_Device, max_current_limit.at(20));
+        Motor22_Control->Set_I_Max(Motor22_Device, max_current_limit.at(21));
+        Motor23_Control->Set_I_Max(Motor23_Device, max_current_limit.at(22));
+        Motor24_Control->Set_I_Max(Motor24_Device, max_current_limit.at(23));
+        Motor25_Control->Set_I_Max(Motor25_Device, max_current_limit.at(24));
+        Motor26_Control->Set_I_Max(Motor26_Device, max_current_limit.at(25));
+        Motor27_Control->Set_I_Max(Motor27_Device, max_current_limit.at(26));
+        Motor28_Control->Set_I_Max(Motor28_Device, max_current_limit.at(27));
+
+        auto SensorQos = rclcpp::SensorDataQoS();
+        publisher_ = this->create_publisher<devices_pkg::msg::YHandMsg>(pub_topic, SensorQos);
+        subscription_ = this->create_subscription<devices_pkg::msg::YHandMsg>(sub_topic, SensorQos, \
             std::bind(&Y_Hand_Node::topic_callback, this, std::placeholders::_1));
 
         return 0;
