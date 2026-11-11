@@ -61,6 +61,7 @@ set(SDK_INCLUDE_DIRS
         ${SDK_INC}/Custom_Device/Uart_Pressure_Sensor
         ${SDK_INC}/Custom_Device/Eyou_Motor
         ${SDK_INC}/Custom_Device/Motor_TaiHu
+        ${SDK_INC}/Custom_Device/Phu_Motor
         ${SDK_INC}/Custom_Device/Motor_BenMo
         ${SDK_INC}/Custom_Device/IMU_YuanJi_Uart
         ${SDK_INC}/Custom_Device/X_Hand_Brushed
@@ -70,6 +71,7 @@ set(SDK_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/E_Bot_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Node
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_EUF_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/W_Bot_Double_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/X_Hand_Node
         ${CMAKE_CURRENT_SOURCE_DIR}/src/X_Hand_Brushed_Node
@@ -94,6 +96,7 @@ set(SDK_ALL_LIBS
         ${SDK_LIB_ABS_DIR}/libLed_Device.so
         ${SDK_LIB_ABS_DIR}/libMotor_Device_BenMo.so
         ${SDK_LIB_ABS_DIR}/libEyou_Custom_Motor_Device.so
+        ${SDK_LIB_ABS_DIR}/libPhu_Custom_Motor_Device.so
         ${SDK_LIB_ABS_DIR}/libIMU_Device_YuanJi.so
         ${SDK_LIB_ABS_DIR}/libBattery_BMS_V2_Device.so
         ${SDK_LIB_ABS_DIR}/libX_Hand_Protocol.so
@@ -169,7 +172,7 @@ install(DIRECTORY
 # 解决「ROS2自动生成的消息接口代码未提前编译」导致的编译错误
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-set(TARGET_LIST "Y_Hand_Node;Y_Hand_M1_Node;X_Hand_Node;X_Hand_Brushed_Node;E_Bot_Node;W_Bot_Node;W_Bot_Double_Node;IO_Board_Node")
+set(TARGET_LIST "Y_Hand_Node;Y_Hand_M1_Node;X_Hand_Node;X_Hand_Brushed_Node;E_Bot_Node;W_Bot_Node;W_Bot_EUF_Node;W_Bot_Double_Node;IO_Board_Node")
 set(TARGET_TEST_LIST "Test_W_Bot_Node;Test_W_Bot_Double_Node;Test_X_Hand_Node;Test_X_Hand_Brushed_Node;Test_Y_Hand_Node;Test_Y_Hand_M1_Node")
 
 function(add_device_node TARGET_NAME)
@@ -192,7 +195,7 @@ function(add_device_node TARGET_NAME)
 
   elseif(${TARGET_NAME} STREQUAL "Remote_Node")
   set(SOURCES_FILES
-  "src/W_Bot_Node/${TARGET_NAME}.cpp"
+  "src/W_Bot_EUF_Node/${TARGET_NAME}.cpp"
   )   
   
   endif()
@@ -242,6 +245,7 @@ add_device_node(Y_Hand_M1_Node)
 #add_device_node(E_Bot_Node)
 # add_device_node(IO_Board_Node)
 add_device_node(W_Bot_Node)
+add_device_node(W_Bot_EUF_Node)
 add_device_node(W_Bot_Double_Node)
 add_device_node(Test_W_Bot_Node)
 # add_device_node(Test_W_Bot_Double_Node)
