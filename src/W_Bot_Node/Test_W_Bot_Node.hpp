@@ -57,7 +57,7 @@ public:
     {
         auto send_message = devices_pkg::msg::WBotMotor();
 
-        float pos = 5.0f;
+        float pos = 0.0f;
 
         send_message.header.stamp = this->now();
         send_message.header.frame_id = "wbot_motor_data";

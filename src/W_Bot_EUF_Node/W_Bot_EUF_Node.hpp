@@ -143,25 +143,25 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         : Node(node_name) {
         self_ptr = this;
         //std::string yaml_path = "install/devices_pkg/share/devices_pkg/YAML/W_Bot/out/TOP.yaml";
-        auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/W_Bot/out/TOP.yaml";
+        auto yaml_path = ament_index_cpp::get_package_share_directory("devices_pkg") + "/YAML/W_Bot_EUF/out/TOP.yaml";
         hardware_init(yaml_path, dev_config);
-        std::string set_name = "wbot";
+        std::string set_name = "wbot_euf";
         // std::string set_name = node_name;
 
         auto SensorQos = rclcpp::SensorDataQoS();
-        publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>(set_name + "_motor_data", SensorQos);
-        publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>(set_name + "_imu_data", SensorQos);
-        publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>(set_name + "_battery_data", SensorQos);
-        publisher_Collision = this->create_publisher<devices_pkg::msg::WBotCollision>(set_name + "_collision_data", SensorQos);
-        publisher_MotorTem = this->create_publisher<devices_pkg::msg::WBotMotorTem>(set_name + "_motor_tem_data", SensorQos);
-        subscription_Motor = this->create_subscription<devices_pkg::msg::WBotMotor>(set_name + "_motor_cmd", SensorQos,
+        publisher_Motor = this->create_publisher<devices_pkg::msg::WBotMotor>(set_name + "_motor_data", 10);
+        publisher_IMU = this->create_publisher<devices_pkg::msg::WBotIMU>(set_name + "_imu_data", 10);
+        publisher_Battery = this->create_publisher<devices_pkg::msg::WBotBattery>(set_name + "_battery_data", 10);
+        publisher_Collision = this->create_publisher<devices_pkg::msg::WBotCollision>(set_name + "_collision_data", 10);
+        publisher_MotorTem = this->create_publisher<devices_pkg::msg::WBotMotorTem>(set_name + "_motor_tem_data", 10);
+        subscription_Motor = this->create_subscription<devices_pkg::msg::WBotMotor>(set_name + "_motor_cmd", 10,
                                                                                     std::bind(&W_Bot_EUF_Node::Motor_topic_callback, this, std::placeholders::_1));
-        subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>(set_name + "_led_cmd", SensorQos,
+        subscription_LED = this->create_subscription<devices_pkg::msg::WBotLED>(set_name + "_led_cmd", 10,
                                                                                 std::bind(&W_Bot_EUF_Node::led_topic_callback, this, std::placeholders::_1));
-        subscription_Motor_Stop = this->create_subscription<std_msgs::msg::String>(set_name + "_motor_stop", SensorQos, \
+        subscription_Motor_Stop = this->create_subscription<std_msgs::msg::String>(set_name + "_motor_stop", 10, \
             std::bind(&W_Bot_EUF_Node::Motor_Stop_topic_callback, this, std::placeholders::_1));
 
-        publisher_Error = this->create_publisher<std_msgs::msg::String>(set_name + "_error_data", SensorQos);
+        publisher_Error = this->create_publisher<std_msgs::msg::String>(set_name + "_error_data", 10);
 
         timer_imu = this->create_wall_timer(
             std::chrono::milliseconds(10),
@@ -241,8 +241,6 @@ class W_Bot_EUF_Node : public rclcpp::Node {
             right_wrist_pitch_N26_Ctl    -> Send_MIT_PD_Control_Data(right_wrist_pitch_N26,    get_message_motor->right_wrist_pitch.pos,    get_message_motor->right_wrist_pitch.vel,    get_message_motor->right_wrist_pitch.tor,    get_message_motor->right_wrist_pitch.kp,    get_message_motor->right_wrist_pitch.kd   );
             right_wrist_roll_N27_Ctl     -> Send_MIT_PD_Control_Data(right_wrist_roll_N27,     get_message_motor->right_wrist_roll.pos,     get_message_motor->right_wrist_roll.vel,     get_message_motor->right_wrist_roll.tor,     get_message_motor->right_wrist_roll.kp,     get_message_motor->right_wrist_roll.kd    );
 
-            // TaiHu_Device_T15->Send_MIT_PD_Control_Data(TaiHu_Device_15, get_message_motor->head_pitch.pos, get_message_motor->head_pitch.vel, get_message_motor->head_pitch.tor, get_message_motor->head_pitch.kp, get_message_motor->head_pitch.kd);
-            // TaiHu_Device_T16->Send_MIT_PD_Control_Data(TaiHu_Device_16, get_message_motor->head_yaw.pos, get_message_motor->head_yaw.vel, get_message_motor->head_yaw.tor, get_message_motor->head_yaw.kp, get_message_motor->head_yaw.kd);
 
             Classis_Motor_T1->Send_MIT_PD_Control_Data(Classis_Motor_1, get_message_motor->wheel_left.pos, get_message_motor->wheel_left.vel, 0.0f, get_message_motor->wheel_left.kp, get_message_motor->wheel_left.kd);
             Classis_Motor_T2->Send_MIT_PD_Control_Data(Classis_Motor_2, get_message_motor->wheel_right.pos, get_message_motor->wheel_right.vel, 0.0f, get_message_motor->wheel_right.kp, get_message_motor->wheel_right.kd);
@@ -251,8 +249,8 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         }
 
         auto send_message = devices_pkg::msg::WBotMotor();
-
         Lower_Limbs_Motor_Waist_Yaw_N35_Ctl  -> Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Yaw_N35,  &send_message.waist_yaw.pos,   &send_message.waist_yaw.vel,  &send_message.waist_yaw.tor );
+        //cout << "data  " << send_message.waist_yaw.pos <<endl;
         Lower_Limbs_Motor_Waist_Roll_N34_Ctl -> Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Roll_N34, &send_message.waist_roll.pos,  &send_message.waist_roll.vel, &send_message.waist_roll.tor);
         Lower_Limbs_Motor_Knee_N32_Ctl       -> Get_Motor_FB_Data(Lower_Limbs_Motor_Knee_N32,       &send_message.knee.pos,        &send_message.knee.vel,       &send_message.knee.tor      );
         Lower_Limbs_Motor_Hip_N33_Ctl        -> Get_Motor_FB_Data(Lower_Limbs_Motor_Hip_N33,        &send_message.hip.pos,         &send_message.hip.vel,        &send_message.hip.tor       );
@@ -261,7 +259,7 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         left_shoulder_pitch_N11_Ctl -> Get_Motor_FB_Data(left_shoulder_pitch_N11, &send_message.left_shoulder_pitch.pos, &send_message.left_shoulder_pitch.vel, &send_message.left_shoulder_pitch.tor);
         left_shoulder_roll_N12_Ctl  -> Get_Motor_FB_Data(left_shoulder_roll_N12,  &send_message.left_shoulder_roll.pos,  &send_message.left_shoulder_roll.vel,  &send_message.left_shoulder_roll.tor );
         left_shoulder_yaw_N13_Ctl   -> Get_Motor_FB_Data(left_shoulder_yaw_N13,   &send_message.left_shoulder_yaw.pos,   &send_message.left_shoulder_yaw.vel,   &send_message.left_shoulder_yaw.tor  );
-        left_elbow_N14_Ctl          -> Get_Motor_FB_Data(left_elbow_N14,          &send_message.left_elbow.pos,          &send_message.left_elbow.vel,          &send_message.left_elbow.tor         );
+        //left_elbow_N14_Ctl          -> Get_Motor_FB_Data(left_elbow_N14,          &send_message.left_elbow.pos,          &send_message.left_elbow.vel,          &send_message.left_elbow.tor         );
         left_wrist_yaw_N15_Ctl      -> Get_Motor_FB_Data(left_wrist_yaw_N15,      &send_message.left_wrist_yaw.pos,      &send_message.left_wrist_yaw.vel,      &send_message.left_wrist_yaw.tor     );
         left_wrist_pitch_N16_Ctl    -> Get_Motor_FB_Data(left_wrist_pitch_N16,    &send_message.left_wrist_pitch.pos,    &send_message.left_wrist_pitch.vel,    &send_message.left_wrist_pitch.tor   );
         left_wrist_roll_N17_Ctl     -> Get_Motor_FB_Data(left_wrist_roll_N17,     &send_message.left_wrist_roll.pos,     &send_message.left_wrist_roll.vel,     &send_message.left_wrist_roll.tor    );
@@ -274,8 +272,6 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         right_wrist_pitch_N26_Ctl    -> Get_Motor_FB_Data(right_wrist_pitch_N26,    &send_message.right_wrist_pitch.pos,    &send_message.right_wrist_pitch.vel,    &send_message.right_wrist_pitch.tor   );
         right_wrist_roll_N27_Ctl     -> Get_Motor_FB_Data(right_wrist_roll_N27,     &send_message.right_wrist_roll.pos,     &send_message.right_wrist_roll.vel,     &send_message.right_wrist_roll.tor    );
 
-        // TaiHu_Device_T15->Get_Motor_FB_Data(TaiHu_Device_15, &send_message.head_pitch.pos, &send_message.head_pitch.vel, &send_message.head_pitch.tor);
-        // TaiHu_Device_T16->Get_Motor_FB_Data(TaiHu_Device_16, &send_message.head_yaw.pos, &send_message.head_yaw.vel, &send_message.head_yaw.tor);
 
         Classis_Motor_T1->Get_Motor_FB_Data(Classis_Motor_1, &send_message.wheel_left.pos, &send_message.wheel_left.vel, &send_message.wheel_left.tor);
         Classis_Motor_T2->Get_Motor_FB_Data(Classis_Motor_2, &send_message.wheel_right.pos, &send_message.wheel_right.vel, &send_message.wheel_right.tor);
@@ -332,7 +328,7 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         left_shoulder_pitch_N11_Ctl -> Get_Motor_Temp_Data(left_shoulder_pitch_N11,  &send_message.left_shoulder_pitch.mtemp);
         left_shoulder_roll_N12_Ctl  -> Get_Motor_Temp_Data(left_shoulder_roll_N12,   &send_message.left_shoulder_roll.mtemp );
         left_shoulder_yaw_N13_Ctl   -> Get_Motor_Temp_Data(left_shoulder_yaw_N13,    &send_message.left_shoulder_yaw.mtemp  );
-        left_elbow_N14_Ctl          -> Get_Motor_Temp_Data(left_elbow_N14,           &send_message.left_elbow.mtemp         );
+        // left_elbow_N14_Ctl          -> Get_Motor_Temp_Data(left_elbow_N14,           &send_message.left_elbow.mtemp         );
         left_wrist_yaw_N15_Ctl      -> Get_Motor_Temp_Data(left_wrist_yaw_N15,       &send_message.left_wrist_yaw.mtemp     );
         left_wrist_pitch_N16_Ctl    -> Get_Motor_Temp_Data(left_wrist_pitch_N16,     &send_message.left_wrist_pitch.mtemp   );
         left_wrist_roll_N17_Ctl     -> Get_Motor_Temp_Data(left_wrist_roll_N17,      &send_message.left_wrist_roll.mtemp    );
