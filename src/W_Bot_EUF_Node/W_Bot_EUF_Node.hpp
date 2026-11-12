@@ -259,7 +259,7 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         left_shoulder_pitch_N11_Ctl -> Get_Motor_FB_Data(left_shoulder_pitch_N11, &send_message.left_shoulder_pitch.pos, &send_message.left_shoulder_pitch.vel, &send_message.left_shoulder_pitch.tor);
         left_shoulder_roll_N12_Ctl  -> Get_Motor_FB_Data(left_shoulder_roll_N12,  &send_message.left_shoulder_roll.pos,  &send_message.left_shoulder_roll.vel,  &send_message.left_shoulder_roll.tor );
         left_shoulder_yaw_N13_Ctl   -> Get_Motor_FB_Data(left_shoulder_yaw_N13,   &send_message.left_shoulder_yaw.pos,   &send_message.left_shoulder_yaw.vel,   &send_message.left_shoulder_yaw.tor  );
-        //left_elbow_N14_Ctl          -> Get_Motor_FB_Data(left_elbow_N14,          &send_message.left_elbow.pos,          &send_message.left_elbow.vel,          &send_message.left_elbow.tor         );
+        left_elbow_N14_Ctl          -> Get_Motor_FB_Data(left_elbow_N14,          &send_message.left_elbow.pos,          &send_message.left_elbow.vel,          &send_message.left_elbow.tor         );
         left_wrist_yaw_N15_Ctl      -> Get_Motor_FB_Data(left_wrist_yaw_N15,      &send_message.left_wrist_yaw.pos,      &send_message.left_wrist_yaw.vel,      &send_message.left_wrist_yaw.tor     );
         left_wrist_pitch_N16_Ctl    -> Get_Motor_FB_Data(left_wrist_pitch_N16,    &send_message.left_wrist_pitch.pos,    &send_message.left_wrist_pitch.vel,    &send_message.left_wrist_pitch.tor   );
         left_wrist_roll_N17_Ctl     -> Get_Motor_FB_Data(left_wrist_roll_N17,     &send_message.left_wrist_roll.pos,     &send_message.left_wrist_roll.vel,     &send_message.left_wrist_roll.tor    );
@@ -328,7 +328,7 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         left_shoulder_pitch_N11_Ctl -> Get_Motor_Temp_Data(left_shoulder_pitch_N11,  &send_message.left_shoulder_pitch.mtemp);
         left_shoulder_roll_N12_Ctl  -> Get_Motor_Temp_Data(left_shoulder_roll_N12,   &send_message.left_shoulder_roll.mtemp );
         left_shoulder_yaw_N13_Ctl   -> Get_Motor_Temp_Data(left_shoulder_yaw_N13,    &send_message.left_shoulder_yaw.mtemp  );
-        // left_elbow_N14_Ctl          -> Get_Motor_Temp_Data(left_elbow_N14,           &send_message.left_elbow.mtemp         );
+        left_elbow_N14_Ctl          -> Get_Motor_Temp_Data(left_elbow_N14,           &send_message.left_elbow.mtemp         );
         left_wrist_yaw_N15_Ctl      -> Get_Motor_Temp_Data(left_wrist_yaw_N15,       &send_message.left_wrist_yaw.mtemp     );
         left_wrist_pitch_N16_Ctl    -> Get_Motor_Temp_Data(left_wrist_pitch_N16,     &send_message.left_wrist_pitch.mtemp   );
         left_wrist_roll_N17_Ctl     -> Get_Motor_Temp_Data(left_wrist_roll_N17,      &send_message.left_wrist_roll.mtemp    );
