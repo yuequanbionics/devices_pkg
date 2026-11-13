@@ -57,8 +57,8 @@ extern shared_ptr<Device_class> right_wrist_yaw_N25;
 extern shared_ptr<Device_class> right_wrist_pitch_N26;
 extern shared_ptr<Device_class> right_wrist_roll_N27;
 
-// extern shared_ptr<Device_class> TaiHu_Device_15;
-// extern shared_ptr<Device_class> TaiHu_Device_16;
+extern shared_ptr<Device_class> head_yaw_N1;
+extern shared_ptr<Device_class> head_pitch_N2;
 
 extern shared_ptr<Device_class> Classis_Motor_1;
 extern shared_ptr<Device_class> Classis_Motor_2;
@@ -95,8 +95,8 @@ extern Phu_Motor* right_wrist_yaw_N25_Ctl;
 extern Phu_Motor* right_wrist_pitch_N26_Ctl;
 extern Phu_Motor* right_wrist_roll_N27_Ctl;
 
-// extern Phu_Motor* TaiHu_Device_T15;
-// extern Phu_Motor* TaiHu_Device_T16;
+extern Phu_Motor* head_yaw_N1_Ctl;
+extern Phu_Motor* head_pitch_N2_Ctl;
 
 extern BMS_V2_Protocol* Battery_BMS_V2_T1;
 extern BMS_V2_Protocol* Battery_BMS_V2_T2;
@@ -219,6 +219,9 @@ class W_Bot_EUF_Node : public rclcpp::Node {
 
     void motor_timer_callback() {
          if (get_message_motor != nullptr) {
+            head_yaw_N1_Ctl    -> Send_MIT_PD_Control_Data(head_yaw_N1,  get_message_motor->head_yaw.pos, get_message_motor->head_yaw.vel, get_message_motor->head_yaw.tor, get_message_motor->head_yaw.kp, get_message_motor->head_yaw.kd);
+            head_pitch_N2_Ctl  -> Send_MIT_PD_Control_Data(head_pitch_N2,  get_message_motor->head_pitch.pos, get_message_motor->head_pitch.vel, get_message_motor->head_pitch.tor, get_message_motor->head_pitch.kp, get_message_motor->head_pitch.kd);
+
             Lower_Limbs_Motor_Waist_Yaw_N35_Ctl  -> Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Waist_Yaw_N35,  get_message_motor->waist_yaw.pos,   Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Waist_Roll_N34_Ctl -> Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Waist_Roll_N34, get_message_motor->waist_roll.pos,  Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
             Lower_Limbs_Motor_Knee_N32_Ctl       -> Send_MIT_PD_Control_Data(Lower_Limbs_Motor_Knee_N32,       get_message_motor->knee.pos,        Eyou_Speed_, 1, Eyou_Acc_, Eyou_Dec_);
@@ -249,12 +252,15 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         }
 
         auto send_message = devices_pkg::msg::WBotMotor();
+        
         Lower_Limbs_Motor_Waist_Yaw_N35_Ctl  -> Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Yaw_N35,  &send_message.waist_yaw.pos,   &send_message.waist_yaw.vel,  &send_message.waist_yaw.tor );
-        //cout << "data  " << send_message.waist_yaw.pos <<endl;
         Lower_Limbs_Motor_Waist_Roll_N34_Ctl -> Get_Motor_FB_Data(Lower_Limbs_Motor_Waist_Roll_N34, &send_message.waist_roll.pos,  &send_message.waist_roll.vel, &send_message.waist_roll.tor);
         Lower_Limbs_Motor_Knee_N32_Ctl       -> Get_Motor_FB_Data(Lower_Limbs_Motor_Knee_N32,       &send_message.knee.pos,        &send_message.knee.vel,       &send_message.knee.tor      );
         Lower_Limbs_Motor_Hip_N33_Ctl        -> Get_Motor_FB_Data(Lower_Limbs_Motor_Hip_N33,        &send_message.hip.pos,         &send_message.hip.vel,        &send_message.hip.tor       );
         Lower_Limbs_Motor_Ankel_N31_Ctl      -> Get_Motor_FB_Data(Lower_Limbs_Motor_Ankel_N31,      &send_message.ankle.pos,       &send_message.ankle.vel,      &send_message.ankle.tor     );
+
+        head_yaw_N1_Ctl   -> Get_Motor_FB_Data(head_yaw_N1, &send_message.head_yaw.pos, &send_message.head_yaw.vel, &send_message.head_yaw.tor);
+        head_pitch_N2_Ctl -> Get_Motor_FB_Data(head_pitch_N2, &send_message.head_pitch.pos, &send_message.head_pitch.vel, &send_message.head_pitch.tor);
 
         left_shoulder_pitch_N11_Ctl -> Get_Motor_FB_Data(left_shoulder_pitch_N11, &send_message.left_shoulder_pitch.pos, &send_message.left_shoulder_pitch.vel, &send_message.left_shoulder_pitch.tor);
         left_shoulder_roll_N12_Ctl  -> Get_Motor_FB_Data(left_shoulder_roll_N12,  &send_message.left_shoulder_roll.pos,  &send_message.left_shoulder_roll.vel,  &send_message.left_shoulder_roll.tor );
@@ -341,8 +347,8 @@ class W_Bot_EUF_Node : public rclcpp::Node {
         right_wrist_pitch_N26_Ctl    -> Get_Motor_Temp_Data(right_wrist_pitch_N26,    &send_message.right_wrist_pitch.mtemp   );
         right_wrist_roll_N27_Ctl     -> Get_Motor_Temp_Data(right_wrist_roll_N27,     &send_message.right_wrist_roll.mtemp    );
 
-        // TaiHu_Device_T15->Get_Motor_Temp(TaiHu_Device_15, &send_message.head_pitch.mtemp);
-        // TaiHu_Device_T16->Get_Motor_Temp(TaiHu_Device_16, &send_message.head_yaw.mtemp);
+        head_yaw_N1_Ctl   -> Get_Motor_Temp_Data(head_yaw_N1,   &send_message.head_yaw.mtemp);
+        head_pitch_N2_Ctl -> Get_Motor_Temp_Data(head_pitch_N2, &send_message.head_pitch.mtemp);
 
         Lower_Limbs_Motor_Ankel_N31_Ctl      -> Get_Motor_Temp_Data(Lower_Limbs_Motor_Ankel_N31,        &send_message.ankle.mtemp     );
         Lower_Limbs_Motor_Knee_N32_Ctl       -> Get_Motor_Temp_Data(Lower_Limbs_Motor_Knee_N32,         &send_message.knee.mtemp      );
